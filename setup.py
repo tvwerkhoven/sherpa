@@ -1,7 +1,22 @@
 #!/usr/bin/env python
+# 
+#  Copyright (C) 2007  Smithsonian Astrophysical Observatory
 #
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
 
 import sys
 import os
@@ -241,7 +256,7 @@ else:
 sherpa_inc = ['sherpa/include']
 
 header_deps = {
-    'Array2d': (),
+    'myArray': (),
     'array': (),
     'constants': (),
     'extension': ('array',),
@@ -365,6 +380,21 @@ extension_modules = [
 ##                'sherpa/optmethods/src/port/port.f',
 ##                'sherpa/optmethods/src/port/myport.f',
 ##                'sherpa/optmethods/src/port/dpptri.f']),
+
+##    # sherpa.optmethods._saoopt
+##    Extension('sherpa.optmethods._stogo',
+##              ['sherpa/optmethods/src/StoGo/_stogo.cc',
+##               'sherpa/optmethods/src/StoGo/linalg.cc',
+##               'sherpa/optmethods/src/StoGo/tools.cc'],
+##              sherpa_inc, libraries=(cpp_libs + ['sherpa']),
+##              depends=(get_deps(['myArray', 'extension']) +
+##                       ['sherpa/include/sherpa/functor.hh',
+##                        'sherpa/optmethods/src/StoGo/linag.h',
+##                        'sherpa/optmethods/src/StoGo/tools.h',
+##                        'sherpa/optmethods/src/StoGo/Local.hh',
+##                        'sherpa/optmethods/src/StoGo/Global.hh'])),
+
+
 ###############################################################################
 
     # sherpa.optmethods._saoopt
@@ -373,7 +403,7 @@ extension_modules = [
                'sherpa/optmethods/src/Simplex.cc'],
               sherpa_inc + ['sherpa/utils/src/gsl'],
               libraries=(cpp_libs + ['sherpa']),              
-              depends=(get_deps(['Array2d', 'extension']) +
+              depends=(get_deps(['myArray', 'extension']) +
                        ['sherpa/include/sherpa/fcmp.hh',
                         'sherpa/include/sherpa/MersenneTwister.h',
                         'sherpa/include/sherpa/functor.hh',
@@ -440,6 +470,20 @@ extension_modules = [
                        ['sherpa/utils/src/gsl/fcmp.h',
                         'sherpa/utils/src/cephes/cephes.h'])),
 
+
+    # sherpa.utils._pykdtree
+    Extension('sherpa.utils._pykdtree',
+              ['sherpa/utils/src/_pykdtree.cc'],
+              sherpa_inc + ['sherpa/utils/src'],
+              libraries=cpp_libs,
+              depends=(get_deps([]) +
+                       ['sherpa/utils/src/kdtree++/allocator.hpp',
+                        'sherpa/utils/src/kdtree++/function.hpp',
+                        'sherpa/utils/src/kdtree++/iterator.hpp',
+                        'sherpa/utils/src/kdtree++/kdtree.hpp',
+                        'sherpa/utils/src/kdtree++/region.hpp',
+                        'sherpa/utils/src/kdtree++/node.hpp'])),
+
     # sherpa.utils._psf
     Extension('sherpa.utils._psf',
               ['sherpa/utils/src/tcd/tcdCastArray.c',
@@ -453,7 +497,7 @@ extension_modules = [
                'sherpa/utils/src/_psf.cc'],
               sherpa_inc + ['sherpa/utils/src/tcd', conf['fftw_include_dir']],
               library_dirs=[conf['fftw_library_dir']],
-              libraries=(cpp_libs + ['fftw3','fftw3f']),
+              libraries=(cpp_libs + ['fftw3']),
               depends=(get_deps(['extension', 'utils'])+
                        ['sherpa/utils/src/tcd/tcd.h'])),
     
@@ -583,19 +627,23 @@ if conf['xspec_library_dir'] is not None:
 #
 ###############################################################################
 
-# CIAO 4.4 beta release
+# CIAO 4.4 release, Sherpa package 1
 setup(name='sherpa',
-      version='4.4 beta',
+      version='4.4.0',
       author='Smithsonian Astrophysical Observatory / Chandra X-Ray Center',
       author_email='cxchelp@head.cfa.harvard.edu',
       url='http://cxc.harvard.edu/sherpa/',
       description='Modeling and fitting package for scientific data analysis',
+      license='GNU GPL v3',
+      long_description='Modeling and fitting package for scientific data analysis',
+      platforms='Linux, Mac OS X, Solaris',
       packages=['sherpa',
                 'sherpa.estmethods',
                 'sherpa.image',
                 'sherpa.models',
                 'sherpa.optmethods',
                 'sherpa.plot',
+                'sherpa.sim',
                 'sherpa.stats',
                 'sherpa.ui',
                 'sherpa.utils',
@@ -603,6 +651,7 @@ setup(name='sherpa',
                 'sherpa.astro.io',
                 'sherpa.astro.models',
                 'sherpa.astro.optical',
+                'sherpa.astro.sim',
                 'sherpa.astro.ui',
                 'sherpa.astro.utils',
                 'sherpa.astro.xspec'],
@@ -614,6 +663,7 @@ setup(name='sherpa',
                     'sherpa.models': ['tests/test_*.py'],
                     'sherpa.optmethods': ['tests/test_*.py'],
                     'sherpa.plot': ['tests/test_*.py'],
+                    'sherpa.sim': ['tests/test_*.py'],
                     'sherpa.stats': ['tests/test_*.py'],
                     'sherpa.ui': ['tests/test_*.py'],
                     'sherpa.utils': ['tests/test_*.py'],
@@ -621,6 +671,7 @@ setup(name='sherpa',
                     'sherpa.astro.io': ['tests/test_*.py'],
                     'sherpa.astro.models': ['tests/test_*.py'],
                     'sherpa.astro.optical': ['tests/test_*.py'],
+                    'sherpa.astro.sim': ['tests/test_*.py'],
                     'sherpa.astro.ui': ['tests/test_*.py'],
                     'sherpa.astro.utils': ['tests/test_*.py'],
                     'sherpa.astro.xspec': ['tests/test_*.py']},
