@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="normal_sample" refkeywords="normal sample samples multi-variate multivariate uni-variate  univariate distribution statistic statistics thawed parameters  parameter  " seealsogroups="sh.model sh.plot " displayseealsogroups="" context="modeling">
+
+
+  <SYNOPSIS>
+    Sample the current set of thawed parameters from a uni-variate
+    or multi-variate normal distribution.
+  </SYNOPSIS>
+
+  <SYNTAX>   
+   <LINE>normal_sample([num=1, sigma=1, correlate=True, id=None, otherids=(), numcores=None])</LINE>
+  </SYNTAX>
+
+  <DESC>
+   <PARA>
+     Sherpa includes several functions for calculating the best set of best-fit
+   model parameters, so to speak, for a given fit of a model to a data
+   set, in order to best determine source flux using that model. This is
+   done by sampling model parameter values, a specified number of times,
+   from a given distribution such as a Gaussian distribution, in order to
+   incorporate the uncertainties on model parameter values in the fit.
+  </PARA>
+  <PARA>
+   The normal_sample() function returns the fit statistic value per
+   set of thawed model parameters sampled from the Gaussian
+   uni-variate or multi-variate distribution, the former treating each
+   parameter independently, the latter for correlated parameters. To
+   sample from the uniform or Student's t-distribution, use the
+   uniform_sample() or t_sample() functions.
+   </PARA>
+ 
+   <PARA>
+   All thawed model parameters are sampled from the Gaussian
+   distribution, where the mean is set as the best-fit parameter value
+   and the variance is determined by the diagonal elements of the
+   covariance matrix. The multi-ivariate Gaussian is assumed by
+   default for correlated parameters, using the off-diagonal elements of the covariance matrix.
+   </PARA>
+
+   <PARA>
+    Arguments:
+   </PARA>  
+  
+   <LIST>
+     <ITEM>
+       num         - number of samples to calculate;
+                     default = 1
+     </ITEM>
+     <ITEM>
+       sigma       - spread of the normal distribution;
+                     default = 1
+     </ITEM>
+     <ITEM>
+       correlate   - if True, sample from multi-variate normal using
+                     covariance; if False, sample from uni-variate normal;
+                     default = True
+     </ITEM>
+     <ITEM>   
+       id          - Sherpa data id;
+                     default = default data id
+     </ITEM>
+     <ITEM>
+       otherids    - list of other Sherpa data ids;
+                     default = ()
+     </ITEM>
+     <ITEM>
+       numcores    - number of CPUs to use to calculate the statistic;
+                     default = number of detected CPUs
+     </ITEM>
+    </LIST>
+
+     <PARA>
+      The normal_sample() command returns an array table consisting of
+      as many rows as samples taken (determined by the 'num' setting), with the
+      calculated fit statistic values in the first column, and the
+      corresponding sampled model parameters in the subsequent columns.
+     </PARA>   
+    </DESC>
+
+     <QEXAMPLELIST> 
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>load_pha("source.pi")</LINE>
+          <LINE>set_source(xsphabs.abs1*powlawd1d.p1)</LINE>
+          <LINE>normal_sample()</LINE>
+        </SYNTAX>
+        <DESC>
+<VERBATIM>
+array([[  3.63429922e+01,   1.34294196e-02,   1.99111998e+00,
+          1.93767611e-04]])
+</VERBATIM>
+          <PARA>
+	   Call normal_sample() with default settings to return the
+	   fit statistic value and model parameter values resulting
+	   from the best fit of an absorbed power-law model to default
+	   data set 1, where all thawed parameters are
+	   considered to be correlated in the fit, and therefore
+	   sampled from a multi-variate Gaussian distribution.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>normal_sample(num=100, correlate=False, id=3)</LINE>
+        </SYNTAX>
+        <DESC>
+<VERBATIM>
+array([[  3.50450794e+01,   1.83813573e-02,   1.96399402e+00,
+          1.91009277e-04],
+       [  4.25527941e+01,   9.03353122e-03,   2.00151808e+00,
+          1.89774746e-04],
+         ...
+       [  3.61527980e+01,   2.04994375e-02,   2.03393790e+00,
+          1.90969702e-04],
+       [  3.82226812e+01,   1.00899561e-02,   1.90617552e+00,
+          1.89799097e-04]])
+</VERBATIM>
+          <PARA>
+	   Return the fit statistic value and set of model parameter
+	   values resulting from the best fit of the model assigned
+	   to data set 3, for each of 100 samples. The samples
+	   are drawn from a uni-variate Gaussian distribution, where all
+	   thawed parameters are treated independently.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+     </QEXAMPLELIST>
+
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

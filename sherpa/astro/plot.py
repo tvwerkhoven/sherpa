@@ -1,13 +1,30 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2010)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 """
 Classes for plotting, analysis of astronomical data sets
 """
 
 from sherpa.astro.data import DataPHA
 from sherpa.plot import DataPlot, ModelPlot, FitPlot, DelchiPlot, ResidPlot, \
-    RatioPlot, ChisqrPlot, ComponentSourcePlot, HistogramPlot, backend, \
-    Histogram
+    RatioPlot, ChisqrPlot, HistogramPlot, backend, Histogram
+from sherpa.plot import ComponentSourcePlot as _ComponentSourcePlot
 from sherpa.astro.utils import compile_energy_grid, bounds_check
 from sherpa.utils.err import PlotErr, IOErr
 from sherpa.utils import parse_expr, dataspace1d, histogram1d, filter_bins
@@ -137,7 +154,7 @@ class SourcePlot(HistogramPlot):
                        overplot=overplot, clearwindow=clearwindow)
 
 
-class ComponentModelPlot(ComponentSourcePlot, ModelHistogram):
+class ComponentModelPlot(_ComponentSourcePlot, ModelHistogram):
 
     histo_prefs = backend.get_component_histo_defaults()
 
@@ -155,7 +172,7 @@ class ComponentModelPlot(ComponentSourcePlot, ModelHistogram):
         ModelHistogram.plot(self, overplot, clearwindow)  
 
 
-class ComponentSourcePlot(ComponentSourcePlot, SourcePlot):
+class ComponentSourcePlot(_ComponentSourcePlot, SourcePlot):
 
     histo_prefs = backend.get_component_histo_defaults()
 

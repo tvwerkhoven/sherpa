@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="t_sample" refkeywords=" uniform sample samples multi-variate multivariate uni-variate univariate distribution statistic statistics thawed parameters  parameter student's t-distribution  " seealsogroups="sh.model sh.plot " displayseealsogroups="" context="modeling">
+ 
+  <SYNOPSIS>
+    Sample the current set of thawed parameters from a Student's t-distribution.
+  </SYNOPSIS>
+
+  <SYNTAX>   
+   <LINE>
+     t_sample([num=1, dof=None, id=None, otherids=(), numcores=None])
+   </LINE>
+  </SYNTAX>
+
+  
+  <DESC>
+   <PARA>
+   Sherpa includes several functions for calculating the best set of best-fit
+   model parameters, so to speak, for a given fit of a model to a data
+   set, in order to best determine source flux using that model. This is
+   done by sampling model parameter values, a specified number of times,
+   from a given distribution such as a Gaussian distribution, in order to
+   incorporate the uncertainties on model parameter values in the fit.
+   </PARA>
+   <PARA>
+   The t_sample() function returns the fit statistic value per set
+   of thawed model parameters sampled from the Student's
+   t-distribution.  To sample from the Gaussian or uniform distribution, use the normal_sample() or uniform_sample() function.
+   </PARA>
+ 
+
+   <PARA>
+    Arguments:
+   </PARA>  
+  
+   <LIST>
+     <ITEM>
+       num         - number of samples to calculate;
+                     default = 1
+     </ITEM>
+     <ITEM>
+       dof         - number of degrees of freedom, calculated from current fit
+                     by default; default = None
+
+     </ITEM>
+     <ITEM>   
+       id          - Sherpa data id;
+                     default = default data id
+     </ITEM>
+     <ITEM>
+       otherids    - list of other Sherpa data ids;
+                     default = ()
+     </ITEM>
+     <ITEM>
+       numcores    - number of CPUs to use to calculate the statistic;
+                     default = number of detected CPUs
+     </ITEM>
+    </LIST>
+  
+     <PARA>
+      The t_sample() command returns an array table consisting of
+      as many rows as samples taken (determined by the 'num' setting), with the
+      calculated fit statistic values in the first column, and the
+      corresponding sampled model parameters in the subsequent columns.
+     </PARA>   
+    </DESC>
+    
+     <QEXAMPLELIST> 
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>load_pha("source.pi")</LINE>
+          <LINE>set_source(xsphabs.abs1*powlawd1d.p1)</LINE>
+          <LINE>t_sample()</LINE>
+        </SYNTAX>
+        <DESC> 
+<VERBATIM>
+array([[  7.42052409e+01,   2.19304497e-02,   2.07296817e+00,
+          1.97260260e-04]])
+</VERBATIM>
+          <PARA>
+	   Call t_sample() with default settings to return the
+	   fit statistic value and model parameter values resulting
+	   from the best fit of an absorbed power-law model to default
+	   data set 1, where all thawed parameters are
+	   sampled from the Student's t-distribution.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>t_sample(num=200, id=4, numcores=3)</LINE>
+        </SYNTAX>
+        <DESC> 
+<VERBATIM>
+array([[  3.67613474e+01,   2.02327747e-02,   1.94780376e+00,
+          1.97563375e-04],
+       [  3.67961761e+01,   1.76162104e-02,   1.94484171e+00,
+          1.74684117e-04],
+
+        ... 
+ 
+       [  3.52175590e+01,   1.78847675e-02,   1.99037247e+00,
+          1.86183040e-04],
+       [  3.54881367e+01,   1.49198878e-02,   2.00103062e+00,
+          1.87970536e-04]])
+</VERBATIM>
+          <PARA>
+	   Return the fit statistic value and set of model parameter
+	   values resulting from the best fit of the model assigned
+	   to data set 4, for each of 200 samples drawn from the
+           t-distribution. Utilize 2 CPUS in the fitting to
+           reduce the computation time.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+     </QEXAMPLELIST>
+
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

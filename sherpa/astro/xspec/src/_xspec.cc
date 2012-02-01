@@ -1,8 +1,25 @@
-//_C++_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-//_C++_INSERT_GPL_LICENSE_HERE_
+// 
+//  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
 // INIT_XSPEC is used by xspecmodelfct() in xspec_extension.hh, so it needs to
 // be defined before that file is included
-int _sherpa_init_xspec_library();
+int _sherpa_init_xspec_library(char* headas=0x0);
 #define INIT_XSPEC _sherpa_init_xspec_library
 
 #include <iostream>
@@ -26,7 +43,7 @@ void FPXSCT(const char* csection, int* ierr);
 void FPMSTR(const char* value1, const char* value2);
 void FPSLFL(float rvalue[], int nvalue, int *ierr);
 
-void FNINIT(void);
+void FNINIT(char* headas);
 float csmgq0(void);
 float csmgh0(void);
 float csmgl0(void);
@@ -171,7 +188,17 @@ void xszvph_(float* ear, int* ne, float* param, int* ifl, float* photar, float* 
 void xszabs_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
 void xszwnb_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
 
+// New XSPEC 12.7 models
 
+void C_cplinear(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void xseqpair_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void xseqth_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void xscompth_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void xsbvvp_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void xsvvap_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void zigm_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+
+// XSPEC table models
 void xsatbl(float* ear, int ne, float* param, const char* filenm, int ifl, 
 	    float* photar, float* photer);
 void xsmtbl(float* ear, int ne, float* param, const char* filenm, int ifl, 
@@ -179,7 +206,7 @@ void xsmtbl(float* ear, int ne, float* param, const char* filenm, int ifl,
 }
 
 // Sun's C++ compiler complains if this is declared static
-int _sherpa_init_xspec_library()
+int _sherpa_init_xspec_library(char* headas)
 {
 
   static bool init = false;
@@ -230,7 +257,7 @@ int _sherpa_init_xspec_library()
     
 
     // Initialize XSPEC model library
-    FNINIT();
+    FNINIT(headas);
 
     
     // Get back original std::cout
@@ -686,7 +713,25 @@ static PyObject* get_xset( PyObject *self, PyObject *args  )
 
 }
 
+
+static PyObject* _init( PyObject *self, PyObject *args )
+ { 
+   char* headas = NULL;
+
+   if ( !PyArg_ParseTuple( args, (char*)"s", &headas ) )
+      return NULL;
+
+   if ( EXIT_SUCCESS != _sherpa_init_xspec_library(headas) )
+      return NULL;
+
+   Py_RETURN_NONE;
+
+ }
+
 static PyMethodDef XSpecMethods[] = {
+ { (char*)"xsinit", (PyCFunction)_init, METH_VARARGS,
+   (char*)"XSPEC initialization, HEADAS." },
+
   { (char*)"get_xsversion", (PyCFunction)get_version, METH_NOARGS,
     (char*)"Get XSPEC version string." },
 
@@ -848,6 +893,15 @@ static PyMethodDef XSpecMethods[] = {
   XSPECMODELFCT( xszvph, 19 ),
   XSPECMODELFCT( xszabs, 2 ),
   XSPECMODELFCT( xszwnb, 3 ),
+  // New XSPEC 12.7 models
+  XSPECMODELFCT_C_NORM( C_cplinear, 21 ),
+  XSPECMODELFCT_NORM( xseqpair, 21 ),
+  XSPECMODELFCT_NORM( xseqth, 21 ),
+  XSPECMODELFCT_NORM( xscompth, 21 ),
+  XSPECMODELFCT_NORM( xsbvvp, 34 ),
+  XSPECMODELFCT_NORM( xsvvap, 33 ),
+  XSPECMODELFCT( zigm, 3 ),
+  // XSPEC table models
   XSPECTABLEMODEL_NORM( xsatbl ),
   XSPECTABLEMODEL_NORM( xsmtbl ),
 

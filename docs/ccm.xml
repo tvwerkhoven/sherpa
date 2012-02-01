@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="ccm" refkeywords="galactic ccm  model models modeling modelling source optical" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Interstellar extinction function
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+       The interstellar extinction function, according to Cardelli,
+       Clayton, and Mathis extinction curve (ApJ, 1989, 345, 245).
+  </PARA>
+ 
+ 
+<TABLE>
+<CAPTION>CCM Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>ebv</DATA> 
+  <DATA>E(B-V)</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>r</DATA> 
+  <DATA>R</DATA> 
+</ROW>
+
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

@@ -1,5 +1,23 @@
-/*_C_INSERT_SAO_COPYRIGHT_HERE_(1998-2007)_*/
-/*_C_INSERT_GPL_LICENSE_HERE_*/
+/*                                                                
+**  Copyright (C) 1998-2007  Smithsonian Astrophysical Observatory 
+*/                                                                
+
+/*                                                                          */
+/*  This program is free software; you can redistribute it and/or modify    */
+/*  it under the terms of the GNU General Public License as published by    */
+/*  the Free Software Foundation; either version 3 of the License, or       */
+/*  (at your option) any later version.                                     */
+/*                                                                          */
+/*  This program is distributed in the hope that it will be useful,         */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of          */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           */
+/*  GNU General Public License for more details.                            */
+/*                                                                          */
+/*  You should have received a copy of the GNU General Public License along */
+/*  with this program; if not, write to the Free Software Foundation, Inc., */
+/*  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.             */
+/*                                                                          */
+
 
 /*H*****************************************************************
  * FILE NAME:  tcd.h
@@ -194,15 +212,6 @@ typedef enum tcdConMethod tcdCONMETHOD;
 
 
 /* perform N-D transform of the initialized data array */
-
-extern int tcdTransform(
-			tcdTRANSFORM  tType,  /* i: transform type          */
-			float        *params, /* i: transform parameters    */
-			tcdComplex   *data,   /* i/o: initialize data array */
-			long          nAxes,  /* i: number of data axes     */
-			long         *lAxes,  /* i: length of data axes     */
-			long         *dOrigin /* i: origin of data axes     */
-			);
 
 /* double precision */
 extern int tcdTransformD(

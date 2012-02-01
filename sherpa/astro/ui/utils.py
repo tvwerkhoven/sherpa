@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2010)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 import os
 import logging
 import numpy
@@ -62,6 +79,8 @@ class Session(sherpa.ui.utils.Session):
         
         sherpa.ui.utils.Session.__init__(self)
 
+        self._pyblocxs = sherpa.astro.sim.MCMC()
+
         self._plot_types['order']=self._orderplot
         self._plot_types['energy']=self._energyfluxplot
         self._plot_types['photon']=self._photonfluxplot
@@ -119,6 +138,8 @@ class Session(sherpa.ui.utils.Session):
         self._xspec_state = None
         
         sherpa.ui.utils.Session.clean(self)
+
+        self._pyblocxs = sherpa.astro.sim.MCMC()
 
         self._plot_types['order']=self._orderplot
         self._plot_types['energy']=self._energyfluxplot
@@ -5684,7 +5705,7 @@ class Session(sherpa.ui.utils.Session):
         return (x,y)
 
 
-    def load_table_model(self, modelname, filename, *args, **kwargs):
+    def load_table_model(self, modelname, filename, method=sherpa.utils.linear_interp, *args, **kwargs):
         """
         load_table_model
         
@@ -5698,6 +5719,9 @@ class Session(sherpa.ui.utils.Session):
         
            filename   - file from which table model data are read
         
+           method     - interpolation method
+                        default = linear {neville, linear}
+
            args       - optional arguments to pass to data reader
 
            kwargs     - optional keyword arguments to pass to data reader
@@ -5714,6 +5738,8 @@ class Session(sherpa.ui.utils.Session):
            set_model, load_user_model, add_user_pars        
         """
         tablemodel = sherpa.models.TableModel(modelname)
+        # interpolation method
+        tablemodel.method = method 
         tablemodel.filename = filename
 
         try:
@@ -6177,7 +6203,9 @@ class Session(sherpa.ui.utils.Session):
         if isinstance(self.get_data(id), sherpa.astro.data.DataPHA):
             self._prepare_plotobj(id, self._astrocompsrcplot, model=model)
             return self._astrocompsrcplot
-
+        elif isinstance(model, sherpa.models.TemplateModel):
+            self._prepare_plotobj(id, self._comptmplsrcplot, model=model)
+            return self._comptmplsrcplot
         self._prepare_plotobj(id, self._compsrcplot, model=model)
         return self._compsrcplot
 
@@ -7179,6 +7207,8 @@ class Session(sherpa.ui.utils.Session):
         plotobj = self._compsrcplot
         if isinstance(self.get_data(id), sherpa.astro.data.DataPHA):
             plotobj = self._astrocompsrcplot
+        elif isinstance(model, sherpa.models.TemplateModel):
+            plotobj = self._comptmplsrcplot
 
         self._plot(id, plotobj, None, None, None, None, None, model, **kwargs)
 
@@ -7884,10 +7914,13 @@ class Session(sherpa.ui.utils.Session):
         """
         ids, fit = self._get_fit(id)
         data = self.get_data(id)
-        src  = self.get_source(id)
+        src  = None
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             src  = self.get_bkg_source(id, bkg_id)
+        else:
+            src = self.get_source(id)
+            
         correlated=sherpa.utils.bool_cast(correlated)
         
         return sherpa.astro.flux.sample_flux(fit, data, src,
@@ -7940,10 +7973,13 @@ class Session(sherpa.ui.utils.Session):
         """
         ids, fit = self._get_fit(id)
         data = self.get_data(id)
-        src  = self.get_source(id)
+        src  = None
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             src  = self.get_bkg_source(id, bkg_id)
+        else:
+            src = self.get_source(id)
+            
         correlated=sherpa.utils.bool_cast(correlated)
         
         return sherpa.astro.flux.sample_flux(fit, data, src, 
@@ -8032,12 +8068,14 @@ class Session(sherpa.ui.utils.Session):
         """
         
         data = self.get_data(id)
-        model= self.get_source(id)
+        model= None
 
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             model= self.get_bkg_source(id, bkg_id)
-
+        else:
+            model = self.get_source(id)
+            
         return sherpa.astro.utils.calc_photon_flux(data, model, lo, hi)
     
     def calc_energy_flux(self, lo=None, hi=None, id=None, bkg_id=None):
@@ -8074,12 +8112,13 @@ class Session(sherpa.ui.utils.Session):
            calc_source_sum
         """
         data = self.get_data(id)
-        model= self.get_source(id)
+        model= None
 
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             model= self.get_bkg_source(id, bkg_id)
-
+        else:
+            model= self.get_source(id)
         return sherpa.astro.utils.calc_energy_flux(data, model, lo, hi)
 
 
@@ -8156,10 +8195,12 @@ class Session(sherpa.ui.utils.Session):
            calc_source_sum, calc_data_sum2d, calc_model_sum2d
         """
         data = self.get_data(id)
-        model= self.get_model(id)
+        model= None
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             model= self.get_bkg_model(id, bkg_id)
+        else:
+            model= self.get_model(id)
         return sherpa.astro.utils.calc_model_sum(data, model, lo, hi)
 
     def calc_data_sum2d(self, reg=None, id=None):
@@ -8289,10 +8330,12 @@ class Session(sherpa.ui.utils.Session):
            calc_model_sum
         """
         data = self.get_data(id)
-        model= self.get_source(id)
+        model= None
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             model= self.get_bkg_source(id, bkg_id)
+        else:
+            model= self.get_source(id)
         return sherpa.astro.utils.calc_source_sum(data, model, lo, hi)
 
 
@@ -8345,11 +8388,13 @@ class Session(sherpa.ui.utils.Session):
            calc_model_sum
         """
         data = self.get_data(id)
-        model= self.get_source(id)
+        model= None
         if bkg_id is not None:
             data = self.get_bkg(id, bkg_id)
             model= self.get_bkg_source(id, bkg_id)
-
+        else:
+            model= self.get_source(id)
+            
         return sherpa.astro.utils.calc_kcorr(data, model, z, obslo, obshi,
                                              restlo, resthi)
 

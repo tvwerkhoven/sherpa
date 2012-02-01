@@ -1,5 +1,22 @@
-//_C++_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-//_C++_INSERT_GPL_LICENSE_HERE_
+// 
+//  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
 #ifndef __sherpa_models_hh__
 #define __sherpa_models_hh__
 
@@ -592,7 +609,8 @@ namespace sherpa { namespace models {
   {
 
     // p[1] is an always frozen parameter, currently initialized to 1
-    if ( x > 0.0 ) {
+    // x must be zero or greater
+    if ( !(x < 0.0) ) {
       val = p[2] * POW( x / p[ 1 ], - p[ 0 ] );
       return EXIT_SUCCESS;
     }
@@ -608,8 +626,18 @@ namespace sherpa { namespace models {
 				DataType xlo, DataType xhi, DataType& val )
   {
 
-    if ( xlo > 0 ) {
+    // xlo must be 0 or greater
+    if ( !(xlo < 0.0) ) {
       if ( p[0] == 1.0 ) {
+	if ( xlo > 0.0 ) {
+	  ;
+	}
+	else {
+	  // If we get here, xlo == 0.0
+	  // Stub in Sherpa minimum value for xlo,
+	  // so we can take its log
+	  xlo = SMP_MIN;
+	}	
 	val = p[2] * p[1] * ( LOG(xhi) - LOG(xlo) );
 	return EXIT_SUCCESS;
       } else {

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="powerlaw" refkeywords=" powerlaw power law power-law   model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Power law function
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         A power law function, taking the functional form:
+ </PARA>
+
+    
+ <PARA>
+  <EQUATION>  
+        f(x) = ampl * (x / refer) ** index
+      </EQUATION>
+  </PARA>
+
+<TABLE>
+<CAPTION>Powerlaw Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>refer</DATA> 
+  <DATA>Position of the break, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>ampl</DATA> 
+  <DATA>Amplitude</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>index</DATA> 
+  <DATA>Index of power law</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

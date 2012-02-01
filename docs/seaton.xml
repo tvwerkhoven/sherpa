@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="seaton" refkeywords="seaton  galactic extinction model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+    <SYNOPSIS>
+     Galactic extinction model
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         This model is the galactic extinction from Seaton, M. J. 1979, MNRAS 187, 73P. The formulae are based on an adopted value of R = 3.20.
+  </PARA>
+  <PARA>
+    This function implements Seaton's function as originally implemented in STScI's Synphot program.
+  </PARA>
+  <PARA>
+    For wavelengths &gt; 3704 Angstrom, the function interpolates linearly in 1/lambda in Seaton's table 3. For wavelengths &lt; 3704 Angstrom, the class uses the formulae from Seaton's table 2. The formulae match at the endpoints of their respective intervals. There is a mismatch of 0.009 mag/ebmv at nu=2.7 (lambda=3704 Angstrom). Seaton's tabulated value of 1.44 mag at 1/lambda = 1.1 may be in error; 1.64 seems more consistent with his other values.
+  </PARA> 
+  <PARA>
+    Wavelength range allowed is 0.1 to 1.0 microns; outside this range, the class extrapolates the function.
+  </PARA>
+
+<TABLE>
+<CAPTION>Seaton Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>ebv</DATA> 
+  <DATA>E(B-V)</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

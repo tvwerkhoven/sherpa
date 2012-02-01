@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 from itertools import izip
 import numpy
 import pychips as chips
@@ -22,7 +39,7 @@ __all__ = ('clear_window', 'plot', 'histo', 'contour', 'point', 'set_subplot',
            'get_confid_contour_defaults', 'set_window_redraw', 'set_jointplot',
            'get_histo_defaults', 'get_model_histo_defaults',
            'get_component_plot_defaults', 'get_component_histo_defaults',
-           'vline', 'hline')
+           'vline', 'hline', 'get_cdf_plot_defaults', 'get_scatter_plot_defaults')
 
 _initialized = False # Set this True first time begin() is called
 
@@ -531,4 +548,16 @@ def get_component_plot_defaults():
 def get_component_histo_defaults():
     d = get_model_histo_defaults()
     d['linecolor'] = 'orange'
+    return d
+
+def get_cdf_plot_defaults():
+    d = get_model_plot_defaults()
+    d['linecolor'] = 'red'
+    return d
+
+def get_scatter_plot_defaults():
+    d = get_data_plot_defaults()
+    d['symbolsize'] = 1
+    d['symbolfill'] = True
+    d['yerrorbars'] = False
     return d

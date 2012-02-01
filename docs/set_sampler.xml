@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="set_sampler" refkeywords=" get_sampler set_sampler_opt  jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler_name  Markov chain Monte Carlo " seealsogroups="sh.set sh.stat" displayseealsogroups="" context="statistics">
+
+
+
+    <SYNOPSIS>
+      Set the current pyBLoCXS sampler.
+    </SYNOPSIS>
+
+    <SYNTAX>
+        <LINE>set_sampler(name)</LINE>
+      
+    </SYNTAX>
+
+    <DESC>
+      <PARA>
+      pyBLoCXS is a sophisticated Markov chain Monte Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count X-ray Spectral (BLoCXS) analysis in the Sherpa environment.  The algorithm explores parameter space at a suspected minimum using a predefined Sherpa model to high-energy X-ray spectral data.  
+     </PARA>
+
+      <PARA>
+	The Sherpa set_sampler  command may be used to define the
+	current pyBLoCXS sampler (the type of jumping rule to be used in MCMC) to be either "MH" or "MetropolisMH". "MH" is Metropolis-Hastings, which
+	always jumps from the best-fit, and "MetropolisMH" is
+	Metropolis with Metropolis-Hastings that jumps from the
+	best-fit with probability 'p_M', else it jumps from the last
+	accepted jump. "PragBayes" is used when effective area calibration uncertainty is to be included in the calculation.  (At each nominal MCMC
+iteration, a new calibration product is generated, and a series
+of N (option in set_sampler_opt) MCMC sub-iteration steps are
+carried out, choosing between Metropolis and Metropolis-Hastings
+types of samplers with probability p_M (option in set_sampler_opt).
+Only the last of these sub-iterations are kept in the chain.)
+      </PARA>
+ 
+     <LIST>
+	<ITEM>
+	  name - the name of the sampler, or jumping rule to be used in MCMC
+	</ITEM>
+      </LIST>
+
+
+
+      <PARA>
+	 Available samplers are returned by the list_samplers command        
+        (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/list_samplers.html">"ahelp
+        list_samplers"</HREF>). The configuration options for each pyBLoCXS sampler type may be
+	viewed and customized using the get_sampler commands (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/get_sampler.html">"ahelp get_sampler"</HREF>).
+  
+      </PARA>
+          
+
+      <PARA>
+	Refer to
+	the <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">pyBLoCXS
+	documentation</HREF> for additional information about the algorithm.
+      </PARA>	
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>sherpa&gt; set_sampler("MetropolisMH")</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Set the current MCMC jumping rule to a mix of Metropolis
+	    and Metropolis-Hastings.
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; load_pha("pha.fits")
+sherpa&gt; set_model(xsphabs.abs1*powlaw1d.p1)
+sherpa&gt; set_stat("cash")
+sherpa&gt; fit()
+sherpa&gt; covar()
+
+sherpa&gt; print get_sampler_name()
+        MH
+sherpa&gt; set_sampler("MetropolisMH")
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>sherpa&gt; set_sampler("MH")</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Set the current MCMC jumping rule to Metropolis-Hastings.
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; load_pha("pha.fits")
+sherpa&gt; set_model(xsphabs.abs1*powlaw1d.p1)
+sherpa&gt; set_stat("cash")
+sherpa&gt; fit()
+sherpa&gt; covar()
+
+sherpa&gt; print get_sampler_name()
+        MetropolisMH
+
+sherpa&gt; set_sampler("MH")
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+      
+
+    </QEXAMPLELIST>
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

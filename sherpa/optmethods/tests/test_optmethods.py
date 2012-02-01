@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 from math import sqrt
 from sherpa.utils import SherpaTestCase
 from sherpa.optmethods import optfcts
@@ -28,7 +45,24 @@ class test_optmethods(SherpaTestCase):
                   x0, xmin, xmax, iprint=iprint, maxfev=8192*len(x0) )
         self.tst( optfcts.lmdif, name + self.lm, fct, fmin,
                   x0, xmin, xmax, iprint=iprint )
+        self.tstgridsearch( optfcts.grid_search, name + '_gridsearch', fct,
+                            fmin, x0, xmin, xmax, iprint=iprint,
+                            method='neldermead' )
+        self.tstgridsearch( optfcts.grid_search, name + '_gridsearch', fct,
+                            fmin, x0, xmin, xmax, iprint=iprint,
+                            method='levmar' )        
+
+    def tstgridsearch( self, optmethod, name, fct, fmin, x0, xmin, xmax,
+                       maxfev=4096, iprint=False, method='neldermead' ):
+        status, x, fval, msg, stuff = optmethod( fct, x0, xmin, xmax, maxfev=maxfev*len(x0), num=1, method=method)
+        nfev = stuff.get('nfev')
+        if iprint:
+            print 'fmin = %g vs fval = %g' % ( fmin, fval )
+        if self.verbose or iprint:
             
+            self.print_result( name, fval, x, nfev )
+        self.assertEqualWithinTol( fval, fmin, self.tolerance )
+        
     def tst( self, optmethod, name, fct, fmin, x0, xmin, xmax,
              maxfev=4096, iprint=False ):
         status, x, fval, msg, stuff = optmethod( fct, x0, xmin, xmax, maxfev=maxfev*len(x0))

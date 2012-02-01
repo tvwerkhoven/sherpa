@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="set_prior" refkeywords=" get_prior list_priors  prior priors jumping rule MCMC MH Metropolis Metropolis-Hastings  Markov chain Monte Carlo " seealsogroups="sh.set sh.stat" displayseealsogroups="" context="statistics">
+
+
+    <SYNOPSIS>
+      Define a prior function for a particular Sherpa model parameter.
+    </SYNOPSIS>
+
+    <SYNTAX>
+       <LINE>set_prior(par, prior)</LINE>
+    </SYNTAX> 
+
+    <DESC>
+     <PARA>
+       The Sherpa prior functions constitute a subset of the pyBLoCXS
+       suite of functions; pyBLoCXS is a sophisticated Markov chain Monte
+       Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count
+       X-ray Spectral (BLoCXS) analysis in the Sherpa environment. The
+       algorithm explores parameter space at a suspected minimum using a
+       predefined Sherpa model to high-energy X-ray spectral data.  
+    </PARA>
+
+     <PARA>
+       By default, pyBLoCXS uses a flat prior defined between the
+       hardcoded parameter minima and maxima.  The set_prior() function
+       is used to associate a function or model ('prior') with a
+       thawed fit parameter ('par').  The function signature for 'prior' is
+       of the form lambda x, and can be a Sherpa model or an arbitrary
+       user-defined function. 
+     </PARA>
+
+      
+     <LIST>
+	<ITEM>
+	  prior - prior function, of the form lambda x, associated
+	  with a Sherpa model parameter
+	</ITEM>
+        <ITEM>
+	  par - Sherpa model parameter name
+	</ITEM>
+      </LIST>
+
+
+      <PARA>
+	The list of currently set prior-parameter pairs is returned by
+	the list_priors command (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/list_priors.html"/>). The
+        prior function associated with a particular Sherpa model
+        parameter may be accessed with get_prior (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/get_prior.html">"ahelp get_prior"</HREF>).
+      </PARA>   
+
+      <PARA>
+	Refer to the <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">pyBLoCXSdocumentation</HREF> for additional information about the algorithm.
+      </PARA>	
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>set_prior(therm.kT,g1)</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Define Gaussian model 'g1' using the Sherpa 'normgauss'
+	    model, and set it as the prior
+	    function for the temperature parameter of the Sherpa model 'xsapec.therm'.
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; normgauss1d.g1
+sherpa&gt; g1.pos=2.5; g1.fwhm=0.5
+sherpa&gt; set_prior(therm.kT,g1)
+
+sherpa&gt; set_sampler_opt('defaultprior', False)
+sherpa&gt; set_sampler_opt('priorshape', [True, False, False])
+sherpa&gt; set_sampler_opt('originalscale', [True, True, True])
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+ 
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>set_prior(abs1.NH,lognorm)</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	   Define custom function 'lognorm' and set it as the
+	   prior for the 'nH' parameter of a Sherpa absorption model.
+	  </PARA>
+
+<VERBATIM>
+
+def lognorm(x, sigma=0.5, norm=1.0, x0=20.):
+   xl=numpy.log10(x)+22.
+   return
+   (norm/numpy.sqrt(2*numpy.pi)/sigma)*numpy.exp(-0.5*(xl-x0)*(xl-x0)/sigma/sigma)
+
+
+set_prior(abs1.NH,lognorm)
+set_sampler_opt('defaultprior', False)
+set_sampler_opt('priorshape', [True, False, False])
+set_sampler_opt('originalscale', [True, True, True])
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+
+
+    </QEXAMPLELIST>
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="smc" refkeywords="  smc small magellanic cloud Small Magellanic Cloud extinction curve   model models modeling modelling source optical" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Extinction curve for the Small Magellanic Cloud
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         This model is the extinction curve for the SMC, as given in Prevot et al., 1984, A&amp;A, 132, 389-392.
+  </PARA>
+ 
+
+<TABLE>
+<CAPTION>SMC Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>ebv</DATA> 
+  <DATA>E(B-V)</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

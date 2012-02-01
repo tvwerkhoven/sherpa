@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="integrate1d" refkeywords=" integrate1d integration integral normalization multiplicative additive multiply add histogram binned" seealsogroups="sh.model " displayseealsogroups="" context="modeling">
+
+<SYNOPSIS>
+Helper function to control the integration of 1D non-XSpec model expressions
+</SYNOPSIS>
+
+    <SYNTAX>
+      <LINE>set_source([id], integrate1d(model))</LINE>
+	</SYNTAX>
+
+<DESC>
+  <PARA>
+    In Sherpa, the user may control the integration setting of
+  non-XSpec additive models when fitting binned data, in order to specify that the model should or should not be integrated over each bin (the integration setting has
+  no effect on non-binned data). Integration of 1D and 2D model components is
+  controlled by an integration flag in each model structure (see
+  "ahelp integrate"). In lieu of the integrate flag found on Sherpa
+  models, the integrate1d helper function can be used to
+  define the integration over a full model expression, not each
+  component individually, for 1D models. It is used
+   within the set_model/set_source model definition in order to
+  specify that the model being defined within the parentheses should be
+  numerically integrated. Multiple instances of the helper function can be used in a Sherpa
+   model expression when multiple tolerances are needed for various
+   components; but these instances should not be nested. If the integrate1d helper function is not used in the
+  model definition, non-XSpec additive Sherpa models will not be
+  integrated by default.  Note that the XSpec additive models included
+  in the Sherpa model suite will always
+  be integrated, i.e., their integration setting cannot be altered by
+  the user. It is for this reason that integrate1d should not be used
+  in model definitions containing XSpec additive models.
+  </PARA>
+  
+  <PARA>
+    Sherpa source and background additive models are integrated over bins in
+    energy-space or wavelength-space before being folded through an
+    instrument response model, or over bins in counts-space if no
+    instrument model is specified.  When integration is turned off,
+    the model values at the left side of the bin are used in the
+    fitting. When integration is turned on, Sherpa bins the model values such that the model is evaluated at x_lo and x_hi, and all the counts that happened in that bin are considered, not just at some particular point in data
+    space.  Since the bin size is being taken into account, the value
+    really means "counts/bin", not simply "counts".   Changing the
+    integration status of a model component will have no effect if the
+    data are not binned; in this case, the model values
+    at the entered data points are used.
+  </PARA>
+
+  <PARA>
+    There is no control from Sherpa over the integration setting
+    of XSpec source models.  Additionally, there is no
+    integration setting for instrument models. 
+  </PARA>
+
+  <PARA>
+    Certain combinations of additive/integrated and
+    multiplicative/non-integrated model components are not allowed -
+    such as by adding two model components with different integration
+    settings - as they can not produce meaningful results.  Sherpa
+    will issue a warning when it detects an unacceptable combination.
+  </PARA>
+
+  <PARA>
+   The (frozen) parameters of the integrate1d helper function may be
+   viewed and modified by issuing the command "print int_name" at the
+   Sherpa prompt, where "int_name" is the name assigned to the
+   function by the user, e.g. "integrate1d.int1". This interface allows the user to change the tolerance of integration per instance (integrate1d.int1,
+   integrate1d.int2, ...); see the examples below for details.
+   </PARA>
+</DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; set_model(integrate1d.int1(xsphabs.abs1*powlaw1d.p1))</LINE>
+	</SYNTAX>
+        <DESC>
+<VERBATIM>
+sherpa&gt; print(int1)
+integrate1d.int1
+   Param        Type          Value          Min          Max      Units
+   -----        ----          -----          ---          ---      -----
+   int1.epsabs  frozen  2.22045e-16 -3.40282e+38  3.40282e+38           
+   int1.epsrel  frozen            0 -3.40282e+38  3.40282e+38           
+   int1.maxeval frozen        10000 -3.40282e+38  3.40282e+38     
+
+sherpa&gt; show_model()
+Model: 1
+apply_rmf(apply_arf((38564.6089269 * integrate1d((xsphabs.abs1 * powlaw1d.p1)))))
+   Param        Type          Value          Min          Max      Units
+   -----        ----          -----          ---          ---      -----
+   abs1.nH      thawed            1            0       100000 10^22 atoms / cm^2
+   p1.gamma     thawed            1          -10           10           
+   p1.ref       frozen            1 -3.40282e+38  3.40282e+38           
+   p1.ampl      thawed            1            0  3.40282e+38      
+</VERBATIM>
+          <PARA>
+	    Define a model expression which includes one multiplicative/non-integrated and one additive/integrated component, and use the integrate1d helper function to turn on model integration for the ("p1") additive component. This means that if the data set associated with this model is binned, e.g. in energy space, then Sherpa will evaluate the model at both the 'lo' and 'hi' ends of each energy bin, as opposed to just at the 'lo' end for the non-integrated case.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+      <SYNTAX>
+          <LINE>sherpa&gt; set_model(integrate1d.int1(beta1d.b1+gauss1d.g1))</LINE>
+	  <LINE>sherpa&gt; int1.epsabs = 1.e-7</LINE>
+	</SYNTAX>
+        <DESC>
+	  <PARA>
+	   Turn on numerical integration for a model expression
+	   consisting of the sum of the Sherpa 1D Beta and Gaussian
+	   models. Change the tolerance value of the
+	   integration helper function from the default to a lower value using the "epsabs" attribute.
+
+	  </PARA>
+	  </DESC>
+	 </QEXAMPLE>
+    </QEXAMPLELIST>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2009)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2009  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 """
 A visualization interface to Sherpa
 """
@@ -13,8 +30,8 @@ warning = logging.getLogger(__name__).warning
 import numpy
 _ = numpy.seterr(invalid='ignore')
 
-from sherpa.utils import NoNewAttributesAfterInit, erf, SherpaFloat, bool_cast,\
-    parallel_map, divide_run_parallel
+from sherpa.utils import NoNewAttributesAfterInit, erf, SherpaFloat, \
+    bool_cast, parallel_map, dataspace1d, histogram1d, get_error_estimates
 from sherpa.utils.err import PlotErr, StatErr, ConfidenceErr
 from sherpa.estmethods import Covariance
 from sherpa.optmethods import LevMar, NelderMead
@@ -188,6 +205,7 @@ class Histogram(NoNewAttributesAfterInit):
         kwargs['overplot'] = True
         self.plot(*args, **kwargs)
 
+
 class HistogramPlot(Histogram):
 
     def __init__(self):
@@ -233,6 +251,162 @@ class HistogramPlot(Histogram):
         Histogram.plot(self, self.xlo, self.xhi, self.y, title=self.title,
                        xlabel=self.xlabel, ylabel=self.ylabel,
                        overplot=overplot, clearwindow=clearwindow)
+
+
+class PDFPlot(HistogramPlot):
+
+    def __init__(self):
+        self.points = None
+        HistogramPlot.__init__(self)
+
+
+    def __str__(self):
+        numpy.set_printoptions(precision=4, threshold=6)
+
+        points = self.points
+        if self.points is not None:
+            points = numpy.array2string(numpy.asarray(self.points))
+
+        return ('points = %s\n'%(points) +
+                HistogramPlot.__str__(self))
+
+    def prepare(self, points, bins=12, normed=True, xlabel="x", name="x"):
+        self.points = points
+        self.y, xx = numpy.histogram(points, bins=bins, normed=normed)
+        self.xlo = xx[:-1]
+        self.xhi = xx[1:]
+        self.ylabel = "probability density"
+        self.xlabel = xlabel
+        self.title  = "PDF: %s"%name
+
+
+
+class CDFPlot(Plot):
+    
+    median_defaults = dict(linestyle='dash', linecolor='orange',
+                           linewidth=1.5)
+    lower_defaults = dict(linestyle='dash', linecolor='blue',
+                          linewidth=1.5)
+    upper_defaults = dict(linestyle='dash', linecolor='blue',
+                          linewidth=1.5)
+
+    plot_prefs = backend.get_cdf_plot_defaults()
+    
+    def __init__(self):
+        self.x  = None
+        self.y  = None
+        self.points = None
+        self.median = None
+        self.lower  = None
+        self.upper  = None
+        self.xlabel = None
+        self.ylabel = None
+        self.title = None
+        Plot.__init__(self)
+
+
+    def __str__(self):
+        numpy.set_printoptions(precision=4, threshold=6)
+        x = self.x
+        if self.x is not None:
+            x = numpy.array2string(self.x)
+        y = self.y
+        if self.y is not None:
+            y = numpy.array2string(self.y)
+
+        points = self.points
+        if self.points is not None:
+            points = numpy.array2string(self.points)
+
+        return (('points = %s\n' +
+                 'x      = %s\n' +
+                 'y      = %s\n' +
+                 'median = %s\n' +
+                 'lower  = %s\n' +
+                 'upper  = %s\n' +
+                 'xlabel = %s\n' +
+                 'ylabel = %s\n' +
+                 'title  = %s\n' +
+                 'plot_prefs = %s') %
+                ( x,
+                  y,
+                  points,
+                  self.median,
+                  self.lower,
+                  self.upper,
+                  self.xlabel,
+                  self.ylabel,
+                  self.title,
+                  self.plot_prefs))
+
+
+    def prepare(self, points, xlabel="x", name="x"):
+        self.points = points
+        self.x = numpy.sort(points)
+        (self.median, self.lower,
+         self.upper) = get_error_estimates(self.x, True)
+        xsize = len(self.x)
+        self.y = (numpy.arange(xsize) + 1.0) / xsize
+        self.xlabel = xlabel
+        self.ylabel = "p(<=%s)"%(xlabel)
+        self.title  = "CDF: %s"%(name)
+
+
+    def plot(self, overplot=False, clearwindow=True):
+        Plot.plot(self, self.x, self.y, title=self.title,
+                  xlabel=self.xlabel, ylabel=self.ylabel,
+                  overplot=overplot, clearwindow=clearwindow)
+        Plot.vline(self.median, overplot=True, clearwindow=False,
+                   **self.median_defaults)
+        Plot.vline(self.lower, overplot=True, clearwindow=False, 
+                   **self.lower_defaults)
+        Plot.vline(self.upper, overplot=True, clearwindow=False,
+                   **self.upper_defaults)
+
+
+class LRHistogram(HistogramPlot):
+    "Derived class for creating 1D likelihood ratio distribution plots"
+    def __init__(self):
+        self.ratios=None
+        self.lr=None
+        self.ppp=None
+        HistogramPlot.__init__(self)
+
+
+    def __str__(self):
+        numpy.set_printoptions(precision=4, threshold=6)
+
+        ratios = self.ratios
+        if self.ratios is not None:
+            ratios = numpy.array2string(numpy.asarray(self.ratios))
+
+        return '\n'.join(['ratios = %s' % ratios,
+                          'lr = %s' % str(self.lr),
+                          HistogramPlot.__str__(self)])
+
+
+    def prepare(self, ratios, bins, niter, lr, ppp):
+        self.ppp = float(ppp)
+        self.lr = float(lr)
+        y = numpy.asarray(ratios)
+        self.ratios = y
+        self.xlo, self.xhi = dataspace1d(y.min(), y.max(), numbins=bins+1)[:2]
+        y = histogram1d(y, self.xlo, self.xhi)
+	self.y = y/float(niter)
+        self.title = "Likelihood Ratio Distribution"
+        self.xlabel = "Likelihood Ratio"
+        self.ylabel = "Frequency"
+
+
+    def plot(self, overplot=False, clearwindow=True):
+        Histogram.plot(self, self.xlo, self.xhi, self.y, title=self.title,
+                       xlabel=self.xlabel, ylabel=self.ylabel,
+                       overplot=overplot, clearwindow=clearwindow)
+
+        if self.lr is not None:
+            if self.lr <= self.xhi.max() and self.lr >= self.xlo.min():
+                Plot.vline(self.lr, linecolor="orange", linestyle="solid",
+                           linewidth=1.5, overplot=True, clearwindow=False)
 
 
 class SplitPlot(Plot,Contour):
@@ -440,6 +614,30 @@ class DataPlot(Plot):
                   self.xlabel, self.ylabel, overplot, clearwindow)
 
 
+class TracePlot(DataPlot):
+
+    plot_prefs = backend.get_model_plot_defaults()
+    
+    def prepare(self, points, xlabel="x", name="x"):
+        self.x = numpy.arange(len(points), dtype=SherpaFloat)
+        self.y = points
+        self.xlabel = "iteration"
+        self.ylabel = name
+        self.title  = "Trace: %s"%(name)
+
+
+class ScatterPlot(DataPlot):
+
+    plot_prefs = backend.get_scatter_plot_defaults()
+
+    def prepare(self, x, y, xlabel="x", ylabel="y", name="(x,y)"):
+        self.x = numpy.asarray(x, dtype=SherpaFloat)
+        self.y = numpy.asarray(y, dtype=SherpaFloat)
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.title  = "Scatter: %s"%(name)
+
+
 class PSFKernelPlot(DataPlot):
     "Derived class for creating 1D PSF kernel data plots"
 
@@ -587,6 +785,16 @@ class ComponentModelPlot(ModelPlot):
         self.title = 'Model component: %s' % model.name
 
 
+class ComponentTemplateModelPlot(ComponentModelPlot):
+
+    def prepare(self, data, model, stat=None):
+        self.x = model.get_x()
+        self.y = model.get_y()
+        self.xlabel = data.get_xlabel()
+        self.ylabel = data.get_ylabel()
+        self.title = 'Model component: %s' % model.name
+
+
 class SourcePlot(ModelPlot):
     "Derived class for creating 1D model plots"
     def __init__(self):
@@ -601,6 +809,25 @@ class ComponentSourcePlot(SourcePlot):
     def prepare(self, data, model, stat=None):
         SourcePlot.prepare(self, data, model, stat)
         self.title = 'Source model component: %s' % model.name
+
+
+class ComponentTemplateSourcePlot(ComponentSourcePlot):
+
+    def prepare(self, data, model, stat=None):
+        self.x = model.get_x()
+        self.y = model.get_y()
+
+        if numpy.iterable(data.mask):
+            x = data.to_plot()[0]
+            mask = (self.x > x.min()) & (self.x <= x.max())
+            self.x = self.x[mask]
+            self.y = self.y[mask]
+
+        self.xlabel = data.get_xlabel()
+        self.ylabel = data.get_ylabel()
+        self.title = 'Source model component: %s' % model.name
+
+
 
 
 class PSFPlot(DataPlot):

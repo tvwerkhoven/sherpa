@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2008)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2008  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 """
 Tools for creating, storing, inspecting, and manipulating data sets
 """
@@ -401,6 +418,16 @@ class DataND(Data):
         if filter:
             y = self.apply_filter(y)
         return y
+
+    def set_dep(self, val):
+        "Set the dependent variable values"
+        dep = None
+        if numpy.iterable(val):
+            dep = numpy.asarray(val, SherpaFloat)
+        else:
+            val = SherpaFloat(val)
+            dep = numpy.array([val]*len(self.get_indep()[0]))
+        setattr(self, 'y', dep)
 
 
 class Data1D(DataND):

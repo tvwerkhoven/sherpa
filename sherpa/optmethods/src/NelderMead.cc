@@ -1,54 +1,49 @@
 #ifdef testNelderMead
 
-//_C++_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-//_C++_INSERT_GPL_LICENSE_HERE_
+// 
+//  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
 
-#include <iostream>
-#include <stdexcept>
-
-#include "sherpa/fcmp.hh"
-#include "sherpa/functor.hh"
 
 #include "NelderMead.hh"
-#include "tests/tstoptfct.hh"
 
+#include "tests/tstopt.hh"
 
-template <typename Real>
-void print_pars( const char* name, int nfev, Real stat, Real answer,
-		 int n, const std::vector< Real >& x, int initsimplex,
-		 Real tol=
-		 1.0e4*std::sqrt( std::numeric_limits< Real >::epsilon() ) ) {
-
- 
-  std::cout << "NelderMead_" << initsimplex << '_' << name << '\t';
-  if ( 0 == sao_fcmp( stat, answer, std::sqrt(tol) ) )
-    std::cout << nfev << '\t';
-  else
-    std::cout << -nfev << '\t';
-  std::cout << answer << '\t';
-  std::cout << stat << '\t';
-  std::cout << x[0];
-  for ( int ii = 1; ii < n; ++ii )
-    std::cout << ',' << x[ii];
-  std::cout << '\n';
-
-}
-
-template< typename Init, typename Fct >
-void justdoit( Init init, Fct fct, int npar, 
-	       std::vector<double>& par, std::vector<double>& lo,
-	       std::vector<double>& hi, const std::vector<double>& step,
-	       double tol, const char* header ) {
-
-  std::vector< int > finalsimplex;
+void tstnm( Init init, Fct fct, int npar, std::vector<double>& par,
+	    std::vector<double>& lo, std::vector<double>& hi,
+	    double tol, const char* fct_name, int npop, int maxfev,
+	    double c1, double c2 ) {
 
   try {
+
+    char header[64];
 
     //
     // you may think you are clever by eliminating the following overhead
     // and simply use the vector par, but believe me it this is necessary
     //
     std::vector<double> mypar( npar, 0.0 );
+
+    std::vector<double> step( npar * npar * 4 );
+    for ( int ii = 0; ii < npar; ++ii )
+      step[ ii ] = 1.2;
+
+    std::vector< int > finalsimplex;
 
     for ( int ii = 0; ii < 2; ++ii ) {
 
@@ -62,15 +57,15 @@ void justdoit( Init init, Fct fct, int npar,
 	init( npar, mfcts, answer, &par[0], &lo[0], &hi[0] );
 	for ( int jj = 0; jj < npar; ++jj )
 	  mypar[ jj ] = par[ jj ];
-	
 	sherpa::NelderMead< Fct, void* > nm( fct, NULL );
 	
-	int verbose=0, maxnfev=npar*npar*1024, nfev;
+	int verbose=0, maxnfev=npar*npar*maxfev, nfev;
 	double fmin;
 	nm( verbose, maxnfev, tol, npar, initsimplex, finalsimplex, lo, hi,
 	    step, mypar, nfev, fmin );
 	
-	print_pars( header, nfev, fmin, answer, npar, mypar, initsimplex );
+	sprintf( header, "NelderMead_%d_", initsimplex );
+	print_pars( header, fct_name, nfev, fmin, answer, npar, mypar );
 
       }
 	
@@ -84,515 +79,7 @@ void justdoit( Init init, Fct fct, int npar,
 
   return;
 
-}
-
-using namespace sherpa;
-
-void tstuncopt( int npar, double tol ) {
-
-  int size = npar * npar * 4;
-  std::vector<double> par( size ), step( size ), lo( size ),
-    hi( size );
-  
-  for ( int ii = 0; ii < npar; ++ii )
-    step[ ii ] = 1.2;
-  
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Rosenbrock<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::RosenbrockInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "Rosenbrock" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::FreudensteinRoth<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::FreudensteinRothInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "FreudensteinRoth" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::PowellBadlyScaled<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::PowellBadlyScaledInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "PowellBadlyScaled" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::BrownBadlyScaled<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BrownBadlyScaledInit<double> ),
-		fct, 2, par, lo, hi, step, tol, "BrownBadlyScaled" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Beale<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BealeInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "Beale" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::JennrichSampson<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::JennrichSampsonInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "JennrichSampson" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::HelicalValley<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::HelicalValleyInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "HelicalValley" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Bard<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BardInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "Bard" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Gaussian<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::GaussianInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "Gaussian" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Meyer<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::MeyerInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "Meyer" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::GulfResearchDevelopment<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::GulfResearchDevelopmentInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "GulfResearchDevelopment" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Box3d<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::Box3dInit<double> ),
-		fct, 3, par, lo, hi, step, tol, "Box3d" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::PowellSingular<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::PowellSingularInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "PowellSingular" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Wood<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::WoodInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "Wood" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::KowalikOsborne<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::KowalikOsborneInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "KowalikOsborne" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::BrownDennis<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BrownDennisInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "BrownDennis" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Osborne1<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::Osborne1Init<double> ),
-		fct, 5, par, lo, hi, step, tol, "Osborne1" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Biggs<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BiggsInit<double> ),
-		fct, 6, par, lo, hi, step, tol, "Biggs" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Osborne2<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::Osborne2Init<double> ),
-		fct, 11, par, lo, hi, step, tol, "Osborne2" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Watson<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::WatsonInit<double> ),
-		fct, 6, par, lo, hi, step, tol, "Watson" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::PenaltyI<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::PenaltyIInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "PenaltyI" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::PenaltyII<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::PenaltyIIInit<double> ),
-		fct, 4, par, lo, hi, step, tol, "PenaltyII" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::VariablyDimensioned<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::VariablyDimensionedInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "VariablyDimensioned" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Trigonometric<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::TrigonometricInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "Trigonometric" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::BrownAlmostLinear<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BrownAlmostLinearInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "BrownAlmostLinear" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::DiscreteBoundary<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::DiscreteBoundaryInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "DiscreteBoundary" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::DiscreteIntegral<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::DiscreteIntegralInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "DiscreteIntegral" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::BroydenTridiagonal<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BroydenTridiagonalInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "BroydenTridiagonal" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::BroydenBanded<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::BroydenBandedInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "BroydenBanded" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::LinearFullRank<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::LinearFullRankInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "LinearFullRank" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::LinearFullRank1<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::LinearFullRank1Init<double> ),
-		fct, npar, par, lo, hi, step, tol, "LinearFullRank1" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::LinearFullRank0cols0rows<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::LinearFullRank0cols0rowsInit<double> ),
-		fct, npar, par, lo, hi, step, tol, "LinearFullRank0cols0rows" );
-    }
-
-    {
-      FctPtr< void, int, double*, double&, int&, void* >
-	fct( tstoptfct::Chebyquad<double,void*> );
-
-      justdoit( fct_ptr( tstoptfct::ChebyquadInit<double> ),
-		fct, 9, par, lo, hi, step, tol, "Chebyquad" );
-    }
-
-}
-
-void tstglobal( int npar, double tol ) {
-
-  int size = npar * npar * 4;
-  std::vector<double> par( size ), step( size ), lo( size ),
-    hi( size );
-
-  for ( int ii = 0; ii < npar; ++ii )
-    step[ ii ] = 0.4;
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::McCormick<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::McCormickInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "McCormick" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BoxBetts<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BoxBettsInit<double> ),
-	      fct, 3, par, lo, hi, step, tol, "BoxBetts" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Paviani<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PavianiInit<double> ),
-	      fct, 10, par, lo, hi, step, tol, "Paviani" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::GoldsteinPrice<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GoldsteinPriceInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "GoldsteinPrice" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel5<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel5Init<double> ),
-	      fct, 4, par, lo, hi, step, tol, "Shekel5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel7<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel7Init<double> ),
-	      fct, 4, par, lo, hi, step, tol, "Shekel7" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel10<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel10Init<double> ),
-	      fct, 4, par, lo, hi, step, tol, "Shekel10" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 4, par, lo, hi, step, tol, "Levy4" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 5, par, lo, hi, step, tol, "Levy5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 6, par, lo, hi, step, tol, "Levy6" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 7, par, lo, hi, step, tol, "Levy7" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Griewank<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GriewankInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Griewank" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::SixHumpCamel<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::SixHumpCamelInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "SixHumpCamel" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Branin<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BraninInit<double> ),
-	      fct, 2, par, lo, hi, step, tol,
-	      "Branin" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shubert<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::ShubertInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Shubert" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Hansen<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::HansenInit<double> ),
-	      fct, 2, par, lo, hi, step, tol,
-	      "Hansen" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Cola<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::ColaInit<double> ),
-	      fct, 17, par, lo, hi, step, tol, "Cola" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Ackley<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::AckleyInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Ackley" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky1<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky1Init<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Bohachevsky1" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky2<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky2Init<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Bohachevsky2" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky3<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky3Init<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Bohachevsky3" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::DixonPrice<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::DixonPriceInit<double> ),
-	      fct, 25, par, lo, hi, step, tol, "DixonPrice" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Easom<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::EasomInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Easom" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Rastrigin<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::RastriginInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Rastrigin" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 2, par, lo, hi, step, tol, "Michalewicz2" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 5, par, lo, hi, step, tol, "Michalewicz5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 10, par, lo, hi, step, tol, "Michalewicz10" );
-  }
-
-  return;
-
-}
+}  
 
 int main( int argc, char* argv[] ) {
 
@@ -626,16 +113,19 @@ int main( int argc, char* argv[] ) {
     }
 
     double tol = 1.0e-8;
-
+    std::cout << "#\n#:npar = " << npar << "\n";
     std::cout << "#:tol=" << tol << '\n';
     std::cout << "# A negative value for the nfev signifies that the "
       "optimization method did not converge\n#\n";
     std::cout << "name\tnfev\tanswer\tstat\tpar\nS\tN\tN\tN\tN\n";
 
+    int npop=0, maxfev=1024;
+    double c1=0.0, c2=0.0;
     if ( uncopt )
-      tstuncopt( npar, tol );
+      tst_unc_opt( npar, tol, tstnm, npop, maxfev, c1, c2 );
+
     if ( globalopt )
-      tstglobal( npar, tol );
+      tst_global( npar, tol, tstnm, npop, maxfev, c1, c2 );
 
     return EXIT_SUCCESS;
 
@@ -649,11 +139,13 @@ int main( int argc, char* argv[] ) {
 }
 
 /*
-==18137== Memcheck, a memory error detector
-==18137== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
-==18137== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
-==18137== Command: a.out
-==18137==
+==1929== Memcheck, a memory error detector
+==1929== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
+==1929== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
+==1929== Command: tstnm
+==1929==
+#
+#:npar = 6
 #:tol=1e-08
 # A negative value for the nfev signifies that the optimization method did not converge
 #
@@ -671,10 +163,10 @@ NelderMead_0_PowellBadlyScaled	1429	0	8.03264e-08	8.38095e-06,11.9321,1.26161e-0
 NelderMead_1_PowellBadlyScaled	1468	0	2.57977e-06	4.17305e-06,23.9559,1.48524e-05,6.73218,1.49442e-05,6.69038
 NelderMead_0_PowellBadlyScaled	2551	0	7.73439e-08	8.83658e-06,11.3166,1.26077e-05,7.93166,9.42547e-06,10.6096
 NelderMead_1_PowellBadlyScaled	1801	0	2.43226e-06	4.17384e-06,23.9585,1.48476e-05,6.73462,1.49367e-05,6.69459
-NelderMead_0_BrownBadlyScaled	-215	0	1748.76	999965,2.44623e-05
-NelderMead_1_BrownBadlyScaled	-184	0	964.194	999980,2.54328e-05
-NelderMead_0_BrownBadlyScaled	421	0	1.62329e-08	1e+06,1.9999e-06
-NelderMead_1_BrownBadlyScaled	344	0	4.35674e-09	1e+06,2.00002e-06
+NelderMead_0_BrownBadlyScaled	-716	0	2.97791e+12	1491.49,-99.9975,1351.81,6785.79,8263.52,-0.372906
+NelderMead_1_BrownBadlyScaled	-383	0	4.90426e+11	1.09578e+06,479512,896591,86645,517175,5.58367e-05
+NelderMead_0_BrownBadlyScaled	-971	0	2.96981e+12	1773.84,903.886,2757.35,-99.9968,10628.5,0.0279322
+NelderMead_1_BrownBadlyScaled	-749	0	3.12746e+11	1.07107e+06,436191,1.14219e+06,250217,813975,2.58843e-05
 NelderMead_0_Beale	372	0	1.89415e-08	3.00017,0.500055,3.00018,0.500035,3.00007,0.500026
 NelderMead_1_Beale	454	0	2.08803e-08	2.99988,0.499969,3.00028,0.500084,3.00004,0.500014
 NelderMead_0_Beale	587	0	1.2406e-08	2.99998,0.500006,3.00002,0.500014,2.99988,0.499986
@@ -731,9 +223,9 @@ NelderMead_0_Biggs	626	0	0	1,10,1,5,4,3
 NelderMead_1_Biggs	249	0	0	1,10,1,5,4,3
 NelderMead_0_Biggs	1252	0	0	1,10,1,5,4,3
 NelderMead_1_Biggs	498	0	0	1,10,1,5,4,3
-NelderMead_0_Osborne2	-534	0.0401377	0.447557	1.14053,-0.0813793,0.388371,0.52296,0.256453,0.21697,5,7,2,4.5,5.5
+NelderMead_0_Osborne2	-2853	0.0401377	0.0443746	1.28814,0.40824,0.633314,0.579866,0.710138,1.00532,1.29459,5.15732,2.42452,4.58027,5.69192
 NelderMead_1_Osborne2	-2426	0.0401377	0.0845621	1.29114,0.386615,0.62108,0.408116,0.669402,1.40689,0.698202,13.1647,2.3395,4.75763,5.70398
-NelderMead_0_Osborne2	-745	0.0401377	0.447557	1.14053,-0.0813988,0.388347,0.523085,0.256463,0.216905,5,7,2,4.5,5.5
+NelderMead_0_Osborne2	3870	0.0401377	0.0401683	1.30997,0.431442,0.633621,0.599272,0.753864,0.905773,1.36485,4.82508,2.3988,4.56888,5.67538
 NelderMead_1_Osborne2	5172	0.0401377	0.0402209	1.30699,0.432518,0.634409,0.598327,0.753971,0.901382,1.36738,4.8245,2.39833,4.57019,5.67577
 NelderMead_0_Watson	627	0.00228767	0.00228767	-0.0157235,1.01243,-0.232966,1.2604,-1.51373,0.993008
 NelderMead_1_Watson	550	0.00228767	0.00228767	-0.0157257,1.01244,-0.233019,1.2605,-1.51379,0.993011
@@ -787,126 +279,123 @@ NelderMead_0_LinearFullRank0cols0rows	189	2.66667	2.66667	2.14804,1.95635,0.2611
 NelderMead_1_LinearFullRank0cols0rows	196	2.66667	2.66667	1.56493,0.703205,0.818582,-0.603392,-0.223035,1.69523
 NelderMead_0_LinearFullRank0cols0rows	458	2.66667	2.66667	2.54626,1.95813,0.262525,0.864232,-1.56549,2.27683
 NelderMead_1_LinearFullRank0cols0rows	465	2.66667	2.66667	1.65756,0.765659,0.86782,-0.600641,-0.279777,1.78379
-NelderMead_0_Chebyquad	-670	0	0.0162113	0.0348735,0.161667,0.22691,0.423012,0.422982,0.611581,0.7,0.8,0.9
+NelderMead_0_Chebyquad	898	0	2.42098e-05	0.0450991,0.215181,0.222438,0.429553,0.486155,0.593495,0.760509,0.805557,0.956184
 NelderMead_1_Chebyquad	2226	0	7.24599e-07	0.0441004,0.23679,0.19815,0.414455,0.582454,0.50183,0.799581,0.765167,0.955723
-NelderMead_0_Chebyquad	-871	0	0.0162113	0.0348735,0.161667,0.22691,0.423012,0.422982,0.611581,0.7,0.8,0.9
+NelderMead_0_Chebyquad	2046	0	1.50681e-09	0.0442028,0.199493,0.235614,0.416064,0.499987,0.583977,0.764389,0.800515,0.955792
 NelderMead_1_Chebyquad	2617	0	4.6099e-07	0.0440289,0.236508,0.198236,0.414554,0.582641,0.501506,0.799873,0.764807,0.955755
-NelderMead_0_McCormick	72	-1.91	-1.91322	-0.547215,-1.54724
+NelderMead_0_McCormick	66	-1.91	-1.91322	-0.547127,-1.54715
 NelderMead_1_McCormick	68	-1.91	-1.91322	-0.547201,-1.54716
-NelderMead_0_McCormick	125	-1.91	-1.91322	-0.547215,-1.54724
+NelderMead_0_McCormick	124	-1.91	-1.91322	-0.547214,-1.54716
 NelderMead_1_McCormick	129	-1.91	-1.91322	-0.547201,-1.54716
-NelderMead_0_BoxBetts	106	0	5.59281e-10	1.00007,9.99952,0.999948
+NelderMead_0_BoxBetts	112	0	1.46974e-10	1.00004,9.9997,0.999971
 NelderMead_1_BoxBetts	119	0	1.8843e-10	1.00003,9.99999,0.999983
-NelderMead_0_BoxBetts	182	0	1.97261e-10	0.999998,10,1.00001
+NelderMead_0_BoxBetts	183	0	1.46974e-10	1.00004,9.9997,0.999971
 NelderMead_1_BoxBetts	191	0	1.8843e-10	1.00003,9.99999,0.999983
-NelderMead_0_Paviani	-509	-45.7	-13.097	9.20575,9.20586,9.20651,9.20642,9.20674,9.20636,5,5,5,5
+NelderMead_0_Paviani	916	-45.7	-45.7785	9.35053,9.35058,9.35035,9.35037,9.34932,9.35131,9.34967,9.35021,9.35147,9.35032
 NelderMead_1_Paviani	1216	-45.7	-45.7784	9.34889,9.35141,9.34997,9.34849,9.35104,9.35041,9.3501,9.35006,9.3512,9.35108
-NelderMead_0_Paviani	-694	-45.7	-13.097	9.20624,9.20614,9.20624,9.2062,9.20605,9.20626,5,5,5,5
+NelderMead_0_Paviani	1299	-45.7	-45.7785	9.35046,9.35051,9.3504,9.3503,9.34999,9.35023,9.35017,9.35022,9.35029,9.35034
 NelderMead_1_Paviani	1679	-45.7	-45.7785	9.35019,9.35034,9.35017,9.35011,9.35015,9.35013,9.35021,9.35031,9.35031,9.35012
-NelderMead_0_GoldsteinPrice	85	3	3	-4.52456e-05,-1.00002
+NelderMead_0_GoldsteinPrice	63	3	3	5.56372e-06,-1.00002
 NelderMead_1_GoldsteinPrice	72	3	3	-2.83725e-05,-0.999983
-NelderMead_0_GoldsteinPrice	156	3	3	8.1296e-06,-0.999997
+NelderMead_0_GoldsteinPrice	134	3	3	-4.76258e-06,-0.999994
 NelderMead_1_GoldsteinPrice	145	3	3	8.28096e-06,-0.999998
-NelderMead_0_Shekel5	-99	-10.1532	-5.10076	7.9991,7.99939,7.99928,7.99961
+NelderMead_0_Shekel5	-115	-10.1532	-5.10076	7.99917,7.99921,7.99968,7.99955
 NelderMead_1_Shekel5	-120	-10.1532	-5.10076	8,8,8,8
-NelderMead_0_Shekel5	-239	-10.1532	-5.10077	7.99961,7.99965,7.99959,7.99961
+NelderMead_0_Shekel5	-275	-10.1532	-5.10077	7.99961,7.99965,7.99954,7.99961
 NelderMead_1_Shekel5	-282	-10.1532	-5.10077	7.9996,7.99964,7.99961,7.99963
-NelderMead_0_Shekel7	-98	-10.4029	-5.12881	7.9994,7.99943,7.99961,7.99903
+NelderMead_0_Shekel7	-117	-10.4029	-5.12881	7.99939,8,7.99911,7.99939
 NelderMead_1_Shekel7	-121	-10.4029	-5.12881	7.99921,7.99973,7.9999,7.99899
-NelderMead_0_Shekel7	-237	-10.4029	-5.12882	7.99951,7.99965,7.99949,7.99962
+NelderMead_0_Shekel7	-278	-10.4029	-5.12882	7.99951,7.9996,7.99952,7.9996
 NelderMead_1_Shekel7	-288	-10.4029	-5.12882	7.99955,7.99964,7.99948,7.99962
-NelderMead_0_Shekel10	-92	-10.5364	-5.17563	7.99989,7.99876,7.99943,7.99934
+NelderMead_0_Shekel10	-116	-10.5364	-5.17563	7.99911,8.00003,7.99955,7.99904
 NelderMead_1_Shekel10	-124	-10.5364	-5.17563	7.99957,7.9988,7.99962,7.99955
-NelderMead_0_Shekel10	-235	-10.5364	-5.17565	7.99945,7.99938,7.99939,7.99946
+NelderMead_0_Shekel10	-270	-10.5364	-5.17565	7.9995,7.99944,7.99945,7.99946
 NelderMead_1_Shekel10	-291	-10.5364	-5.17565	7.99946,7.99949,7.99945,7.99942
-NelderMead_0_Levy4	-672	-21.502	6.98777	1.98885,1.00001,1.00007,6.99791
+NelderMead_0_Levy4	-528	-21.502	8.95668	2.64777,1.33177,1.30012,6.99795
 NelderMead_1_Levy4	-756	-21.502	15.0168	0.00938728,-1.63593,1.99843,6.99607
-NelderMead_0_Levy4	-811	-21.502	6.98777	1.98881,1.00001,0.999949,6.99789
+NelderMead_0_Levy4	-667	-21.502	8.95668	2.64772,1.33182,1.30044,6.99796
 NelderMead_1_Levy4	-897	-21.502	15.0141	0.0122165,-1.63428,1.99839,6.99846
-NelderMead_0_Levy5	-145	-11.504	38.8617	3.96391,3.99608,3.99626,3.99629,3.9996
+NelderMead_0_Levy5	-100	-11.504	38.8617	3.96389,3.99626,3.99616,3.99627,3.9994
 NelderMead_1_Levy5	-198	-11.504	32.0094	3.30626,4.32626,3.66394,3.3297,3.99914
-NelderMead_0_Levy5	-333	-11.504	38.8617	3.96387,3.99616,3.99623,3.99623,3.99946
+NelderMead_0_Levy5	-233	-11.504	38.8617	3.9638,3.99613,3.99623,3.99625,3.99946
 NelderMead_1_Levy5	-633	-11.504	2.54461	1.65918,1.32488,0.999992,1.00007,2.99363
-NelderMead_0_Levy6	-180	-11.504	47.8505	3.96414,3.99643,3.9963,3.99614,3.99614,3.99941
+NelderMead_0_Levy6	-99	-11.504	47.8506	3.96384,3.99586,3.99612,3.99607,3.99638,3.99953
 NelderMead_1_Levy6	-228	-11.504	47.8505	3.96362,3.99621,3.9963,3.99611,3.99621,3.99951
-NelderMead_0_Levy6	-413	-11.504	47.8504	3.96388,3.99615,3.99624,3.99625,3.99622,3.99946
+NelderMead_0_Levy6	-267	-11.504	47.8504	3.96389,3.99615,3.99624,3.99622,3.99625,3.99946
 NelderMead_1_Levy6	-478	-11.504	47.8504	3.96392,3.99615,3.99624,3.99622,3.99623,3.99945
-NelderMead_0_Levy7	-174	-11.504	56.8395	3.96403,3.99626,3.99629,3.99627,3.99614,3.99608,4
+NelderMead_0_Levy7	-115	-11.504	56.8393	3.96409,3.99599,3.99608,3.99603,3.99633,3.99604,3.99966
 NelderMead_1_Levy7	-245	-11.504	56.8392	3.96439,3.99618,3.9963,3.99618,3.99616,3.99622,3.99946
-NelderMead_0_Levy7	-397	-11.504	56.8394	3.96381,3.99614,3.99624,3.99623,3.99623,3.99624,4
+NelderMead_0_Levy7	-356	-11.504	56.8392	3.9639,3.99615,3.99625,3.99624,3.99622,3.99625,3.99946
 NelderMead_1_Levy7	-524	-11.504	56.8392	3.96385,3.99615,3.99623,3.99624,3.99625,3.99624,3.99946
-NelderMead_0_Griewank	-44	0	4.91141	100.482,-97.6443
+NelderMead_0_Griewank	-40	0	4.91142	100.48,-97.6503
 NelderMead_1_Griewank	-36	0	4.91141	100.483,-97.646
-NelderMead_0_Griewank	-89	0	4.91141	100.481,-97.646
+NelderMead_0_Griewank	-87	0	4.91141	100.481,-97.6459
 NelderMead_1_Griewank	-85	0	4.91141	100.48,-97.6456
-NelderMead_0_SixHumpCamel	87	-1.03	-1.03163	0.0898309,-0.71266
+NelderMead_0_SixHumpCamel	148	-1.03	-1.03163	0.0898672,-0.712641
 NelderMead_1_SixHumpCamel	89	-1.03	-1.03163	0.0898139,-0.712667
-NelderMead_0_SixHumpCamel	145	-1.03	-1.03163	0.0898309,-0.71266
+NelderMead_0_SixHumpCamel	209	-1.03	-1.03163	0.0898672,-0.712641
 NelderMead_1_SixHumpCamel	153	-1.03	-1.03163	0.0898139,-0.712667
-NelderMead_0_Branin	84	0.397889	0.397887	9.42472,2.4752
+NelderMead_0_Branin	58	0.397889	0.397887	9.42484,2.47488
 NelderMead_1_Branin	68	0.397889	0.397887	9.4249,2.47518
-NelderMead_0_Branin	108	0.397889	0.397887	9.42478,2.47507
+NelderMead_0_Branin	114	0.397889	0.397887	9.42476,2.47496
 NelderMead_1_Branin	121	0.397889	0.397887	-3.14158,12.275
-NelderMead_0_Shubert	-48	-24.06	-7.21602	6.85993,6.85985
+NelderMead_0_Shubert	-59	-24.06	-14.6909	8.82759,5.79172
 NelderMead_1_Shubert	-51	-24.06	-7.21602	6.86033,6.86023
-NelderMead_0_Shubert	-109	-24.06	-7.21603	6.86013,6.86012
+NelderMead_0_Shubert	128	-24.06	-24.0625	5.79182,5.7918
 NelderMead_1_Shubert	-119	-24.06	-7.21603	6.86014,6.86014
-NelderMead_0_Hansen	-52	-176.54	-13.2572	3.34968,3.77213
+NelderMead_0_Hansen	60	-176.54	-176.542	4.9766,4.85798
 NelderMead_1_Hansen	58	-176.54	-176.542	4.97637,4.85802
-NelderMead_0_Hansen	-116	-176.54	-13.2573	3.3496,3.77232
+NelderMead_0_Hansen	128	-176.54	-176.542	4.97649,4.85806
 NelderMead_1_Hansen	123	-176.54	-176.542	4.97646,4.85804
-NelderMead_0_Cola	-1001	12.8154	164.519	1.63321,-1.22131,2.32856,0.607706,2.42367,-2.33567,0,0,0,0,0,0,0,0,0,0,0
+NelderMead_0_Cola	-291	12.8154	256.203	1.93387,-0.57903,0.373911,0.0739108,0.0739108,0.0739108,0.0739108,0.0739108,0.0739108,0.673911,-0.0382,0.0739108,0.0739108,0.0739108,0.0739108,0.0739108,0.0739108
 NelderMead_1_Cola	-270	12.8154	269.106	2.12345,-0.032006,0.248757,0.160369,0.160369,0.160369,0.160369,0.160369,0.160369,0.690699,0.127338,0.160369,0.160369,0.160369,0.160369,0.160369,0.160369
-NelderMead_0_Cola	-1564	12.8154	164.519	1.81478,-1.22133,2.32858,0.607775,2.42368,-2.33566,0,0,0,0,0,0,0,0,0,0,0
+NelderMead_0_Cola	-773	12.8154	169.125	1.80169,-1.37731,0.670804,0.370804,0.370804,0.370804,0.370804,0.370804,0.370804,0.970804,-1.97723,0.370804,0.370804,0.370804,0.370804,0.370804,0.370804
 NelderMead_1_Cola	-750	12.8154	197.195	2.17655,-1.25365,0.566106,0.477718,0.477718,0.477718,0.477718,0.477718,0.477718,1.00805,0.444687,0.477718,0.477718,0.477718,0.477718,0.477718,0.477718
-NelderMead_0_Ackley	-40	0	19.3325	16.9992,16.9991
+NelderMead_0_Ackley	-47	0	19.3325	16.9991,16.999
 NelderMead_1_Ackley	-42	0	19.3325	16.9997,16.9983
-NelderMead_0_Ackley	-96	0	19.3325	16.9988,16.9988
+NelderMead_0_Ackley	-107	0	19.3325	16.9987,16.9988
 NelderMead_1_Ackley	-99	0	19.3325	16.9988,16.9988
-NelderMead_0_Bohachevsky1	122	0	1.25887e-08	-2.78979e-05,-6.54913e-06
+NelderMead_0_Bohachevsky1	107	0	2.80925e-08	3.68721e-05,1.60197e-05
 NelderMead_1_Bohachevsky1	107	0	1.44232e-08	-2.52107e-05,1.25853e-05
-NelderMead_0_Bohachevsky1	180	0	9.97341e-09	8.17281e-06,1.63857e-05
+NelderMead_0_Bohachevsky1	172	0	2.09614e-08	-3.76885e-05,-4.28061e-06
 NelderMead_1_Bohachevsky1	171	0	7.07406e-09	1.04185e-05,-1.28198e-05
-NelderMead_0_Bohachevsky2	122	0	2.88746e-08	3.37759e-05,-2.20893e-05
+NelderMead_0_Bohachevsky2	113	0	1.54786e-08	-1.30841e-05,-2.25193e-05
 NelderMead_1_Bohachevsky2	116	0	1.84323e-08	3.537e-05,-4.46684e-06
-NelderMead_0_Bohachevsky2	183	0	2.00189e-09	1.14095e-05,-2.31143e-06
+NelderMead_0_Bohachevsky2	180	0	8.38959e-09	1.91356e-05,-1.10643e-05
 NelderMead_1_Bohachevsky2	182	0	4.57689e-09	-1.74279e-05,2.96785e-06
-NelderMead_0_Bohachevsky3	139	0	1.1725e-09	2.18609e-05,-1.2337e-05
+NelderMead_0_Bohachevsky3	113	0	2.6074e-09	1.94913e-05,-2.19285e-05
 NelderMead_1_Bohachevsky3	116	0	7.57306e-09	-7.13698e-06,2.19882e-05
-NelderMead_0_Bohachevsky3	199	0	1.1725e-09	2.18609e-05,-1.2337e-05
+NelderMead_0_Bohachevsky3	177	0	2.6074e-09	1.94913e-05,-2.19285e-05
 NelderMead_1_Bohachevsky3	179	0	2.94437e-09	-2.99086e-06,-8.60461e-06
-NelderMead_0_DixonPrice	-1112	0	30619.6	1.16636,0.790475,0.694773,0.727581,0.887451,1.30285,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5
-NelderMead_1_DixonPrice	-4219	0	1.9483	0.977852,0.70257,0.560747,0.531306,0.503243,0.497539,0.48952,0.44103,0.417998,0.382023,0.339412,-0.217317,0.0165483,0.143583,0.260735,0.355273,0.422537,0.464246,0.487951,0.494504,0.500238,0.5069,0.502595,0.501426,0.503183
-NelderMead_0_DixonPrice	-1266	0	30619.6	1.16616,0.790046,0.694627,0.727509,0.887395,1.3028,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5
-NelderMead_1_DixonPrice	-8297	0	1.03166	0.83508,0.59402,0.448749,0.358445,0.145349,0.0225438,0.0523564,-0.0263026,-0.00882373,0.022101,-0.0108069,-0.0148586,0.0197503,0.0776026,0.199348,0.315308,0.384486,0.418571,0.451432,0.476888,0.496668,0.504006,0.508931,0.506912,0.496625
-NelderMead_0_Easom	-31	-1	-0	25,25
+NelderMead_0_Easom	-39	-1	-0	25,25
 NelderMead_1_Easom	-39	-1	-0	25,25
-NelderMead_0_Easom	-62	-1	-0	25,25
+NelderMead_0_Easom	-78	-1	-0	25,25
 NelderMead_1_Easom	-78	-1	-0	25,25
-NelderMead_0_Rastrigin	-54	0	17.9092	2.98492,2.98481
+NelderMead_0_Rastrigin	-68	0	7.95966	1.98983,1.98988
 NelderMead_1_Rastrigin	-63	0	7.95967	1.99003,1.98996
-NelderMead_0_Rastrigin	-118	0	17.9092	2.98485,2.98487
+NelderMead_0_Rastrigin	-139	0	7.95966	1.9899,1.9899
 NelderMead_1_Rastrigin	-128	0	7.95966	1.98993,1.98994
-NelderMead_0_Michalewicz2	56	-1.8013	-1.8013	2.20297,1.57073
+NelderMead_0_Michalewicz2	57	-1.8013	-1.8013	2.20294,1.57083
 NelderMead_1_Michalewicz2	57	-1.8013	-1.8013	2.20286,1.57074
-NelderMead_0_Michalewicz2	115	-1.8013	-1.8013	2.20293,1.57079
+NelderMead_0_Michalewicz2	125	-1.8013	-1.8013	2.20292,1.5708
 NelderMead_1_Michalewicz2	125	-1.8013	-1.8013	2.20291,1.57081
-NelderMead_0_Michalewicz5	228	-4.68766	-4.68766	2.20305,1.57074,1.28517,1.92306,1.72046
+NelderMead_0_Michalewicz5	-265	-4.68766	-4.37489	2.20315,1.57071,2.21932,1.92308,0.996771
 NelderMead_1_Michalewicz5	-581	-4.68766	-4.21132	2.20294,1.57064,1.2851,2.48209,0.996649
-NelderMead_0_Michalewicz5	411	-4.68766	-4.68766	2.2029,1.57082,1.285,1.92306,1.72046
+NelderMead_0_Michalewicz5	-465	-4.68766	-4.3749	2.20291,1.57081,2.21934,1.92306,0.996673
 NelderMead_1_Michalewicz5	-769	-4.68766	-4.21132	2.20296,1.57068,1.28499,2.48202,0.996671
-NelderMead_0_Michalewicz10	-1263	-9.66015	-6.68961	2.20293,1.57075,1.28509,1.92312,1.7205,1.57082,1.5708,1.5708,1.5708,1.5708
+NelderMead_0_Michalewicz10	-757	-9.66015	-7.54152	2.20317,1.57105,1.28507,1.38683,1.7204,1.57082,2.2211,1.58688,1.65572,1.5708
 NelderMead_1_Michalewicz10	-1309	-9.66015	-7.38385	2.24268,1.4873,1.58613,1.12782,1.71622,1.56826,1.45042,1.63713,1.65397,1.57083
-NelderMead_0_Michalewicz10	-1481	-9.66015	-6.68961	2.2029,1.5708,1.285,1.92306,1.72047,1.57079,1.5708,1.5708,1.5708,1.5708
+NelderMead_0_Michalewicz10	-1491	-9.66015	-8.63743	2.2029,1.5708,1.285,1.92305,1.72048,1.57079,1.87724,1.9251,1.65572,1.57079
 NelderMead_1_Michalewicz10	-3389	-9.66015	-9.36542	2.14938,1.51456,1.29891,1.1225,1.70948,1.56669,1.44722,1.75381,1.65608,1.57376
-==18137==
-==18137== HEAP SUMMARY:
-==18137==     in use at exit: 0 bytes in 0 blocks
-==18137==   total heap usage: 46,819 allocs, 46,819 frees, 4,466,608 bytes allocated
-==18137==
-==18137== All heap blocks were freed -- no leaks are possible
-==18137==
-==18137== For counts of detected and suppressed errors, rerun with: -v
-==18137== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+==1929==
+==1929== HEAP SUMMARY:
+==1929==     in use at exit: 0 bytes in 0 blocks
+==1929==   total heap usage: 103,087 allocs, 103,087 frees, 15,091,548 bytes allocated
+==1929==
+==1929== All heap blocks were freed -- no leaks are possible
+==1929==
+==1929== For counts of detected and suppressed errors, rerun with: -v
+==1929== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
 */
+
 #endif

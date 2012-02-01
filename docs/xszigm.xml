@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="xszigm" refkeywords="wabs model models modeling modelling source composite attenuation xspec optical UV intergalactic medium  " seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+<SYNOPSIS>
+UV/Optical attenuation by the intergalactic medium.
+</SYNOPSIS>
+
+<DESC>
+<PARA>
+This multiplicative model computes the mean attenuation of the optical/UV spectrum of an object at redshift z at a random position on the sky due to intergalactic medium (IGM) clouds following either Madau (1995, ApJ 441, 18) or Meiksin (2006, MNRAS, 365, 807). The model calculates the mean expected attenuation due to resonant scattering by Lyman transitions and photoelectric absorption shortward of the Lyman limit. Attenuation by Helium and metals are not included in the Meiksin model, but are expected to be small. The total attenuation is set to zero for wavelengths less than 900 Angstroms. The user chooses whether to include attenuation due to photoelectric absorption.
+</PARA>
+
+
+<PARA>
+     This is a multiplicative model component.
+   </PARA>
+
+<TABLE>
+<CAPTION>xszigm Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> <DATA>z</DATA> <DATA>redshift</DATA>
+</ROW>
+<ROW> 
+  <DATA>2</DATA> <DATA>model</DATA> <DATA>Madau (0) or
+  Meiksin (1)</DATA>
+</ROW>
+<ROW> 
+  <DATA>3</DATA> <DATA>lyman_limit</DATA> <DATA>include photoelectric absorption (1) or not (0)</DATA>
+</ROW>
+</TABLE>
+
+<PARA title="XSpec version">
+     This information is taken from the
+     <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
+     User's Guide</HREF>.
+     Version 12.7 of the XSpec
+     models is supplied with CIAO 4.4.
+   </PARA>
+</DESC>
+
+<BUGS>
+     <PARA>
+       For a list of known bugs and issues with the XSPEC models, please visit
+       the <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/bugs.html">XSPEC bugs page</HREF>.
+     </PARA>
+   </BUGS>
+
+<VERSION>CIAO 4.4</VERSION>
+
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

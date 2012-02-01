@@ -3,7 +3,7 @@ import random
 
 #from sherpa.optmethods import _port
 #from sherpa.optmethods import _powell
-#import _odrpack
+import _odrpack
 
 from sherpa.optmethods import OptMethod
 #from sherpa.astro.ui import ui

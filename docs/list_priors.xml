@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="list_priors" refkeywords=" set_prior get_prior  prior priors jumping rule MCMC MH Metropolis Metropolis-Hastings  Markov chain Monte Carlo " seealsogroups="sh.list sh.stat" displayseealsogroups="" context="statistics">
+
+    <SYNOPSIS>
+      List thawed Sherpa model parameters with associated priors. 
+    </SYNOPSIS>
+
+    <SYNTAX>
+       <LINE>list_priors()</LINE>
+    </SYNTAX> 
+
+    <DESC>
+     <PARA>
+       The Sherpa prior functions constitute a subset of the pyBLoCXS
+       suite of functions; pyBLoCXS is a sophisticated Markov chain Monte
+       Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count
+       X-ray Spectral (BLoCXS) analysis in the Sherpa environment. The
+       algorithm explores parameter space at a suspected minimum using a
+       predefined Sherpa model to high-energy X-ray spectral data.  
+     </PARA>
+
+     <PARA>
+       By default, pyBLoCXS uses a flat prior defined between the
+      hardcoded parameter minima and maxima. The list_priors() function
+      may be used to return the list of all currently associated
+      parameter-prior pairs, which have been set using the set_prior()
+      function (see 'ahelp set_prior'). The get_prior() function
+      accesses the name of the prior function ('prior')
+      which has been assigned to a particular thawed fit parameter ('par').
+      </PARA>
+
+      <PARA>
+	Refer to
+	the <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">pyBLoCXS
+	documentation</HREF> for additional information about the algorithm.
+      </PARA>	
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>print list_priors()</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	   Call the list_priors() function with no arguments to
+	   return the dictionary of currently set prior functions for the set of thawed Sherpa model parameters.
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; normgauss1d.g1
+sherpa&gt; xsapec.therm
+sherpa&gt; g1.pos=2.5; g1.fwhm=0.5
+sherpa&gt; set_prior(therm.kT,g1)
+
+sherpa&gt; def lognorm(x, sigma=0.5, norm=1.0, x0=20.):
+   xl=numpy.log10(x)+22.
+   return (norm/numpy.sqrt(2*numpy.pi)/sigma)*numpy.exp(-0.5*(xl-x0)*(xl-x0)/sigma/sigma)
+
+sherpa&gt; set_prior(abs1.nH,lognorm)
+
+sherpa&gt; print list_priors()
+{'therm.kT': &lt;NormGauss1D model instance 'normgauss1d.g1'&gt;, 'abs1.nH': &lt;function lognorm at 0xc857230&gt;}
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

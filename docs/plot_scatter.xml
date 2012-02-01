@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="plot_scatter" refkeywords=" scatter plot plotting model models modeling modelling " seealsogroups="sh.model sh.plot" displayseealsogroups="" context="plotting">
+
+
+
+    <SYNOPSIS>
+      Create an X,Y scatter plot.
+    </SYNOPSIS>
+
+    <SYNTAX>
+      <LINE>plot_scatter(x, y, name="(x,y)", xlabel="x", ylabel="y", replot=False, overplot=False, clearwindow=True)
+</LINE>
+      
+    </SYNTAX>
+
+    <DESC>
+      <PARA>
+	The plot_scatter() function creates a scatter plot using the
+	input x and y data arrays (NumPy ndarrays), with the specified title and
+	axis labels.
+      </PARA>
+
+         <TABLE>
+	<ROW><DATA>Argument</DATA><DATA>Default</DATA><DATA>Description</DATA></ROW>
+	<ROW>        
+	<DATA>
+	 x
+	</DATA>
+	<DATA>
+	</DATA>  
+	<DATA>
+	  NumPy ndarray of x values
+	</DATA>
+	</ROW>
+	<ROW>        
+	<DATA>
+	 y
+	</DATA>
+	<DATA>
+	</DATA>  
+	<DATA>
+	  NumPy ndarray of y values
+	</DATA>
+	</ROW>
+
+	<ROW>
+	<DATA>
+	 name
+	</DATA>
+	<DATA>
+	  "(x,y)"
+	</DATA> 
+	<DATA>
+	  title to assign to the plot
+	</DATA>
+	</ROW>
+
+        <ROW>
+	<DATA>
+	 xlabel
+	</DATA>
+	<DATA>
+	  "x"
+	</DATA>
+	<DATA>
+	  label to assign to the x-axis
+	</DATA>
+	</ROW>	  
+        
+        <ROW>
+	<DATA>
+	 ylabel
+	</DATA>
+	<DATA>
+	  "y"
+	</DATA>
+	<DATA>
+	  label to assign to the y-axis
+	</DATA>
+	</ROW>	  
+        <ROW>
+	<DATA>
+	  replot
+	</DATA>
+        <DATA>
+	  False
+ 	</DATA>
+	<DATA>
+	  Should previously-calculated arrays be used to create the plot?
+	</DATA>
+	</ROW>
+
+	<ROW>
+	  <DATA>
+	    overplot
+	  </DATA>
+	  <DATA>
+	    False
+	  </DATA>
+	  <DATA>
+	    If True, then add the data to the current plot, otherwise
+	    erase the frame and create a new plot.
+	  </DATA>
+	</ROW>
+
+	<ROW>
+	  <DATA>
+	    clearwindow
+	  </DATA>
+	  <DATA>
+	    True 
+	  </DATA>
+	  <DATA>
+	    If True, then do not delete any existing frames in the current ChIPS
+	    window. Note that the plots will be created in a new
+	    ChIPS frame even when this argument is set.
+	  </DATA>
+	</ROW>
+      </TABLE>
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>plot_scatter(x,y)</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	   Assign an array of flux values to variable 'x' 
+	   and array of corresponding significance values to variable
+	   'y', and create an x,y scatter plot of the data using the
+	   plot_scatter() function with default preferences.
+	  </PARA>
+<VERBATIM>
+sherpa&gt; x = [7.89598603e-13, 7.83831341e-13, 7.56311062e-13,
+7.82468252e-13, 7.86805883e-13, 7.18030229e-13]
+sherpa&gt; y = [3., 4., 5., 6., 10., 2.]
+
+sherpa&gt; plot_scatter(x,y)
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>plot_scatter(redshift, index, name="P-L Photon Index
+          versus Quasar Redshift", ylabel="X-ray power law photon
+          index", xlabel="quasar redshift")</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	   Assign an array of quasar redshift values to variable 'redshift' and
+	   and array of corresponding power law photon index values to variable
+	   'index', and create a scatter plot of the data. Customize
+	   the title and axis labels of the plot by specifying 
+	   'redshift' as the x-axis label, 'index' as the y-axis
+	   label, and "P-L Photon Index versus Quasar Redshift" as the
+	   plot title.
+	  </PARA>
+<VERBATIM>
+sherpa&gt; redshift = [3.9, 4.5, 4.19, 4.23, 4.46]
+sherpa&gt; index = [1.25, 1.35, 0.75, 1.3, 1.8]
+
+sherpa&gt; plot_scatter(redshift,index, name="P-L Photon Index
+          vs. Quasar Redshift", ylabel="X-ray power law photon
+          index", xlabel="quasar redshift")
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

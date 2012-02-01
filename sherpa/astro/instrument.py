@@ -1,7 +1,24 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2010)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 import numpy
-from sherpa.utils.err import InstrumentErr, DataErr
+from sherpa.utils.err import InstrumentErr, DataErr, PSFErr
 from sherpa.models.model import ArithmeticFunctionModel, NestedModel, \
     ArithmeticModel, CompositeModel, Model
 from sherpa.astro.io.wcs import WCS
@@ -35,7 +52,7 @@ class RMFModel(CompositeModel, ArithmeticModel):
 
         # Logic for ArithmeticModel.__init__
         self.pars = ()
-        
+
         # FIXME: group pairs of coordinates with one attribute
 
         self.elo = None; self.ehi = None  # Energy space
@@ -57,7 +74,7 @@ class RMFModel(CompositeModel, ArithmeticModel):
         self.lo, self.hi = DataPHA._hc/self.ehi, DataPHA._hc/self.elo
 
         # Assume energy as default spectral coordinates
-        self.xlo, self.xhi = self.elo, self.ehi 
+        self.xlo, self.xhi = self.elo, self.ehi
 
         # Used to rebin against finer or coarser energy grids
         self.rmfargs = ()
@@ -305,7 +322,7 @@ class ARFModelPHA(ARFModel):
 
             # Compare disparate grids in energy space
             self.arfargs = ((self.elo, self.ehi), (bin_lo, bin_hi))
-            
+
             # FIXME: Assumes ARF grid is finest
 
         # Assume energy as default spectral coordinates
@@ -324,7 +341,9 @@ class ARFModelPHA(ARFModel):
 
         # Filter the view for current fitting session
         if numpy.iterable(pha.mask):
-            self.arf.notice(pha.get_mask())
+            mask = pha.get_mask()
+            if len(mask) == len(self.arf.specresp):
+                self.arf.notice(mask)
 
         self.filter()
 
@@ -404,7 +423,7 @@ class RSPModelPHA(RSPModel):
             self.arfargs = ((self.elo, self.ehi), (bin_lo, bin_hi))
 
             # FIXME: Assumes ARF grid is finest
-        
+
         elo, ehi = self.rmf.get_indep()
         # self.elo, self.ehi are from ARF
         if len(elo) != len(self.elo) and len(ehi) != len(self.ehi):
@@ -587,12 +606,16 @@ class RMF1D(NoNewAttributesAfterInit):
         pha = self._pha
 
         # Automatically add exposure time to source model for RMF-only analysis
-        if type(model) not in (ARFModel,):
+        if type(model) not in (ARFModel,ARFModelPHA,ARFModelNoPHA):
 
             if pha is not None and pha.exposure is not None:
                 model = pha.exposure * model
             elif arf is not None and arf.exposure is not None:
                 model = arf.exposure * model
+        elif pha is not None and arf is not None:
+            # If model is an ARF?
+            # Replace RMF(ARF(SRC)) with RSP(SRC) for efficiency
+            return RSPModelPHA(arf, rmf, pha, model.model)
 
         if pha is not None:
             return RMFModelPHA(rmf, pha, model)
@@ -837,13 +860,13 @@ class PileupRMFModel(CompositeModel, ArithmeticModel):
         self.otherargs = None
         self.otherkwargs = None
         self.pars = ()
-        CompositeModel.__init__(self,           
+        CompositeModel.__init__(self,
                                 ('%s(%s)' % ('apply_rmf', self.model.name)),
                                 (self.model,))
 
     def startup(self):
         pha = self.pha
-        pha.notice_response(False)         
+        pha.notice_response(False)
         self.channel = pha.get_noticed_channels()
         self.mask = pha.get_mask()
         self.model.startup()
@@ -973,18 +996,18 @@ class PSFModel(_PSFModel):
 
         elif ndim == 2:
 
-            # Edit WCS to reflect the subkernel extraction in 
+            # Edit WCS to reflect the subkernel extraction in
             # physical coordinates.
             if (subkernel and sky is not None and
                 lo is not None and hi is not None):
 
-                sky = WCS(sky.name, sky.type, sky.crval, 
+                sky = WCS(sky.name, sky.type, sky.crval,
                           sky.crpix - lo, sky.cdelt, sky.crota,
                           sky.epoch, sky.equinox)
 
                 # FIXME: Support for WCS only (non-Chandra) coordinate
                 # transformations?
-                
+
             dataset = DataIMG('kernel', indep[0], indep[1], dep,
                               kshape[::-1], sky=sky, eqpos=eqpos)
         else:

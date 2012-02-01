@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="get_lrt_results" refkeywords=" get plot plotting  result results model models modeling modelling likelihood ratio test null hypothesis" seealsogroups="sh.model sh.plot " displayseealsogroups="" context="plotting">
+
+
+   <SYNOPSIS>
+     Access the simulation results of the likelihood ratio test.
+   </SYNOPSIS>
+
+   <SYNTAX>
+     <LINE>
+      get_lrt_results()
+     </LINE>
+   </SYNTAX>
+
+   <DESC>
+     <PARA>
+       The get_lrt_results() command returns the likelihood ratio test
+     results computed by the plot_lrt() command, comparing fits of the
+     null model to fits of the alternative model using faked data with
+     Poisson noise. The likelihood ratio based on the observed data is
+     returned, along with the p-value, used to reject or accept the null model.
+     </PARA>
+
+     <PARA>
+       The following attributes are returned by get_lrt_results():
+     </PARA>
+ 
+   <LIST>
+    <ITEM>
+     samples  - parameter samples from all iterations, in the order of
+                the parameter list (as many as samples as specified in the 'num'
+                parameter of plot_lrt() are returned; default is 500)
+    </ITEM>
+    <ITEM>
+     stats    - calculated fit statistics in all iterations (first column
+                null, alt second)
+    </ITEM>
+    <ITEM>
+     ratios   - calculated likelihood ratios from all iterations
+    </ITEM>
+    <ITEM>
+     null     - fit statistic of null on real data
+    </ITEM>
+    <ITEM>
+     alt      - fit statistic of alt on real data
+    </ITEM>
+    <ITEM>
+     lr       - likelihood ratio on real data
+    </ITEM>
+    <ITEM>
+     ppp      - p-value 
+    </ITEM>
+   </LIST> 
+  </DESC>
+
+  <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; plot_lrt(powlaw1d.p1, p1+gauss1d.g1)</LINE>
+          <LINE>sherpa&gt; print get_lrt_results()</LINE>
+        </SYNTAX>
+       <DESC>
+<VERBATIM>
+samples = [[  8.5623e-01   5.6209e+03]
+ [  8.5391e-01   5.5819e+03]
+ [  8.5695e-01   5.7627e+03]
+ ..., 
+ [  8.6336e-01   5.9058e+03]
+ [  8.5459e-01   5.6061e+03]
+ [  8.3418e-01   4.9820e+03]]
+stats   = [[ 466.1517  466.1517]
+ [ 500.005   500.005 ]
+ [ 474.0595  474.0595]
+ ..., 
+ [ 424.5051  424.5051]
+ [ 453.3375  453.3375]
+ [ 463.3019  463.3019]]
+ratios  = [-0. -0. -0. ..., -0. -0. -0.]
+null    = 3958.4582610638136
+alt     = 3958.4582610638136
+lr      = -0.0
+ppp     = 0.054
+</VERBATIM>
+      
+          <PARA>
+           Call the get_lrt_results() command with no arguments to print
+ to the screen the results of the likelihood ratio test performed by
+ the plot_lrt() command.  View the array of ratios comparing fits
+           to simulated data done with a simple (null) power-law model
+           versus the more-complex (alternative) power-law plus
+	   Gaussian model, along with the likelihood ratio and p-value
+	   based on the observed data. 
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>lrt = get_lrt_results()</LINE>
+        </SYNTAX>
+        <DESC>
+          <PARA> 
+	   Store the data returned by get_lrt_results() to variable "lrt", in order to access and manipulate individual attributes within a script.        
+          </PARA>
+           
+<VERBATIM>
+sherpa&gt; res.ratios
+            array([-0., -0., -0., ..., -0., -0., -0.])
+
+sherpa&gt; res.ppp
+            0.054
+
+sherpa&gt; res.stats
+            
+array([[ 466.1517,  466.1517],
+       [ 500.005 ,  500.005 ],
+       [ 474.0595,  474.0595],
+       ..., 
+       [ 424.5051,  424.5051],
+       [ 453.3375,  453.3375],
+       [ 463.3019,  463.3019]])
+
+
+sherpa&gt; len(res.stats)
+            500
+
+sherpa&gt; res.stats[46]
+            array([ 532.5428,  532.5428])
+
+</VERBATIM>
+     </DESC>
+    </QEXAMPLE>
+   </QEXAMPLELIST>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

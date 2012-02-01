@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2008)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2008  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 """
 Classes for storing, inspecting, and manipulating astronomical data sets
 """
@@ -176,6 +193,9 @@ class DataRMF(Data1DInt):
             (rmf, pha) = args
             if pha != () and len(pha[0]) > len(rmf[0]):
                 src = rebin(src, pha[0], pha[1], rmf[0], rmf[1])
+
+        if len(src) != len(self._lo):
+            raise TypeError("Mismatched filter between ARF and RMF or PHA and RMF")
 
         return rmf_fold(src, self._grp, self._fch, self._nch, self._rsp,
                         self.detchans, self.offset)
@@ -779,13 +799,18 @@ class DataPHA(Data1DInt):
 
         #old_filter = self.get_filter(group=False)
         old_filter = self.get_filter(group=True)
+        do_notice = numpy.iterable(self.mask)
 
         self.grouping, self.quality = group_func(*args, **kwargs)
         self.group()
         self._original_groups = False
 
-        if numpy.iterable(self.mask):
-            self.ignore()
+        if do_notice:
+            # self.group() above has cleared the filter if applicable
+            # No, that just sets a flag.  So manually clear filter
+            # here
+            if self.mask is not None:
+                self.notice()
             for vals in parse_expr(old_filter):
                 self.notice(*vals)
 
@@ -906,6 +931,15 @@ class DataPHA(Data1DInt):
         if filter:
             dep = self.apply_filter(dep)
         return dep
+
+    def set_dep(self, val):
+        dep = None
+        if numpy.iterable(val):
+            dep = numpy.asarray(val, SherpaFloat)
+        else:
+            val = SherpaFloat(val)
+            dep = numpy.array([val]*len(self.get_indep()[0]))
+        setattr(self, 'counts', dep)
 
     def get_staterror(self, filter=False, staterrfunc=None):
         staterr = self.staterror

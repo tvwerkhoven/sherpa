@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="emissiongaussian" refkeywords="emission gaussian  model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     A Gaussian model of an emission feature.
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+      A Gaussian model of an emission feature, where:
+  </PARA>
+
+  <PARA>
+     <EQUATION>  
+           sigma = pos * fwhm / c / 2.354820044
+           delta = (x - pos) / sigma
+      </EQUATION>
+   </PARA>
+
+   <PARA>
+    if skew = 1,
+   </PARA>
+   
+   <PARA>
+    <EQUATION>  
+           f(x) = flux * exp (- delta**2 / 2) / sigma / 2.50662828
+      </EQUATION>
+   </PARA>
+
+   <PARA>
+    and, if skew != 1 and x &lt;= pos,
+   </PARA>
+
+   <PARA>
+    <EQUATION>  
+           f(x) = 2 * flux * exp(- delta**2 /2)/ sigma /2.50662828/(1+skew)
+      </EQUATION>
+   </PARA>
+
+   <PARA>
+    and, if skew != 1 and x &gt; pos,
+   </PARA>
+
+   <PARA>
+    <EQUATION>  
+           f(x) = 2 * flux * exp(- delta**2 /2/ skew**2)/ sigma /2.50662828/(1+skew)
+      </EQUATION>
+   </PARA>
+
+  
+<TABLE>
+<CAPTION>EmissionGaussian Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>fwhm</DATA> 
+  <DATA>FWHM, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>pos</DATA> 
+  <DATA>Center of feature, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>flux</DATA> 
+  <DATA>Amplitude of Gaussian</DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> 
+  <DATA>skew</DATA> 
+  <DATA>skew</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

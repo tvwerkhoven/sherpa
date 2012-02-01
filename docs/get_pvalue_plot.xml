@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="get_pvalue_plot" refkeywords=" get plot plotting model models modeling modelling likelihood ratio test null hypothesis" seealsogroups="sh.model sh.plot " displayseealsogroups="" context="plotting">
+
+
+    <SYNOPSIS>
+     Access a histogram plot of likelihood ratio test results.
+    </SYNOPSIS>
+
+    <SYNTAX>
+     <LINE>
+      get_pvalue_plot([null_model=None, alt_model=None, conv_model=None, id=1,
+             otherids=(), num=500, bins=25, numcores=None, recalc=False])
+     </LINE>
+    </SYNTAX>
+ 
+    <DESC>
+      <PARA>
+       Access the data arrays and preferences defining the histogram
+       plot produced by the plot_pvalue() function, a histogram of the
+       likelihood ratios comparing fits of the null model to fits of
+       the alternative model using faked data with Poisson noise.
+       Data returned includes the likelihood ratio computed using the observed
+       data, and the p-value, used to reject or accept the null model.
+      </PARA>
+ 
+
+     <PARA> Arguments:</PARA>
+   
+     <LIST>
+      <ITEM>
+       null_model  - model representing the null hypothesis
+      </ITEM>
+      <ITEM>
+       alt_model   - alternative model to compare to null
+      </ITEM>
+      <ITEM>
+       conv_model  - convolution model (PSF or RSP) to include for fitting.
+                     default = None
+      </ITEM>
+      <ITEM>
+       id          - Sherpa data id
+                     default = default data id
+      </ITEM>
+      <ITEM>
+       otherids    - List of other Sherpa data ids
+                     default = ()
+      </ITEM>
+      <ITEM>
+       num         - Number of iterations to run
+                     default = 500
+      </ITEM>
+      <ITEM>
+       bins        - Number of bins for the histogram
+                     default = 25
+      </ITEM>
+      <ITEM>
+       numcores    - Number of cpus to use during simulation
+                     default = number of detected cpus
+      </ITEM>
+      <ITEM>
+       recalc      - Recalculate the likelihood ratio test simulation
+                     default = False
+      </ITEM> 
+     </LIST>
+
+     <PARA>
+       The get_pvalue_plot() function returns the following
+       attributes:
+     </PARA>
+     
+    <LIST> 
+     <ITEM>
+       ratios - likelihood ratios from 'num' iterations
+     </ITEM>
+     <ITEM>
+      lr     - likelihood ratio on real, observed data
+     </ITEM>
+     <ITEM>
+      y      - normalized frequencies of likelihood ratios
+     </ITEM>
+     <ITEM>
+      xlo    - lower bin edges
+     </ITEM>
+     <ITEM> 
+      xhi    - upper bin edges
+     </ITEM>
+    </LIST>
+    </DESC>
+
+
+
+   <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+         <LINE>sherpa&gt; plot_pvalue(powlaw1d.p1, bpowlaw1d.bp1)</LINE>
+         <LINE>sherpa&gt; print get_pvalue_plot()</LINE>
+        </SYNTAX>
+       <DESC>
+<VERBATIM>
+ratios = [ 0.303   2.3149  0.5895 ..., -9.5852 -2.3156 -4.92  ]
+lr = 12566.880545
+xlo    = [-88.6406 -85.0598 -81.4791 ...,  -6.2833  -2.7026   0.8782]
+xhi    = [-85.0598 -81.4791 -77.8983 ...,  -2.7026   0.8782   4.4589]
+y      = [ 0.002  0.     0.    ...,  0.114  0.672  0.01 ]
+xlabel = Likelihood Ratio
+ylabel = Frequency
+title  = Likelihood Ratio Distribution
+histo_prefs = {'linethickness': None, 'symbolcolor': None, 'symbolfill': None, 'xlog': False, 'ylog': False, 'symbolangle': None, 'errthickness': None, 'fillcolor': None, 'linecolor': None, 'errstyle': None, 'linestyle': 1, 'symbolstyle': 0, 'errcolor': None, 'fillstyle': None, 'fillopacity': None, 'yerrorbars': False, 'symbolsize': None}
+</VERBATIM>
+          <PARA>
+           Call the get_pvalue_plot() command with no arguments to print
+ to the screen the data arrays and preferences
+           defining a histogram of likelihood ratios calculated using
+           the plot_pvalue() command.  View the arrays of ratios comparing fits
+           to simulated data done with a simple (null) power-law model
+           versus the more-complex (alternative) broken power-law model.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+  
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; plot_pvalue(p1, p1+g1)</LINE>
+          <LINE>sherpa&gt; my_lrt_plot = get_pvalue_plot()</LINE>
+          <LINE>sherpa&gt; my_lrt_plot.ratios</LINE>
+         </SYNTAX>
+         <DESC>
+<VERBATIM>
+array([ 0.303 ,  2.3149,  0.5895, ..., -9.5852, -2.3156, -4.92  ])
+</VERBATIM>
+        
+          <PARA>
+            Store the data arrays and plot preferences returned by
+            get_pvalue_plot() to variable "my_lrt_plot", in order to access and
+            manipulate individual attributes within a script.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+   </QEXAMPLELIST>
+
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

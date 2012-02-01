@@ -1,891 +1,90 @@
 #ifdef testDifEvo
 
-//_C++_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-//_C++_INSERT_GPL_LICENSE_HERE_
+// 
+//  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
 
 #include "DifEvo.hh"
-
-#include "sherpa/fcmp.hh"
-#include "tests/tstoptfct.hh"
-#include "sherpa/functor.hh"
 
 #include "minpack/LevMar.hh"
 #include "NelderMead.hh"
 
-using namespace sherpa;
+#include "tests/tstopt.hh"
 
-template <typename Real>
-void print_pars( const char* prefix, const char* name, int nfev, Real stat,
-		 Real answer, int n, const std::vector< Real >& x,
-		 Real tol=
-		 1.0e4*std::sqrt( std::numeric_limits< Real >::epsilon() ) ) {
+void tstde( Init init, Fct fct, int npar, std::vector<double>& par,
+	    std::vector<double>& lo, std::vector<double>& hi,
+	    double tol, const char* fct_name, int npop, int maxfev,
+	    double xprob, double sfactor ) {
 
-  
-  std::cout << prefix << name << '\t';
-  if ( 0 == sao_fcmp( stat, answer, std::sqrt(tol) ) )
-    std::cout << nfev << '\t';
-  else
-    std::cout << -nfev << '\t';
-  std::cout << answer << '\t';
-  std::cout << stat << '\t';
-  std::cout << x[0];
-  for ( int ii = 1; ii < n; ++ii )
-    std::cout << ',' << x[ii];
-  std::cout << '\n';
-
-}
-
-#define NPOP 16
-#define MAXNFEV 64
-
-template< typename Init, typename Fct >
-void justdoit( Init init, Fct fct, int npar, 
-	       std::vector< double >& par, std::vector< double >& lo,
-	       std::vector< double >& hi, double tol, const char* header ) {
-
-  int mfcts, seed=1357;
-  double answer;
-  double xprob = 0.9, sfactor=1.0;
-
-  sherpa::DifEvo< Fct, void*,
-    sherpa::NelderMead< Fct, void* > > de_nm( fct, NULL );
-
-  sherpa::DifEvo< Fct, void*,
-    sherpa::OptFunc< Fct, void* > > de( fct, NULL );
-  
+  int nfev, mfcts=0, seed=1357, verbose = 0, size = npop * npar,
+    maxnfev = maxfev * npar * size;
+  double fmin, answer=0.0;
   //
   // you may think you are clever by eliminating the following overhead
   // and simply use the vector par, but believe me it is necessary to call
   // with de_nm and de with mypar!
   //
   std::vector<double> mypar( npar, 0.0 );
-  int nfev, verbose = 0, size = NPOP * npar;
-  int maxnfev = MAXNFEV * npar * size;
-  double fmin;
 
   init( npar, mfcts, answer, &par[0], &lo[0], &hi[0] );
+  sherpa::DifEvo< Fct, void*,
+    sherpa::NelderMead< Fct, void* > > de_nm( fct, NULL );
   for ( int ii = 0; ii < npar; ++ii )
     mypar[ ii ] = par[ ii ];
   de_nm( verbose, maxnfev, tol, size, seed, xprob, sfactor, npar, lo, hi,
 	 mypar, nfev, fmin );
-  print_pars( "DifEvo_nm_", header, nfev, fmin, answer, npar, mypar );
-  
+  print_pars( "DifEvo_nm_", fct_name, nfev, fmin, answer, npar, mypar );
 
   init( npar, mfcts, answer, &par[0], &lo[0], &hi[0] );
+  sherpa::DifEvo< Fct, void*,
+    sherpa::OptFunc< Fct, void* > > de( fct, NULL );
   for ( int ii = 0; ii < npar; ++ii )
     mypar[ ii ] = par[ ii ];
   de( verbose, maxnfev, tol, size, seed, xprob, sfactor, npar, lo, hi,
       mypar, nfev, fmin );
-  print_pars( "DifEvo_", header, nfev, fmin, answer, npar, mypar );
+  print_pars( "DifEvo_", fct_name, nfev, fmin, answer, npar, mypar );
 
 }
 
-template< typename Init, typename Fct >
-void justdoitlm( Init init, Fct fct, int npar, 
-		 std::vector< double >& par, std::vector< double >& lo,
-		 std::vector< double >& hi, double tol, const char* header ) {
+void tstde_lm( Init init, FctVec fct, int npar, std::vector<double>& par,
+	       std::vector<double>& lo, std::vector<double>& hi,
+	       double tol, const char* fct_name, int npop, int maxfev,
+	       double xprob, double sfactor ) {
 
+  int nfev, mfcts=0, seed=1357, verbose = 0, size = npop * npar,
+    maxnfev = maxfev * npar * size;
+  double fmin, answer=0.0;
   //
   // you may think you are clever by eliminating the following overhead
   // and simply use the vector par, but believe me it is necessary to call
-  // de with mypar!
+  // with de_nm and de with mypar!
   //
   std::vector<double> mypar( npar, 0.0 );
-  int mfcts, seed=1357;
-  double answer;
-  double xprob = 0.9, sfactor=1.0;
 
   init( npar, mfcts, answer, &par[0], &lo[0], &hi[0] );
-    
-  sherpa::DifEvo< Fct, void*,
-    minpack::LevMar< Fct, void* > > de( fct, NULL, mfcts );
-
-  int nfev, verbose = 0, population_size = NPOP * npar;
-  int maxnfev = MAXNFEV * npar * population_size;
-  double fmin;
-
+  sherpa::DifEvo< FctVec, void*,
+    minpack::LevMar< FctVec, void* > > de_lm( fct, NULL, mfcts );
   for ( int ii = 0; ii < npar; ++ii )
     mypar[ ii ] = par[ ii ];
-  de( verbose, maxnfev, tol, population_size, seed, xprob, sfactor, npar, lo,
-      hi, mypar, nfev, fmin );
-  
-  print_pars( "DifEvo_lm_", header, nfev, fmin, answer, npar, mypar );
-
-}
-
-void tstuncopt( int npar, double tol ) {
-
-  const int size=npar*32;
-  std::vector< double > par( size, 0 ), lo( size, -1.0e2 ), hi( size, 1.0e2 );
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Rosenbrock<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::RosenbrockInit<double> ), fct, npar, par,
-	      lo, hi, tol, "Rosenbrock" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::FreudensteinRoth<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::FreudensteinRothInit<double> ),
-	      fct, npar, par, lo, hi, tol, "FreudensteinRoth" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::PowellBadlyScaled<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PowellBadlyScaledInit<double> ),
-	      fct, npar, par, lo, hi, tol, "PowellBadlyScaled" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BrownBadlyScaled<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BrownBadlyScaledInit<double> ),
-	      fct, 2, par, lo, hi, tol, "BrownBadlyScaled" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Beale<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BealeInit<double> ),
-	      fct, npar, par, lo, hi, tol, "Beale" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::JennrichSampson<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::JennrichSampsonInit<double> ),
-	      fct, npar, par, lo, hi, tol,
-	      "JennrichSampson" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::HelicalValley<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::HelicalValleyInit<double> ),
-	      fct, 3, par, lo, hi, tol, "HelicalValley" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bard<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BardInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Bard" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Gaussian<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GaussianInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Gaussian" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Meyer<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MeyerInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Meyer" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::GulfResearchDevelopment<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GulfResearchDevelopmentInit<double> ),
-	      fct, 3, par, lo, hi, tol, "GulfResearchDevelopment" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Box3d<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Box3dInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Box3d" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::PowellSingular<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PowellSingularInit<double> ),
-	      fct, 4, par, lo, hi, tol, "PowellSingular" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Wood<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::WoodInit<double> ),
-	      fct, 4, par, lo, hi, tol, "Wood" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::KowalikOsborne<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::KowalikOsborneInit<double> ),
-	      fct, 4, par, lo, hi, tol, "KowalikOsborne" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BrownDennis<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BrownDennisInit<double> ),
-	      fct, 4, par, lo, hi, tol, "BrownDennis" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Osborne1<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Osborne1Init<double> ),
-	      fct, 5, par, lo, hi, tol, "Osborne1" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Biggs<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BiggsInit<double> ),
-	      fct, 6, par, lo, hi, tol, "Biggs" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Osborne2<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Osborne2Init<double> ),
-	      fct, 11, par, lo, hi, tol, "Osborne2" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Watson<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::WatsonInit<double> ),
-	      fct, 6, par, lo, hi, tol, "Watson" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::PenaltyI<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PenaltyIInit<double> ),
-	      fct, 4, par, lo, hi, tol, "PenaltyI" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::PenaltyII<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PenaltyIIInit<double> ),
-	      fct, 4, par, lo, hi, tol, "PenaltyII" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::VariablyDimensioned<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::VariablyDimensionedInit<double> ),
-	      fct, npar, par, lo, hi, tol, "VariablyDimensioned" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Trigonometric<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::TrigonometricInit<double> ),
-	      fct, npar, par, lo, hi, tol, "Trigonometric" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BrownAlmostLinear<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BrownAlmostLinearInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BrownAlmostLinear" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::DiscreteBoundary<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::DiscreteBoundaryInit<double> ),
-	      fct, npar, par, lo, hi, tol, "DiscreteBoundary" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::DiscreteIntegral<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::DiscreteIntegralInit<double> ),
-	      fct, npar, par, lo, hi, tol, "DiscreteIntegral" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BroydenTridiagonal<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BroydenTridiagonalInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BroydenTridiagonal" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BroydenBanded<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BroydenBandedInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BroydenBanded" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::LinearFullRank<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LinearFullRankInit<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::LinearFullRank1<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LinearFullRank1Init<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank1" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::LinearFullRank0cols0rows<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LinearFullRank0cols0rowsInit<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank0cols0rows" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Chebyquad<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::ChebyquadInit<double> ),
-	      fct, 9, par, lo, hi, tol, "Chebyquad" );
-  }
-
-  return;
-
-}
-
-void tstuncoptlm( int npar, double tol ) {
-
-  const int size=npar*32;
-  std::vector< double > par( size, 0 ), lo( size, -1.0e2 ), hi( size, 1.0e2 );
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Rosenbrock<double,void*> );
-    
-    justdoitlm( sherpa::fct_ptr( tstoptfct::RosenbrockInit<double> ),
-		fct, npar, par, lo, hi, tol, "Rosenbrock" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::FreudensteinRoth<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::FreudensteinRothInit<double> ),
-		fct, npar, par, lo, hi, tol, "FreudensteinRoth" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::PowellBadlyScaled<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::PowellBadlyScaledInit<double> ),
-		fct, npar, par, lo, hi, tol, "PowellBadlyScaled" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::BrownBadlyScaled<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BrownBadlyScaledInit<double> ),
-	      fct, 2, par, lo, hi, tol, "BrownBadlyScaled" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Beale<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BealeInit<double> ),
-	      fct, npar, par, lo, hi, tol, "Beale" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::JennrichSampson<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::JennrichSampsonInit<double> ),
-	      fct, npar, par, lo, hi, tol, "JennrichSampson" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::HelicalValley<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::HelicalValleyInit<double> ),
-	      fct, 3*npar, par, lo, hi, tol, "HelicalValley" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Bard<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BardInit<double> ),
-	      fct, 3*npar, par, lo, hi, tol, "Bard" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Gaussian<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::GaussianInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Gaussian" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Meyer<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::MeyerInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Meyer" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::GulfResearchDevelopment<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::GulfResearchDevelopmentInit<double> ),
-	      fct, 3, par, lo, hi, tol, "GulfResearchDevelopment" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Box3d<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::Box3dInit<double> ),
-	      fct, 3, par, lo, hi, tol, "Box3d" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::PowellSingular<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::PowellSingularInit<double> ),
-	      fct, 4*npar, par, lo, hi, tol, "PowellSingular" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Wood<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::WoodInit<double> ),
-	      fct, 4, par, lo, hi, tol, "Wood" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::KowalikOsborne<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::KowalikOsborneInit<double> ),
-	      fct, 4, par, lo, hi, tol, "KowalikOsborne" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::BrownDennis<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BrownDennisInit<double> ),
-	      fct, 4, par, lo, hi, tol, "BrownDennis" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Osborne1<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::Osborne1Init<double> ),
-	      fct, 5, par, lo, hi, tol, "Osborne1" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Biggs<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BiggsInit<double> ),
-	      fct, 6, par, lo, hi, tol, "Biggs" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Osborne2<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::Osborne2Init<double> ),
-	      fct, 11, par, lo, hi, tol, "Osborne2" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Watson<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::WatsonInit<double> ),
-	      fct, 6, par, lo, hi, tol, "Watson" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::PenaltyI<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::PenaltyIInit<double> ),
-	      fct, 4, par, lo, hi, tol, "PenaltyI" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::PenaltyII<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::PenaltyIIInit<double> ),
-	      fct, 4, par, lo, hi, tol, "PenaltyII" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::VariablyDimensioned<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::VariablyDimensionedInit<double> ),
-	      fct, npar, par, lo, hi, tol, "VariablyDimensioned" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Trigonometric<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::TrigonometricInit<double> ),
-	      fct, npar, par, lo, hi, tol, "Trigonometric" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::BrownAlmostLinear<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BrownAlmostLinearInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BrownAlmostLinear" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::DiscreteBoundary<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::DiscreteBoundaryInit<double> ),
-	      fct, npar, par, lo, hi, tol, "DiscreteBoundary" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::DiscreteIntegral<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::DiscreteIntegralInit<double> ),
-	      fct, npar, par, lo, hi, tol, "DiscreteIntegral" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::BroydenTridiagonal<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BroydenTridiagonalInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BroydenTridiagonal" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::BroydenBanded<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::BroydenBandedInit<double> ),
-	      fct, npar, par, lo, hi, tol, "BroydenBanded" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::LinearFullRank<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::LinearFullRankInit<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::LinearFullRank1<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::LinearFullRank1Init<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank1" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::LinearFullRank0cols0rows<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::LinearFullRank0cols0rowsInit<double> ),
-	      fct, npar, par, lo, hi, tol, "LinearFullRank0cols0rows" );
-  }
-
-  {
-    sherpa::FctPtr< void, int, int, double*, double*, int&, void* >
-      fct( tstoptfct::Chebyquad<double,void*> );
-
-    justdoitlm( sherpa::fct_ptr( tstoptfct::ChebyquadInit<double> ),
-	      fct, 9, par, lo, hi, tol, "Chebyquad" );
-  }
-
-  return;
-
-}
-
-void tstglobal( int npar, double tol ) {
-
-  const int size=npar*32;
-  std::vector< double > par( size, 0 ), lo( size, -1.0e2 ), hi( size, 1.0e2 );
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::McCormick<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::McCormickInit<double> ),
-	      fct, 2, par, lo, hi, tol, "McCormick" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::BoxBetts<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BoxBettsInit<double> ),
-	      fct, 3, par, lo, hi, tol, "BoxBetts" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Paviani<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::PavianiInit<double> ),
-	      fct, 10, par, lo, hi, tol, "Paviani" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::GoldsteinPrice<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GoldsteinPriceInit<double> ),
-	      fct, 2, par, lo, hi, tol, "GoldsteinPrice" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel5<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel5Init<double> ),
-	      fct, 4, par, lo, hi, tol, "Shekel5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel7<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel7Init<double> ),
-	      fct, 4, par, lo, hi, tol, "Shekel7" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shekel10<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Shekel10Init<double> ),
-	      fct, 4, par, lo, hi, tol, "Shekel10" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 4, par, lo, hi, tol, "Levy4" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 5, par, lo, hi, tol, "Levy5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 6, par, lo, hi, tol, "Levy6" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Levy<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::LevyInit<double> ),
-	      fct, 7, par, lo, hi, tol, "Levy7" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Griewank<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::GriewankInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Griewank" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::SixHumpCamel<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::SixHumpCamelInit<double> ),
-	      fct, 2, par, lo, hi, tol, "SixHumpCamel" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Branin<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::BraninInit<double> ),
-	      fct, 2, par, lo, hi, tol,
-	      "Branin" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Shubert<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::ShubertInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Shubert" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Hansen<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::HansenInit<double> ),
-	      fct, 2, par, lo, hi, tol,
-	      "Hansen" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Cola<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::ColaInit<double> ),
-	      fct, 17, par, lo, hi, tol, "Cola" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Ackley<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::AckleyInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Ackley" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky1<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky1Init<double> ),
-	      fct, 2, par, lo, hi, tol, "Bohachevsky1" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky2<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky2Init<double> ),
-	      fct, 2, par, lo, hi, tol, "Bohachevsky2" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Bohachevsky3<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::Bohachevsky3Init<double> ),
-	      fct, 2, par, lo, hi, tol, "Bohachevsky3" );
-  }
-
-
-  // {
-  //   FctPtr< void, int, double*, double&, int&, void* >
-  //     fct( tstoptfct::DixonPrice<double,void*> );
-  // 
-  //   justdoit( fct_ptr( tstoptfct::DixonPriceInit<double> ),
-  // 	      fct, 25, par, lo, hi, tol, "DixonPrice" );
-  // }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Easom<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::EasomInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Easom" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Rastrigin<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::RastriginInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Rastrigin" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 2, par, lo, hi, tol, "Michalewicz2" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 5, par, lo, hi, tol, "Michalewicz5" );
-  }
-
-  {
-    FctPtr< void, int, double*, double&, int&, void* >
-      fct( tstoptfct::Michalewicz<double,void*> );
-
-    justdoit( fct_ptr( tstoptfct::MichalewiczInit<double> ),
-	      fct, 10, par, lo, hi, tol, "Michalewicz10" );
-  }
-
-
-  return;
+  de_lm( verbose, maxnfev, tol, size, seed, xprob, sfactor, npar, lo, hi,
+	 mypar, nfev, fmin );
+  print_pars( "DifEvo_lm_", fct_name, nfev, fmin, answer, npar, mypar );
 }
 
 int main( int argc, char* argv[] ) {
@@ -907,34 +106,40 @@ int main( int argc, char* argv[] ) {
       }
 
   int npar=2;
-  if ( argc == 1 ) {
+  if ( argc == 1 )
     npar = atoi( *argv );
-    std::cout << "#\n# npar = " << npar << "\n#\n";
-  }
 
   double tol=1.0e-6;
+  std::cout << "#\n#:npar = " << npar << "\n";
   std::cout << "#:tol=" << tol << '\n';
   std::cout << "#\n# A negative value for the nfev signifies that the "
     "optimization method did not converge\n#\n";
   std::cout << "name\tnfev\tanswer\tstat\tpar\nS\tN\tN\tN\tN\n";
 
+
+  int npop=16, maxfev=64;
+  double xprob=0.9, sfactor=1.0;
+
   if ( uncopt ) {
-    tstuncopt( npar, tol );
-    tstuncoptlm( npar, tol );
+    tst_unc_opt( npar, tol, tstde, npop, maxfev, xprob, sfactor );
+    tst_unc_opt( npar, tol, tstde_lm, npop, maxfev, xprob, sfactor );
   }
   if ( globalopt )
-    tstglobal( npar, tol );
+    tst_global( npar, tol, tstde, npop, maxfev, xprob, sfactor );
+    
 
   return 0;
 
- }
+}
 
 /*
-==20081== Memcheck, a memory error detector
-==20081== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
-==20081== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
-==20081== Command: tstde
-==20081==
+==1609== Memcheck, a memory error detector
+==1609== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
+==1609== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
+==1609== Command: tstde
+==1609==
+#
+#:npar = 2
 #:tol=1e-06
 #
 # A negative value for the nfev signifies that the optimization method did not converge
@@ -1013,13 +218,13 @@ DifEvo_lm_PowellBadlyScaled	50	0	6.75462e-29	1.09816e-05,9.10615
 DifEvo_lm_BrownBadlyScaled	46	0	1.97215e-31	1e+06,2e-06
 DifEvo_lm_Beale	23	0	1.83079e-26	3,0.5
 DifEvo_lm_JennrichSampson	41	124.362	124.362	0.257837,0.257818
-DifEvo_lm_HelicalValley	72	0	5.09357e-47	1,-2.35127e-29,0,1,-4.48426e-25,0
-DifEvo_lm_Bard	36	0.0164297	0.0164298	0.0824106,1.13304,2.34369,0.0824106,1.13304,2.34369
+DifEvo_lm_HelicalValley	35	0	9.69231e-33	1,-6.18577e-18,0
+DifEvo_lm_Bard	21	0.00821487	0.00821488	0.0824106,1.13304,2.34369
 DifEvo_lm_Gaussian	9	1.12793e-08	1.12793e-08	0.398956,1.00002,-3.34829e-13
 DifEvo_lm_Meyer	537	87.9458	87.9459	0.00560966,6181.34,345.224
 DifEvo_lm_GulfResearchDevelopment	1729	0	1.7747e-21	50,25,1.5
 DifEvo_lm_Box3d	25	0	2.49066e-22	1,10,1
-DifEvo_lm_PowellSingular	759	0	5.93172e-54	3.50164e-14,-3.50164e-15,1.6607e-14,1.6607e-14,3.50164e-14,-3.50164e-15,1.6608e-14,1.6608e-14
+DifEvo_lm_PowellSingular	287	0	4.83914e-58	3.98842e-15,-3.98842e-16,1.78612e-15,1.78612e-15
 DifEvo_lm_Wood	-31	0	7.87697	-0.969487,0.950066,-0.968,0.948317
 DifEvo_lm_KowalikOsborne	62	0.000307505	0.000307506	0.192813,0.191149,0.123032,0.136001
 DifEvo_lm_BrownDennis	1055	85822.2	85823	-11.5697,13.1946,-0.404388,0.236564
@@ -1092,14 +297,15 @@ DifEvo_nm_Michalewicz5	1083	-4.68766	-4.64589	2.20292,1.57053,1.2851,1.11375,1.7
 DifEvo_Michalewicz5	13344	-4.68766	-4.68754	2.205,1.57137,1.28544,1.92321,1.72067
 DifEvo_nm_Michalewicz10	12511	-9.66015	-9.61838	2.20326,1.57071,1.28499,1.11359,1.72045,1.57073,1.45438,1.75605,1.65573,1.57082
 DifEvo_Michalewicz10	52873	-9.66015	-9.55588	2.20803,1.57377,1.28519,1.92256,1.72089,1.57051,1.4554,1.75435,1.28298,1.21835
-==20081==
-==20081== HEAP SUMMARY:
-==20081==     in use at exit: 0 bytes in 0 blocks
-==20081==   total heap usage: 919,730 allocs, 919,730 frees, 157,373,228 bytes allocated
-==20081==
-==20081== All heap blocks were freed -- no leaks are possible
-==20081==
-==20081== For counts of detected and suppressed errors, rerun with: -v
-==20081== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+==1609==
+==1609== HEAP SUMMARY:
+==1609==     in use at exit: 0 bytes in 0 blocks
+==1609==   total heap usage: 919,570 allocs, 919,570 frees, 157,350,820 bytes allocated
+==1609==
+==1609== All heap blocks were freed -- no leaks are possible
+==1609==
+==1609== For counts of detected and suppressed errors, rerun with: -v
+==1609== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
 */
+
 #endif

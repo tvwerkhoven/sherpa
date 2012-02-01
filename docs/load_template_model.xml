@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="load_template_model" refkeywords="load_ascii read errors ascii load  template templates table atable mtable readascii model models modeling modelling TABLECrate gridsearch" seealsogroups="sh.io sh.model " displayseealsogroups="" context="modeling">
+
+
+    <SYNOPSIS>
+      Load a set of template models 
+    </SYNOPSIS>
+
+    <SYNTAX>
+      <LINE>load_template_model(modelname, templatefile, dstype=sherpa.data.Data1D, sep=' ', comment='#', method=sherpa.utils.neville)
+</LINE>
+	</SYNTAX>
+
+    <DESC>
+     <PARA>
+      The Sherpa load_template_model function, an extenstion of
+    load_table_model (see 'ahelp load_table_model'), can be used to
+    read in a collection of template models from a
+    directory full of template files, in order to compare a data set to
+    all of the templates in that collection.  Sherpa finds the template
+    that best matches the data, and reports back the parameter values
+    associated with that template.
+      </PARA>
+
+      <PARA>
+        In the simplest case, the user will have a directory
+           containing a set of ASCII template model files, along with a single ASCII index file which lists the various
+           templates in that directory. The index file is specified
+           in the "templatefile" parameter of load_template_model, and
+           the various templates are loaded into a Sherpa model instance assigned
+           the ID specified in the  "modelname" parameter.
+      </PARA>
+
+      <LIST>
+        <ITEM> 
+          modelname - the name for the template model
+	</ITEM>
+
+        <ITEM>
+	  templatefile - the name of the index file (with
+	  path) which contains the list of template files
+	</ITEM>
+
+        <ITEM>
+	  dstype (template input) - dataset type: Data1D, Data1DInt; default=Data1D
+	</ITEM>
+	<ITEM>
+	  sep - string value which represents column separator in 'templatefile'
+	</ITEM>
+	<ITEM>
+	  comment - string value which represents comment in 'templatefile'
+	</ITEM>
+
+      </LIST>
+
+      <PARA>
+	The Sherpa model library will accommodate templates of the
+	 following form:
+	
+      </PARA>
+      <PARA>
+	Template(parameters, x, y) - Model Template file for set of parameters and coordinates
+    </PARA>
+
+    <PARA>
+      parameters - set of parameters, such as (temperature, density)
+    </PARA>
+    <PARA>
+      x - x-coordinate of templates, e.g. wavelength, energy, or time
+    </PARA>
+    <PARA>
+      y - y-coordinate of templates, e.g. flux, counts or intensity
+    </PARA>
+ 
+
+    
+
+    <PARA>
+      The index file should contain a table with one line per template
+      data file,
+      with three groups of columns in the following order:
+    </PARA>
+
+    <LIST>
+      <ITEM>
+	Model parameter columns, an arbitrary number of columns
+      </ITEM>
+      <ITEM>
+	The MODELFLAG column which separates the parameter list from
+        the filenames/model arrays, and marks lines which are to be used or not:
+         
+	  MODELFLAG = 1 - use the file; 
+          MODELFLAG = 0 - do not use the file
+      </ITEM> 
+      <ITEM>
+       The FILENAME column which points to the data file for that instance.
+      </ITEM>
+     </LIST>
+
+     <PARA>
+       Sherpa reads the index file in order to set up the model with
+       the parameters specified in the first line, and the arrays from the
+       columns given by the data file.
+     </PARA>
+
+  
+
+ 
+    <PARA>
+      The Sherpa template model supports linear, nearest-neighbor, and
+      polynomial interpolation. (Interpolation is used by the template
+      model to match the data grid to the model grid - which must match before the fit statistics can be calculated for fitting.)
+    </PARA>  
+    
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; load_template_model("kerr_templ", "templ_index.txt")</LINE>
+	</SYNTAX>
+        <DESC>
+          <PARA>
+	   Load Kerr Disk model templates into Sherpa model instance
+	   "kerr_templ". Template models are loaded from a
+	   directory containing one ASCII file per template
+	   model, listed in the ASCII index file "templ_index.txt".
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; !more templ_index.txt
+      
+#MASS MDOT  PHI  MODELFLAG FILENAME
+1.E9 0.1   0.25  1         k9_bf_01_025.dat
+1.E8 0.8   0.25  0         k8_bf_08_025.dat
+....
+
+sherpa&gt; load_template_model("kerr_temp","templ_index.txt")
+</VERBATIM>
+       </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+        <SYNTAX>
+	  <LINE>sherpa&gt; load_template_model('tbl', 'table.txt')</LINE>
+	</SYNTAX>
+        <DESC>
+          <PARA>
+	    Load a collection of template models into the Sherpa model
+	    instance 'tbl', and fit to a source data set using the Sherpa grid-searching
+	    optimization method. The parameters of the template model which best matches the data are returned. 
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; load_ascii('source.dat', ncols=3, dstype=Data1D)
+sherpa&gt; load_template_model('tbl', 'table.txt')
+sherpa&gt; set_model(tbl)
+sherpa&gt; set_method('gridsearch')
+sherpa&gt; set_method_opt('sequence', tbl.parvals)
+sherpa&gt; fit()
+Dataset               = 1
+Method                = gridsearch
+Statistic             = chi2gehrels
+Initial fit statistic = 1.53806e+12
+Final fit statistic   = 212.321 at function evaluation 106
+Data points           = 7
+Degrees of freedom    = 4
+Probability [Q-value] = 8.41533e-45
+Reduced statistic     = 53.0803
+Change in statistic   = 1.53806e+12
+   tbl.mass       9           
+   tbl.rate       0.3         
+   tbl.angle      1           
+WARNING: parameter value tbl.angle is at its maximum boundary 1.0  
+
+     
+sherpa&gt; show_model()
+Model: 1
+templatemodel.tbl
+   Param        Type          Value          Min          Max      Units
+   -----        ----          -----          ---          ---      -----
+   tbl.mass     thawed            9            6           10           
+   tbl.rate     thawed          0.3         0.01            1           
+   tbl.angle    thawed            1          0.1            1     
+</VERBATIM>
+	</DESC>
+	</QEXAMPLE>
+   
+    </QEXAMPLELIST>
+
+
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

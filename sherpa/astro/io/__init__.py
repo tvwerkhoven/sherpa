@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 from itertools import izip, repeat
 import logging
 import os
@@ -30,9 +47,11 @@ warning = logging.getLogger(__name__).warning
 info    = logging.getLogger(__name__).info
 
 
+read_table_blocks = backend.read_table_blocks
+
 __all__ = ('read_table', 'read_image', 'read_arf', 'read_rmf', 'read_arrays',
            'read_pha', 'write_image','write_pha', 'write_table',
-           'pack_table', 'pack_image', 'pack_pha')
+           'pack_table', 'pack_image', 'pack_pha', 'read_table_blocks')
 
 
 def _is_subclass(t1, t2):
@@ -307,7 +326,7 @@ def _pack_pha(dataset):
 
     # Header Keys
     header = {}
-    if hasattr(dataset,'header') and type(dataset.header) is dict:
+    if hasattr(dataset,'header'): #and type(dataset.header) is dict:
         header = dataset.header.copy()
 
     header['EXPOSURE'] = getattr(dataset, 'exposure', 'none')

@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="plot_lrt" refkeywords="plot plotting model models modeling modelling likelihood ratio test null hypothesis" seealsogroups="sh.model sh.plot " displayseealsogroups="" context="plotting">
+
+    <SYNOPSIS>
+     Plot a histogram of likelihood ratio test results.
+    </SYNOPSIS>
+
+    <SYNTAX>
+     <LINE>plot_lrt(null_model, alt_model [, conv_model=None, id=1,
+   otherids=(), num=500, bins=25, numcores=None, replot=False,
+   overplot=False, clearwindow=True])
+     </LINE>
+    </SYNTAX>
+
+    <DESC>
+      <PARA>
+       There are several functions available in Sherpa for performing
+       a likelihood ratio test to compare a fit to data done with a
+       simple, null model versus a more complex, alternative model. 
+       The plot_lrt() function plots a histogram of likelihood ratios
+       comparing fits done with a specified null model to fits done
+       with the
+       alternative model, using data simulated with Poisson noise. It
+       computes the likelihood ratio and the p-value (value used to
+       reject or accept the null model) using the observed data.
+      </PARA>
+        
+     
+      <PARA>    
+         The Sherpa fit statistic must be set to Cash or CStat for the
+         likelihood ratio test, using the set_stat() command.
+      </PARA>
+
+      <PARA> Arguments:</PARA>
+
+     <LIST>
+      <ITEM>
+       null_model  - model representing the null hypothesis
+      </ITEM>
+      <ITEM>
+       alt_model   - alternative model to compare to null
+      </ITEM>
+      <ITEM>
+       conv_model  - convolution model (PSF or RSP) to include for fitting;
+                     default = None
+      </ITEM>
+      <ITEM>
+       id          - Sherpa data id; 
+                     default = default data id
+      </ITEM>
+      <ITEM>
+       otherids    - List of other Sherpa data ids; 
+                     default = ()
+      </ITEM>
+      <ITEM>
+       num         - Number of iterations to run; 
+                     default = 500
+      </ITEM>
+      <ITEM>
+       bins        - Number of bins for the histogram; 
+                     default = 25
+      </ITEM>
+      <ITEM>
+       numcores    - Number of cpus to use during simulation; 
+                     default = number of detected cpus
+      </ITEM>
+      <ITEM>
+       replot      - Send cached data arrays to visualizer; 
+                     default = False
+      </ITEM>
+      <ITEM>
+       overplot    - Plot data without clearing previous plot; 
+                     default = False
+
+       </ITEM>
+      </LIST>
+    
+
+      <PARA>
+	For the likelihood ratio test to be valid, the following
+        conditions must be true:
+      </PARA>
+      
+      <LIST>
+       <ITEM>
+        the null model is nested within the more complex, alternative model;
+       </ITEM>
+       <ITEM>
+	 the extra parameters of the alternative model have Gaussian
+	 (normal) distributions that are not truncated by parameter
+	 space boundaries.
+       </ITEM>
+      </LIST>
+     </DESC>
+
+
+  <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; plot_lrt(powlaw1d.p1, bpl1d.bp1) </LINE>
+        </SYNTAX>
+        <DESC>
+          <PARA>
+           Generate a histogram of likelihood ratios comparing fits
+           to simulated data done with a simple, null power-law model
+           to those done with a more-complex, broken power-law
+           model. Do not include a response or PSF convolution model
+           in the fit; use the default number of simulations
+           in the test (500); and use the  default number of bins in the
+           resulting histogram of ratios (25).
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; rsp1 = get_response()</LINE>
+          <LINE>sherpa&gt; plot_lrt(p1, p1+g1, conv_model=rsp1, num=600) </LINE>
+        </SYNTAX>
+        <DESC>
+          <PARA>
+           Check to see if the addition of a gaussian line to the null
+	   power-law model is significant, by applying the likelihood
+	   ratio test to compare a power-law (p1) with a power-law plus a
+	   line (p1+g1). Plot the  distribution of the ratio of
+	   (likelihood with line)/(likelihood with no line) for the
+	   ensemble of simulations. Include the ARF*RMF instrument
+	   response associated with the
+	   observed data in the fit, and increase the number of
+	   simulations used from default 500 to 600.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+   </QEXAMPLELIST>
+
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

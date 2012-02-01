@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="fm" refkeywords=" fitzpatrik massa extinction curve   fm model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Fitzpatrick and Massa extinction curve 
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         This model is the Fitzpatrick and Massa extinction curve with Drude UV bump (ApJ, 1988, 328, 734).
+ </PARA>
+
+<TABLE>
+<CAPTION>FM Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>ebv</DATA> 
+  <DATA>E(B-V)</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>x0</DATA> 
+  <DATA>Offset</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>width</DATA> 
+  <DATA>Width of Drude bump</DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> 
+  <DATA>c1</DATA> 
+  <DATA>Coefficient 1</DATA> 
+</ROW>
+<ROW> 
+  <DATA>5</DATA> 
+  <DATA>c2</DATA> 
+  <DATA>Coefficient 2</DATA> 
+</ROW>
+<ROW> 
+  <DATA>6</DATA> 
+  <DATA>c3</DATA> 
+  <DATA>Coefficient 3</DATA> 
+</ROW>
+<ROW> 
+  <DATA>7</DATA> 
+  <DATA>c4</DATA> 
+  <DATA>Coefficient 4</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 import logging
 import numpy
 from sherpa.utils import NoNewAttributesAfterInit, \
@@ -10,7 +27,7 @@ from sherpa.optmethods.optfcts import *
 warning = logging.getLogger(__name__).warning
 
 
-__all__ = ('OptMethod', 'LevMar', 'MonCar', 'NelderMead')
+__all__ = ('GridSearch', 'OptMethod', 'LevMar', 'MonCar', 'NelderMead')
 
 
 class OptMethod(NoNewAttributesAfterInit):
@@ -92,6 +109,13 @@ class OptMethod(NoNewAttributesAfterInit):
 
 	return output
 
+class GridSearch(OptMethod):
+    """A simple iterative method to support the template model interface,
+    the method can be used for non-template model but it is very ineffecient
+    for this purpose."""
+    
+    def __init__(self, name='gridsearch'):
+	OptMethod.__init__(self, name, grid_search)
 
 class LevMar(OptMethod):
     """

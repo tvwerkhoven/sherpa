@@ -95,6 +95,9 @@ namespace sherpa {
 		     std::vector<double>& par, int& nfev, double& fmin ) {
 
       int ierr = EXIT_SUCCESS;
+
+      nfev = 0;
+      fmin = std::numeric_limits< double >::max( );
       std::vector<double> mypar( npar + 1, 0.0 );
       for ( int ii = 0; ii < npar; ++ii )
 	mypar[ ii ] = par[ ii ];
@@ -218,7 +221,7 @@ namespace sherpa {
 		int npar, const sherpa::Opt::mypair& limits,
 		std::vector<double>& par, int& nfev ) {
       
-      nfev = 0;
+
       int ierr = EXIT_SUCCESS;
       par[ npar ]  = std::numeric_limits< double >::max( );
       population_size = std::abs( population_size );

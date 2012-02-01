@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2010)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 import numpy
 from parameter import Parameter, tinyval
 from model import ArithmeticModel, modelCacher1d, CompositeModel, \
@@ -744,6 +761,7 @@ class TableModel(ArithmeticModel):
         self.__y = None
         self.__filtered_y = None
         self.filename = None
+        self.method = linear_interp  # interpolation method
         self.ampl = Parameter(name, 'ampl', 1)
         ArithmeticModel.__init__(self, name, (self.ampl,))
 
@@ -755,7 +773,6 @@ class TableModel(ArithmeticModel):
         self.filename = state.pop('_file', None)
         ArithmeticModel.__setstate__(self, state)
 
-
     def load(self, x, y):
         self.__y = y
         self.__x = x
@@ -765,6 +782,14 @@ class TableModel(ArithmeticModel):
             idx = numpy.asarray(x).argsort()
             self.__y = numpy.asarray(y)[idx]
             self.__x = numpy.asarray(x)[idx]
+
+
+    def get_x(self):
+        return self.__x
+
+
+    def get_y(self):
+        return self.__y
 
 
     def fold(self, data):
@@ -780,7 +805,7 @@ class TableModel(ArithmeticModel):
     def calc(self, p, x0, x1=None, *args, **kwargs):
 
         if self.__x is not None and self.__y is not None:
-            return p[0] * interpolate(x0, self.__x, self.__y)
+            return p[0] * interpolate(x0, self.__x, self.__y, function=self.method)
 
         elif (self.__filtered_y is not None and
               len(x0) == len(self.__filtered_y)):

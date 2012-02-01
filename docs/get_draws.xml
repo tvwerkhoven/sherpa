@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="get_draws" refkeywords=" pyBLoCXS jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler_name  Markov chain Monte Carlo " seealsogroups="sh.get " displayseealsogroups="" context="methods">
+
+
+    <SYNOPSIS>
+      Run the pyBLoCXS MCMC-based algorithm using the current sampler. 
+    </SYNOPSIS>
+
+    <SYNTAX>
+        <LINE>get_draws([id, otherids, niter])</LINE>
+    </SYNTAX>
+
+    <DESC>
+      <PARA>
+      pyBLoCXS is a sophisticated Markov chain Monte Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count X-ray Spectral (BLoCXS) analysis in the Sherpa environment.  The algorithm explores parameter space at a suspected minimum using a predefined Sherpa model to high-energy X-ray spectral data.  
+     </PARA>
+      <PARA>
+	The Sherpa get_draws() function runs a pyBLoCXS chain using fit
+	information associated with the
+	specified data set(s), the currently set sampler (either
+	Metropolis-Hastings , a mix of Metropolis with
+	Metropolis-Hastings, or PragBayes) and parameter priors, for a
+	specified number of iterations. It returns an array of
+	statistic values, an array of acceptance Booleans, and a 2-D array of associated parameter values.
+      </PARA>
+      <PARA>
+ 	The sampler, or jumping rule, to be used by pyBLoCXS may be set
+	with set_sampler(), and its configuration options modifed using the
+	set_sampler_opt() fuction. The available samplers - "MH",
+	"MetropolisMH", and "PragBayes" -  are returned by the list_samplers() command        
+        (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/list_samplers.html">"ahelp list_samplers"</HREF>). "MH" is Metropolis-Hastings, which
+	always jumps from the best-fit, and "MetropolisMH" is
+	Metropolis with Metropolis-Hastings that jumps from the
+	best-fit with probability 'p_M', else it jumps from the last
+	accepted jump.  "PragBayes" is used when effective area calibration uncertainty is to be included in the calculation.  (At each nominal MCMC
+iteration, a new calibration product is generated, and a series
+of N (option in set_sampler_opt) MCMC sub-iteration steps are
+carried out, choosing between Metropolis and Metropolis-Hastings
+types of samplers with probability p_M (option in set_sampler_opt).
+Only the last of these sub-iterations are kept in the chain.)
+      </PARA>	
+      <PARA>
+	Note that before running get_draws(), a Sherpa fit must be run
+	and the covariance matrix should be calculated at the
+	resultant fit minimum; see the Examples	section below for a demonstration.
+      </PARA>
+      
+   
+      <LIST>
+        <ITEM>
+	  id - ID of the data set which has been fit in preparation
+	  for the run of the pyBLoCXS algorithm; default=1
+        </ITEM>
+        <ITEM>
+	 otherids - list of additional data set IDs with fit
+	 information to use in the run of the pyBLoCXS algorithm; default=None
+        </ITEM>
+        <ITEM>
+	  niter - number of iterations to run; default = 1e3
+	</ITEM>
+      </LIST>
+    
+      <PARA>
+	For a detailed description of the algorithm, see: 
+      </PARA>
+
+      <PARA>
+van Dyk, D.A., Connors, A., Kashyap, V.L., &amp; Siemiginowska, A. 2001,
+Ap.J., 548, 224, "Analysis of Energy Spectra with Low Photon Counts via Bayesian
+Posterior Simulation" 
+      </PARA>
+
+      <PARA>
+	and 
+      </PARA>
+
+       <PARA>
+van Dyk, D.A., Connors, A., Kashyap, V.L., &amp; Siemiginowska, A. 2001,
+Ap.J., 548, 224, "Analysis of Energy Spectra with Low Photon Counts via Bayesian
+Posterior Simulation" 
+        </PARA>
+
+      <PARA>
+pyBLoCXS documentation is also available <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">here</HREF>.
+      </PARA>	
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+	<DESC>
+          <PARA>
+	     Fit an absorbed power-law model to source data set "1",
+	and then run the covariance function to calculate confidence intervals
+	for the thawed parameters. Run the pyBLoCXS algorithm using the
+	currently set Metropolis with Metropolis-Hastings jumping rule and fit
+	information from data set 1, 1e4 times. Store the resulting
+	arrays of statistic values, acceptance flags, and parameter
+	values to variables.
+	 </PARA>
+
+<VERBATIM>
+sherpa&gt; load_pha("pha.fits")
+sherpa&gt; set_model(xsphabs.abs1*powlaw1d.p1)
+sherpa&gt; set_stat("cash")
+sherpa&gt; fit()
+sherpa&gt; covar()
+
+sherpa&gt; print get_sampler_name()
+        MetropolisMH
+
+sherpa&gt; stats, accept, params = get_draws(1, niter=1e4)
+
+Using Priors:
+abs1.nH: &lt;function flat at 0x1b948e60&gt;
+p1.PhoIndex: &lt;function flat at 0x1b948e60&gt;
+p1.norm: &lt;function flat at 0x1b948e60&gt;
+
+sherpa&gt; print stats
+[-2449.71534006 -2449.71534006 -2449.71534006 -2447.74139152 -2447.74139152 -2447.74139152 -2441.5488066  -2441.5488066  -2441.5488066 -2446.84464469 ...  -2447.14055844]
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

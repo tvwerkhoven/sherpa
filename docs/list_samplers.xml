@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="list_samplers" refkeywords=" jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler  get_sampler_name  Markov chain Monte Carlo " seealsogroups="sh.list " displayseealsogroups="" context="statistics">
+
+
+
+    <SYNOPSIS>
+      List all available pyBLoCXS samplers.  
+    </SYNOPSIS>
+
+    <SYNTAX>
+        <LINE>list_samplers()</LINE>     
+    </SYNTAX>
+
+    <DESC>
+      
+      <PARA>
+	The Sherpa list_samplers command returns the list of available
+         samplers, or jumping rules, available for use in the 
+         algorithm.  is a sophisticated Markov chain Monte Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count X-ray
+         Spectral (BLoCXS) analysis in the Sherpa environment.  The
+         algorithm explores parameter space at a suspected minimum
+         using a predefined Sherpa model to high-energy X-ray spectral
+         data.
+      </PARA>
+      <PARA>
+	"MH" is Metropolis-Hastings, which
+	always jumps from the best-fit; "MetropolisMH" is
+	Metropolis with Metropolis-Hastings that jumps from the
+	best-fit with probability 'p_M', else it jumps from the last
+	accepted jump. "PragBayes" is used when effective area calibration uncertainty is to be included in the calculation.  (At each nominal MCMC
+iteration, a new calibration product is generated, and a series
+of N (option in set_sampler_opt) MCMC sub-iteration steps are
+carried out, choosing between Metropolis and Metropolis-Hastings
+types of samplers with probability p_M (option in set_sampler_opt).
+Only the last of these sub-iterations are kept in the chain.)
+      </PARA>
+
+
+      <PARA>
+        The get_sampler* and set_sampler* functions are available for
+        accessing and modifying the attributes of each sampler type;
+        see the corresponding ahelp files for details (e.g., <HREF link="http://cxc.harvard.edu/sherpa/ahelp/get_sampler.html">"ahelp get_sampler"</HREF>).
+      </PARA>
+
+      <PARA>
+	Refer to
+	the <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">pyBLoCXS
+	documentation</HREF> for additional information about the algorithm.
+      </PARA>	
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+       <SYNTAX>
+	  <LINE>sherpa&gt; list_samplers()</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Return the names of the available jumping rules for use in
+	    the  algorithm.
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; list_samplers()
+['MetropolisMH', 'MH', 'PragBayes']
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="xssirf" refkeywords=" sirf model models modeling modelling source composite nested joint xspec" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+<SYNOPSIS>
+Self-irradiated funnel.
+XSpec model.
+</SYNOPSIS>
+
+<DESC>
+<PARA>
+The multi-blackbody "Self-IrRadiated Funnel" model is designed to
+model optically-thick outflow-dominated accretion. The basic idea is
+simple: you just assume a lot of matter, angular momentum and energy
+emerges in a limited volume. Momentum conservation leads to
+non-sphericity of the flow that has subsequently conical (funnel-like)
+shape. The model calculates temperature distribution at the funnel
+walls (taking into account irradiation by iterative process) and the
+outer photosphere. We also assume that inside the cone there is a deep
+pseudo-photosphere. Relativistic boosts are taken into account for
+high velocities. For a comprehensive description of the physical
+model, see: <HREF link="http://adsabs.harvard.edu/abs/2009PASJ...61..213A">Abolmasov, P., Karpov, S. and Kotani, T. PASJ, 61, 2, 213.</HREF> 
+</PARA>
+
+<PARA>
+     This is an additive model component.
+   </PARA>
+
+<TABLE>
+<CAPTION>xssirf Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> <DATA>tin</DATA> <DATA>inner temperature (at the inner, inside-the-funnel photosphere)</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> <DATA>rin</DATA> <DATA>inner (inside-the-funnel photosphere) radius in "spherisation radius" units (the latter is defined as 3 K Mdot / Omega_f c).</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> <DATA>rout</DATA> <DATA>outer photosphere radius in "spherisation radius" units.
+</DATA> 
+</ROW>
+
+<ROW> 
+  <DATA>4</DATA> <DATA>theta</DATA> <DATA>half-opening angle of the cone</DATA> 
+</ROW>
+<ROW> 
+  <DATA>5</DATA> <DATA>incl</DATA> <DATA>inclination angle of the funnel. Affects mainly self-occultation and relativistic boost effects.</DATA> 
+</ROW>
+<ROW> 
+  <DATA>6</DATA> <DATA>valpha</DATA> <DATA>velocity law exponent, v goes as r^valpha</DATA> 
+</ROW>
+<ROW> 
+  <DATA>7</DATA> <DATA>gamma</DATA> <DATA>adiabatic index. It affects the inner, hotter parts of the flow, therefore it is set to 4/3 by default.</DATA> 
+</ROW>
+<ROW> 
+  <DATA>8</DATA> <DATA>mdot</DATA> <DATA>mass ejection rate in Eddington (critical) units</DATA> 
+</ROW>
+<ROW> 
+  <DATA>9</DATA> <DATA>irrad</DATA> <DATA>number of iterations for irradiation</DATA> 
+</ROW>
+<ROW> 
+  <DATA>10</DATA> <DATA>norm</DATA> <DATA>K</DATA> 
+</ROW>
+</TABLE>
+
+<PARA title="XSpec version">
+     This information is taken from the
+     <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
+     User's Guide</HREF>.
+     Version 12.7 of the XSpec
+     models is supplied with CIAO 4.4.
+   </PARA>
+</DESC>
+
+<BUGS>
+     <PARA>
+       For a list of known bugs and issues with the XSPEC models, please visit
+       the <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/bugs.html">XSPEC bugs page</HREF>.
+     </PARA>
+   </BUGS>
+
+<VERSION>CIAO 4.4</VERSION>
+
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

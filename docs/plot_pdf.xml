@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="plot_pdf" refkeywords="plot plotting model models modeling modelling  histogram probability density function" seealsogroups="sh.model sh.plot" displayseealsogroups="" context="plotting">
+
+
+    <SYNOPSIS>
+      Plot a binned probability density function. 
+    </SYNOPSIS>
+
+    <SYNTAX>
+      <LINE>plot_pdf(points [, name="x", xlabel="x", bins=12, normed=True, replot=False, overplot=False, clearwindow=True])
+      </LINE>
+    </SYNTAX>
+
+    <DESC>
+      <PARA>
+	The plot_pdf() function plots the probability
+	density function (pdf) of a specified array of histogram values
+	(a NumPY ndarray), using the specified number of data bins
+	(default= 12), plot title, and x-axis label. The pdf is
+	normalized by default (normed=True).
+      </PARA>
+
+      
+      <TABLE>
+	<ROW><DATA>Argument</DATA><DATA>Default</DATA><DATA>Description</DATA></ROW>
+        <ROW>
+	<DATA>
+	 points
+	</DATA>
+	<DATA>
+	</DATA>  
+	<DATA>
+	  NumPy ndarray of histogram data values
+	</DATA>
+	</ROW>
+
+	<ROW>
+	<DATA>
+	 name
+	</DATA>
+	<DATA>
+	  "x"
+	</DATA> 
+	<DATA>
+	  title to assign to the plot
+	</DATA>
+	</ROW>
+
+        <ROW>
+	<DATA>
+	 xlabel
+	</DATA>
+	<DATA>
+	  "x"
+	</DATA>
+	<DATA>
+	  label to assign to the x-axis
+	</DATA>
+	</ROW>	  
+	
+        <ROW>
+	<DATA>
+	 bins
+	</DATA>
+	<DATA>
+	  12
+	</DATA>
+	<DATA>
+	  number of bins
+	</DATA>
+	</ROW>
+        <ROW>
+	<DATA>
+	 normed
+	</DATA>
+	<DATA>
+	  True
+	</DATA>
+	<DATA>
+	  Plot a normalized pdf? 
+	</DATA>
+	</ROW>
+
+	<ROW>
+	  <DATA>
+	    replot
+	  </DATA>
+	  <DATA>
+	    False
+	  </DATA>
+	  <DATA>
+	    Should previously-calculated arrays be used to create the plot?
+	  </DATA>
+	</ROW>
+	<ROW>
+	  <DATA>overplot</DATA>
+	  <DATA>
+	    False
+	  </DATA>
+	  <DATA>
+	    If True, then add the data to the current plot, otherwise
+	    erase the frame and create a new plot.
+	  </DATA>
+	</ROW>
+	<ROW>
+	  <DATA>clearwindow</DATA>
+	  <DATA>
+	    True 
+	  </DATA>
+	  <DATA>
+	    If True, then do not delete any existing frames in the current ChIPS
+	    window. Note that the plots will be created in a new
+	    ChIPS frame even when this argument is set.
+	  </DATA>
+	</ROW>
+      </TABLE>
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>plot_pdf(x, bins=50)</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Define a histogram in the variable "x" and plot the
+	    corresponding normalized probability density function, with 50 bins.
+	  </PARA>
+<VERBATIM>
+sherpa&gt; import numpy as np
+sherpa&gt; mu, sigma = 100, 15
+sherpa&gt; x = mu + sigma*np.random.randn(10000)
+sherpa&gt; plot_pdf(x, bins=50)
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>plot_pdf(x, name="Energy Flux PDF", xlabel="flux", normed=False)</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    Plot the unnormalized probability density function for a
+	    simulated energy flux distribution returned by the sample_energy_flux()
+	    command (see 'ahelp sample_energy_flux'), using the
+	    default number of bins (12).
+          </PARA>
+        
+<VERBATIM>
+sherpa&gt; a = sample_energy_flux(0.5,7.,num=1000)
+sherpa&gt; plot_energy_flux()
+sherpa&gt; x = a[:,0]
+sherpa&gt; plot_pdf(x, name="Energy Flux PDF", xlabel="flux", normed=False)
+</VERBATIM>
+      </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

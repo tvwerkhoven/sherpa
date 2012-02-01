@@ -1,8 +1,25 @@
 #ifndef Array2d_hh
 #define Array2d_hh
 
-//_C++_INSERT_SAO_COPYRIGHT_HERE_(2007)_
-//_C++_INSERT_GPL_LICENSE_HERE_
+// 
+//  Copyright (C) 2007  Smithsonian Astrophysical Observatory
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along
+//  with this program; if not, write to the Free Software Foundation, Inc.,
+//  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
 
 #include <iostream>
 #include <stdexcept>
@@ -103,6 +120,7 @@ namespace sherpa {
 
 #ifdef testArrayNd
 #include "ArrayNd.hh"
+#include "Array.h"
 #endif
 #include "StopWatch.hh"
 
@@ -210,20 +228,20 @@ void timebracket( int r, int c ) {
 
 }
 
-#ifdef ARRAYND_HH
+#ifdef testArrayNd
 void timemulti_array( int r, int c ) {
 
   std::vector<size_t> dims( 2, r );
-  multi_array< double, 2 > laplacian( dims ), uu( dims );
+  MultiArray::multi_array< double, 2 > laplacian( dims ), uu( dims );
 
-  timeme( uu, laplacian, r, c, "Multi_Array[][]" );
+  timeme( uu, laplacian, r, c, "multi_array[][]" );
 
 }
 
 void timeArray( int r, int c ) {
 
   std::vector<size_t> dims( 2, r );
-  Array< double, 2 > laplacian( dims ), uu( dims );
+  MyArray::Array< double, 2 > laplacian( dims ), uu( dims );
 
   timeme( uu, laplacian, r, c, "Array[][]" );
 
@@ -232,9 +250,16 @@ void timeArray( int r, int c ) {
 void timeBavestrelliArray( int r, int c ) {
 
   bavestrelli::Array<double, 2> laplacian( bavestrelli::ArraySizes(r)(c) ),
-    uu(  bavestrelli::ArraySizes(r)(c) );
+    uu( bavestrelli::ArraySizes(r)(c) );
 
   timeme( uu, laplacian, r, c, "bavestrelli::Array[][]" );
+
+}
+void timeJBArray( int r, int c ) {
+
+  Array::array2<double> uu(r,c), laplacian(r,c);
+
+  timeme( uu, laplacian, r, c, "jb::Array[][]" );
 
 }
 #endif
@@ -286,10 +311,11 @@ int main( int argc, char* argv[] ) {
 
   timeclassic( row, col );
   timebracket( row, col );
-#ifdef ARRAYND_HH
+#ifdef testArrayNd
   timemulti_array( row, col );
   timeArray( row, col );
   timeBavestrelliArray( row, col );
+  timeJBArray( row, col );
 #endif
   return 0;
 

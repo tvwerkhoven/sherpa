@@ -1,5 +1,22 @@
-#_PYTHON_INSERT_SAO_COPYRIGHT_HERE_(2010)_
-#_PYTHON_INSERT_GPL_LICENSE_HERE_
+# 
+#  Copyright (C) 2010  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 """
 Sherpa specific exceptions
 """
@@ -256,6 +273,7 @@ class IOErr(SherpaErr):
             'badargs' : "data set '%s' takes at least %s args",
             'badarray' : "'%s' must be a Numpy array, list, or tuple",
             'notascii' : "file '%s' does not appear to be ASCII",
+            'noparamcols' : 'No parameter columns found in %s',
             'toomanycols' : "Received more column names: %s, than required: %s",
             'reqcol' : "Required column '%s' not found in %s",
             'badcol' : "unable to read required column %s from file",

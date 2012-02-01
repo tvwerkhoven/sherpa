@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="uniform_sample" refkeywords=" uniform sample samples multi-variate multivariate uni-variate univariate distribution statistic statistics thawed parameters  parameter  " seealsogroups="sh.model sh.plot " displayseealsogroups="" context="modeling">
+ 
+
+  <SYNOPSIS>
+    Sample the current set of thawed parameters from a uniform distribution.
+  </SYNOPSIS>
+
+  <SYNTAX>   
+   <LINE>
+     uniform_sample([num=1, factor=4, id=None, otherids=(), numcores=None])
+   </LINE>
+  </SYNTAX>
+
+  
+  <DESC>
+   <PARA>
+    Sherpa includes several functions for calculating the best set of best-fit
+   model parameters, so to speak, for a given fit of a model to a data
+   set, in order to best determine source flux using that model. This is
+   done by sampling model parameter values, a specified number of times,
+   from a given distribution such as a Gaussian distribution, in order to
+   incorporate the uncertainties on model parameter values in the fit.
+   </PARA>
+ 
+  <PARA>
+    The uniform_sample() function returns the fit statistic value per set
+   of thawed model parameters sampled from the standard uniform,
+   continuous distribution.  To sample from the Gaussian or Student's
+   t-distribution, use the normal_sample() or t_sample() function.
+  </PARA>
+
+   <PARA>
+    Arguments:
+   </PARA>  
+  
+   <LIST>
+     <ITEM>
+       num         - number of samples to calculate;
+                     default = 1
+     </ITEM>
+     <ITEM>
+       factor      - multiplier to expand the parameter scale;
+                     default = 4
+     </ITEM>
+     <ITEM>   
+       id          - Sherpa data id;
+                     default = default data id
+     </ITEM>
+     <ITEM>
+       otherids    - list of other Sherpa data ids;
+                     default = ()
+     </ITEM>
+     <ITEM>
+       numcores    - number of CPUs to use to calculate the statistic;
+                     default = number of detected CPUs
+     </ITEM>
+    </LIST>
+  
+     <PARA>
+      The uniform_sample() command returns an array table consisting of
+      as many rows as samples taken (determined by the 'num' setting), with the
+      calculated fit statistic values in the first column, and the
+      corresponding sampled model parameters in the subsequent columns.
+     </PARA>   
+    </DESC>
+    
+     <QEXAMPLELIST> 
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>load_pha("source.pi")</LINE>
+          <LINE>set_source(xsphabs.abs1*powlawd1d.p1)</LINE>
+          <LINE>uniform_sample()</LINE>
+        </SYNTAX>
+        <DESC> 
+<VERBATIM>
+array([[  1.11015721e+02,   4.82266577e-03,   1.86646137e+00,
+          1.96840099e-04]])
+</VERBATIM>
+          <PARA>
+	   Call uniform_sample() with default settings to return the
+	   fit statistic value and model parameter values resulting
+	   from the best fit of an absorbed power-law model to default
+	   data set 1, where all thawed parameters are
+	   sampled from the standard uniform distribution.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE> 
+        <SYNTAX>   
+          <LINE>uniform_sample(num=50, id=2, numcores=4)</LINE>
+        </SYNTAX>
+        <DESC> 
+<VERBATIM>
+array([[  6.14073018e+01,   3.41972094e-02,   1.73555667e+00,
+          1.51382694e-04],
+       [  5.14768586e+01,   5.20088098e-03,   1.68554098e+00,
+          1.34556679e-04],
+
+         ...
+
+       [  5.53023378e+01,   3.36622190e-02,   2.10473598e+00,
+          1.71066495e-04],
+       [  3.32604869e+02,   1.11827710e-03,   2.21907598e+00,
+          2.32003881e-04]])
+</VERBATIM>
+          <PARA>
+	   Return the fit statistic value and set of model parameter
+	   values resulting from the best fit of the model assigned
+	   to data set 2, for each of 50 samples drawn from the
+           uniform distribution. Utilize 4 CPUS in the fitting to
+           reduce the computation time.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
+     </QEXAMPLELIST>
+
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

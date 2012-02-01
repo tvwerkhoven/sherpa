@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="absorptionedge" refkeywords="absorption edge model models modeling modelling source optical" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+    <SYNOPSIS>
+      Optical model of interstellar absorption.
+    </SYNOPSIS>
+ 
+
+   <DESC>
+    <PARA>
+      A model of interstellar absorption, taking the functional form:
+    </PARA>
+
+    <PARA>
+    <EQUATION>
+	f(x) = exp[-tau*(x/edgew)**index] 
+      </EQUATION>
+    </PARA>
+
+    <PARA>
+     where x &gt; edgew, and x and edgew must be in Angstroms.
+    </PARA>
+
+    <PARA>
+	f(x) = 0,  where x &lt;= edgew .
+    </PARA>
+
+
+
+<TABLE>
+<CAPTION>AbsorptionEdge Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>edgew</DATA> 
+  <DATA>Absorption edge (in Angstroms)
+  </DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>tau</DATA> 
+  <DATA>Optical depth</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>index</DATA> 
+  <DATA>index</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>

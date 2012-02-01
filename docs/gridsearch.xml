@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="gridsearch" refkeywords="minimization minimize optimization converge convergence template load_template_model  method methods " seealsogroups="sh.method " displayseealsogroups="" context="methods">
+
+
+
+ <SYNOPSIS>
+ Grid searching optimization method
+ </SYNOPSIS>
+
+
+ <DESC>
+  <PARA>
+   The Sherpa grid searching optimization method, "gridsearch",
+   is meant to be used with the Sherpa template model (see 'ahelp
+   load_template_model). This method evaluates the fit statistic for each point in the parameter space grid; the best match is the grid point with the lowest value of the fit statistic.  gridsearch reports back the parameter
+  values associated with this point. 
+  </PARA>
+
+
+  <PARA>Method Options</PARA>
+
+  <LIST>
+  <ITEM>
+    num -  used to generate a sequence of parameters to evaluate when
+    the sequence parameter is set to 'None'.  A uniform grid of size
+   npar^num elements is generated.  Default is 16.
+  </ITEM>
+
+  <ITEM>
+   sequence -  a list which the gridsearch method
+   should iterate through to evaluate the model function; the minimum
+   parameter within this sequence is returned. Default is 'None',
+   in which case the num parameter is utilized.
+  </ITEM>
+ 
+  <ITEM>
+   numcores -  the number of cores on the user's system
+      which should be used in the execution of the gridsearch
+      method. Default is to use one core ('1'); 'None' will use all
+      available cores.
+  </ITEM>
+
+
+  <ITEM>
+    maxfev - the maximum number of function evaluations using the
+    optimization method specified in the method parameter; default  is 'None'.
+  </ITEM>
+
+  <ITEM>
+    ftol - the function tolerance to terminate the search for the
+    minimum, using the optimization method specified in the method
+    parameter. Default is sqrt( DBL_EPSILON ) ~ 1.19209289551e-07, where 
+    DBL_EPSILON is the smallest number x such that 1.0 != 1.0 + x.
+  </ITEM>
+
+  <ITEM>
+   method - optimization method to use after the grid has been
+             evaluated; used together with maxfev and ftol parameters.  If 
+             set to 'neldermead' or 'levmar', the grid search
+             calls the requested method after the grid has been
+             evaluated.  The minimum parameter of the grid is passed
+             as the initial parameter to the optimization method.
+             maxfev and ftol are not used within the grid search
+             optimization method but are passed to the neldermead or
+             levmar method. Default is 'None'.
+
+  </ITEM>
+
+  <ITEM>
+    verbose - the amount of information to print about the fit
+    progress.  Default is 0 (no output).
+  </ITEM> 
+ </LIST>
+
+</DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; set_method("gridsearch")</LINE>
+          
+	</SYNTAX>
+        <DESC>
+          <PARA>
+            Set the optimization method to 'gridsearch', 
+            confirm the new value, and check method settings.
+          </PARA>
+<VERBATIM>
+sherpa&gt; set_method("gridsearch")
+sherpa&gt; get_method_name()
+'gridsearch'
+sherpa&gt; print get_method()
+name     = gridsearch
+num      = 16
+sequence = None
+numcores = 1
+maxfev   = None
+ftol     = 1.19209289551e-07
+method   = None
+verbose  = 0
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; set_method("gridsearch")</LINE>
+          <LINE>sherpa&gt; fit()</LINE>
+	</SYNTAX>
+        <DESC>
+          <PARA>
+	    Load a collection of template models into the Sherpa model
+	    instance 'tbl', and fit to data set 'source.dat' using the Sherpa grid-searching
+	    optimization method. The parameters of the template model which best matches the data are returned. 
+	  </PARA>
+
+<VERBATIM>
+sherpa&gt; load_ascii('source.dat', ncols=3, dstype=Data1D)
+sherpa&gt; load_template_model('tbl', 'table.txt')
+sherpa&gt; set_model(tbl)
+sherpa&gt; set_method('gridsearch')
+sherpa&gt; set_method_opt('sequence', tbl.parvals)
+sherpa&gt; fit()
+Dataset               = 1
+Method                = gridsearch
+Statistic             = chi2gehrels
+Initial fit statistic = 1.53806e+12
+Final fit statistic   = 212.321 at function evaluation 106
+Data points           = 7
+Degrees of freedom    = 4
+Probability [Q-value] = 8.41533e-45
+Reduced statistic     = 53.0803
+Change in statistic   = 1.53806e+12
+   tbl.mass       9           
+   tbl.rate       0.3         
+   tbl.angle      1           
+WARNING: parameter value tbl.angle is at its maximum boundary 1.0  
+</VERBATIM>
+	</DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+    
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

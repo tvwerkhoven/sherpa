@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="recombination" refkeywords=" recombination  continuum emission  model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Model of continuum emission due to recombination
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         A model of the continuum emission due to recombination,
+         taking the functional form:
+  </PARA>
+
+  <PARA>
+    If x &gt;= refer,
+  </PARA>
+
+  <PARA>
+   <EQUATION>
+           f(x) = ampl*exp(-(x - refer)**2/(refer*fwhm/c/2.354820044)**2/2)
+      </EQUATION>
+  </PARA>
+
+  <PARA>
+    and if x &lt; refer,
+  </PARA>
+
+  <PARA>
+   <EQUATION>  
+           f(x) = ampl*(refer/x)**2 * exp-(1.440E8*(1/x - 1/refer)/temperature)
+      </EQUATION>
+  </PARA>
+
+ 
+<TABLE>
+<CAPTION>Recombination Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>refer</DATA> 
+  <DATA>Reference position, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>ampl</DATA> 
+  <DATA>Amplitude</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>temperature</DATA> 
+  <DATA>Temperature, in Kelvins</DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> 
+  <DATA>fwhm</DATA> 
+  <DATA>FWHM, in Angstroms</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

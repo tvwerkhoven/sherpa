@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="bremsstrahlung" refkeywords=" bremsstrahlung  model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Bremsstrahlung function
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+         The bremsstrahlung function, taking the functional form:
+  </PARA>
+
+
+  <PARA>
+  <EQUATION>  
+         f(x) = ampl * (refer / x)**2 * exp (-1.438779E8 / x / temperature)
+      </EQUATION>
+  </PARA>
+
+<TABLE>
+<CAPTION>Bremsstrahlung Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>	
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>refer</DATA> 
+  <DATA>Reference position, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>ampl</DATA> 
+  <DATA>Amplitude of the bremsstrahlung function</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>temperature</DATA> 
+  <DATA>Temperature, in Kelvins</DATA> 
+</ROW>
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

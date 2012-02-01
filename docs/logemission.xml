@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="logemission" refkeywords="log  emission  model models modeling modelling source" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+
+    <SYNOPSIS>
+     Logarithmic emission model
+    </SYNOPSIS>
+
+   
+ <DESC>
+  <PARA>
+    A logarithmic emission model, taking the functional form:
+  </PARA>
+
+  <PARA>
+  <EQUATION>  
+       arg = log (2) / log(1 + fwhm / 2 / c)
+      </EQUATION>
+  </PARA>
+
+  <PARA>
+  <EQUATION>  
+       fmax = (arg - 1) * flux / 2 / c 
+      </EQUATION>
+  </PARA>
+
+  <PARA>
+    If skew = 1 and x &lt; pos,
+  </PARA>
+
+ <PARA>
+  <EQUATION>  
+       f(x) = fmax * (x / pos)**arg
+    </EQUATION>
+  </PARA>
+
+  <PARA>
+    and, if skew = 1 and x &gt;= pos,
+  </PARA>
+
+  <PARA>
+   <EQUATION>  
+       f(x) = fmax * (x / pos)**(-1.0*arg)
+      </EQUATION>
+  </PARA>
+
+  <PARA>
+    If skew != 1,
+  </PARA>
+
+  <PARA>
+   <EQUATION>
+       arg1 = log (2) / log (1 + skew * fwhm / 2 / c)
+       fmax = (arg - 1) * flux / c / [1 + (arg - 1) / (arg1 - 1)]
+      </EQUATION>
+  </PARA>
+
+  <PARA>
+    and if x &lt;= pos,
+  </PARA>
+
+   <PARA>
+   <EQUATION>
+       f(x) = f = fmax * (x / pos)**arg
+     </EQUATION>
+  </PARA> 
+
+  <PARA>
+    and if x &gt; pos
+  </PARA>
+
+   <PARA>
+   <EQUATION>
+       f(x) = fmax * (x / pos)**(-1.0*arg1)
+     </EQUATION>
+  </PARA>
+
+
+<TABLE>
+<CAPTION>LogEmission Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> 
+  <DATA>fwhm</DATA> 
+  <DATA>FWHM of the feature, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> 
+  <DATA>pos</DATA> 
+  <DATA>Center of the feature, in Angstroms</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> 
+  <DATA>flux</DATA> 
+  <DATA>Amplitude of the function</DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> 
+  <DATA>skew</DATA> 
+  <DATA>skew</DATA> 
+</ROW>
+
+</TABLE>
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.4</VERSION>
+<LASTMODIFIED>December 2011</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

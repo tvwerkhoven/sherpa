@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="pyblocxs" refkeywords=" pyBLoCXS jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler_name  Markov chain Monte Carlo  pyblocxs get_draws get_prior get_sampler list_priors  set_prior set_sampler set_sampler_opt pragbayes PragBayes Prag Bayes " seealsogroups="" displayseealsogroups="" context="methods">
+
+
+    <SYNOPSIS>
+       MCMC-based algorithm for Bayesian Low-Count X-ray Spectral (BLoCXS) analysis
+    </SYNOPSIS>
+
+  
+
+    <DESC>
+      <PARA>
+      pyBLoCXS is a sophisticated Markov chain Monte Carlo (MCMC) based algorithm designed to carry out Bayesian Low-Count X-ray Spectral (BLoCXS) analysis in the Sherpa environment.  The algorithm explores parameter space at a suspected minimum using a predefined Sherpa model to high-energy X-ray spectral data.  
+     </PARA>
+      <PARA>
+	The Sherpa get_draws() function runs a pyBLoCXS chain using fit
+	information associated with the	specified data set(s), and the
+	currently set sampler (either Metropolis-Hastings, a mix of
+	Metropolis with Metropolis-Hastings, or PragBayes) and
+	parameter priors, for a specified number of iterations. It
+	returns an array of statistic values, an array of acceptance
+	Booleans, and a 2-D array of associated parameter values.
+      </PARA>
+      <PARA>
+ 	The sampler, or jumping rule, to be used by pyBLoCXS may be set
+	with set_sampler(), and its configuration options modifed using the
+	set_sampler_opt() fuction. The available samplers - "MH",
+	"MetropolisMH", and "PragBayes" -  are returned by the
+	list_samplers() command
+(<HREF link="http://cxc.harvard.edu/sherpa/ahelp/list_samplers.html">"ahelp
+	list_samplers"</HREF>). "MH" is Metropolis-Hastings, which
+	always jumps from the best-fit, and "MetropolisMH" is
+	Metropolis with Metropolis-Hastings that jumps from the
+	best-fit with probability 'p_M', else it jumps from the last
+	accepted jump.  "PragBayes" is used when effective area calibration uncertainty is to be included in the calculation.  (At each nominal MCMC
+iteration, a new calibration product is generated, and a series
+of N (option in set_sampler_opt) MCMC sub-iteration steps are
+carried out, choosing between Metropolis and Metropolis-Hastings
+types of samplers with probability p_M (option in set_sampler_opt).
+Only the last of these sub-iterations are kept in the chain.)
+      </PARA>	
+     
+       <PARA>
+       By default, pyBLoCXS uses a flat prior defined between the
+       hardcoded parameter minima and maxima.  The set_prior() function
+       is used to associate a function or model ('prior') with a
+       thawed fit parameter ('par').  The function signature for 'prior' is
+       of the form lambda x, and can be a Sherpa model or an arbitrary
+       user-defined function. 
+     </PARA>
+    <PARA>
+	The list of currently set prior-parameter pairs is returned by
+	the list_priors command (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/list_priors.html"/>). The
+        prior function associated with a particular Sherpa model
+        parameter may be accessed with get_prior (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/get_prior.html">"ahelp get_prior"</HREF>).
+      </PARA>   
+
+    
+      <PARA>
+	Refer to
+	the <HREF link="http://hea-www.harvard.edu/AstroStat/pyBLoCXS/#high-level-user-interface-functions">pyBLoCXS
+	documentation</HREF> for additional information about the algorithm.
+      </PARA>	
+    </DESC>
+
+
+	<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+    <VERSION>CIAO 4.4</VERSION>
+    <LASTMODIFIED>December 2011</LASTMODIFIED>
+</ENTRY></cxchelptopics>
