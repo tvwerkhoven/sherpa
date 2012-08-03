@@ -22,6 +22,7 @@ import os
 import os.path
 from sherpa.utils import SherpaTestCase, needs_data
 import sherpa.astro.ui as ui
+from sherpa.astro.data import DataPHA
 
 logger = logging.getLogger('sherpa')
 
@@ -76,7 +77,16 @@ class test_threads(SherpaTestCase):
         self.assertEqual(ui.get_fit_results().dof,42)
 
     @needs_data
+    def test_pha_read(self):
+        self.run_thread('pha_read')
+        self.assertEqual(type(ui.get_data()), DataPHA)
+        
+    @needs_data
     def test_basic(self):
+        # In data1.dat for this test, there is a comment with one
+        # word at the beginning -- deliberately would break when reading
+        # with DM ASCII kernel, but passes because we have Sherpa code
+        # to bypass that.
         self.run_thread('basic')
         self.assertEqualWithinTol(ui.get_fit_results().statval, 151.827, 1e-4)
         self.assertEqualWithinTol(ui.get_fit_results().rstat, 16.8697, 1e-4)
@@ -151,6 +161,20 @@ class test_threads(SherpaTestCase):
     @needs_data
     def test_radpro(self):
         self.run_thread('radpro')
+        self.assertEqualWithinTol(ui.get_fit_results().statval, 217.450, 1e-4)
+        self.assertEqualWithinTol(ui.get_fit_results().rstat, 6.21287, 1e-4)
+        self.assertEqualWithinTol(ui.get_fit_results().qval, 0.0, 1e-4)
+        self.assertEqualWithinTol(self.locals['src'].r0.val, 125.829, 1e-4)
+        self.assertEqualWithinTol(self.locals['src'].beta.val, 4.1633, 1e-4)
+        self.assertEqualWithinTol(self.locals['src'].xpos.val, 0.0, 1e-4)
+        self.assertEqualWithinTol(self.locals['src'].ampl.val, 4.42821, 1e-4)
+        self.assertEqual(ui.get_fit_results().nfev,92)
+        self.assertEqual(ui.get_fit_results().numpoints,38)
+        self.assertEqual(ui.get_fit_results().dof,35)
+
+    @needs_data
+    def test_radpro_dm(self):
+        self.run_thread('radpro_dm')
         self.assertEqualWithinTol(ui.get_fit_results().statval, 217.450, 1e-4)
         self.assertEqualWithinTol(ui.get_fit_results().rstat, 6.21287, 1e-4)
         self.assertEqualWithinTol(ui.get_fit_results().qval, 0.0, 1e-4)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#
 # 
 #  Copyright (C) 2007  Smithsonian Astrophysical Observatory
 #
@@ -17,6 +18,7 @@
 #  with this program; if not, write to the Free Software Foundation, Inc.,
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
+
 
 import sys
 import os
@@ -256,7 +258,7 @@ else:
 sherpa_inc = ['sherpa/include']
 
 header_deps = {
-    'myArray': (),
+    'Array2d': (),
     'array': (),
     'constants': (),
     'extension': ('array',),
@@ -380,21 +382,6 @@ extension_modules = [
 ##                'sherpa/optmethods/src/port/port.f',
 ##                'sherpa/optmethods/src/port/myport.f',
 ##                'sherpa/optmethods/src/port/dpptri.f']),
-
-##    # sherpa.optmethods._saoopt
-##    Extension('sherpa.optmethods._stogo',
-##              ['sherpa/optmethods/src/StoGo/_stogo.cc',
-##               'sherpa/optmethods/src/StoGo/linalg.cc',
-##               'sherpa/optmethods/src/StoGo/tools.cc'],
-##              sherpa_inc, libraries=(cpp_libs + ['sherpa']),
-##              depends=(get_deps(['myArray', 'extension']) +
-##                       ['sherpa/include/sherpa/functor.hh',
-##                        'sherpa/optmethods/src/StoGo/linag.h',
-##                        'sherpa/optmethods/src/StoGo/tools.h',
-##                        'sherpa/optmethods/src/StoGo/Local.hh',
-##                        'sherpa/optmethods/src/StoGo/Global.hh'])),
-
-
 ###############################################################################
 
     # sherpa.optmethods._saoopt
@@ -403,7 +390,7 @@ extension_modules = [
                'sherpa/optmethods/src/Simplex.cc'],
               sherpa_inc + ['sherpa/utils/src/gsl'],
               libraries=(cpp_libs + ['sherpa']),              
-              depends=(get_deps(['myArray', 'extension']) +
+              depends=(get_deps(['Array2d', 'extension']) +
                        ['sherpa/include/sherpa/fcmp.hh',
                         'sherpa/include/sherpa/MersenneTwister.h',
                         'sherpa/include/sherpa/functor.hh',
@@ -627,16 +614,13 @@ if conf['xspec_library_dir'] is not None:
 #
 ###############################################################################
 
-# CIAO 4.4 release, Sherpa package 1
+# CIAO 4.4 release, Sherpa package 2
 setup(name='sherpa',
-      version='4.4.0',
+      version='4.4.1',
       author='Smithsonian Astrophysical Observatory / Chandra X-Ray Center',
       author_email='cxchelp@head.cfa.harvard.edu',
       url='http://cxc.harvard.edu/sherpa/',
       description='Modeling and fitting package for scientific data analysis',
-      license='GNU GPL v3',
-      long_description='Modeling and fitting package for scientific data analysis',
-      platforms='Linux, Mac OS X, Solaris',
       packages=['sherpa',
                 'sherpa.estmethods',
                 'sherpa.image',

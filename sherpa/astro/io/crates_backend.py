@@ -72,6 +72,7 @@ def close_crate_dataset(dataset):
 
 def get_filename_from_dmsyntax(filename, blockname=None):
 
+    arg = str(filename)
     isbinary = True
     colnames = True
     dmsyn = ''
@@ -96,8 +97,6 @@ def get_filename_from_dmsyntax(filename, blockname=None):
                 colnames = False
         finally:
             fd.close()
-
-    arg = str(filename)
 
     if blockname is not None:
         arg += "[%s]" % str(blockname).upper()
@@ -894,7 +893,21 @@ def get_pha_data(arg, make_copy=True, use_background=False):
     else:
         raise IOErr('badfile', arg, "PHACrateDataset obj")
 
-    pha = phadataset.get_crate(phadataset.get_current_crate())
+    pha = phadataset.get_crate("SPECTRUM")
+    if pha is None:
+        pha = phadataset.get_crate(phadataset.get_current_crate())
+        if (pha.get_key('HDUCLAS1').value == 'SPECTRUM' or
+            pha.get_key('HDUCLAS2').value == 'SPECTRUM'):
+            pass
+        else:
+            pha = phadataset.get_crate(1)
+            if (pha.get_key('HDUCLAS1').value == 'SPECTRUM' or
+                pha.get_key('HDUCLAS2').value == 'SPECTRUM'):
+                pass
+            else:
+                # If background maybe better to go on to next block?
+                pha = None
+
     if use_background:
 
         # Used to read BKGs found in an additional block of

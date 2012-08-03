@@ -198,6 +198,16 @@ void xsbvvp_(float* ear, int* ne, float* param, int* ifl, float* photar, float* 
 void xsvvap_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
 void zigm_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
 
+// New XSPEC 12.7.1 models
+
+void C_gaussDem(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_vgaussDem(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void logpar_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void eplogpar_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void optxagn_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void optxagnf_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+void pexmon_(float* ear, int* ne, float* param, int* ifl, float* photar, float* photer);
+
 // XSPEC table models
 void xsatbl(float* ear, int ne, float* param, const char* filenm, int ifl, 
 	    float* photar, float* photer);
@@ -901,6 +911,14 @@ static PyMethodDef XSpecMethods[] = {
   XSPECMODELFCT_NORM( xsbvvp, 34 ),
   XSPECMODELFCT_NORM( xsvvap, 33 ),
   XSPECMODELFCT( zigm, 3 ),
+  // New XSPEC 12.7.1 models
+  XSPECMODELFCT_C_NORM( C_gaussDem, 7 ),
+  XSPECMODELFCT_C_NORM( C_vgaussDem, 20 ),
+  XSPECMODELFCT_NORM( eplogpar, 3 ),
+  XSPECMODELFCT_NORM( logpar, 4 ),
+  XSPECMODELFCT_NORM( optxagn, 14 ),
+  XSPECMODELFCT_NORM( optxagnf, 12 ),
+  XSPECMODELFCT_NORM( pexmon, 8 ),
   // XSPEC table models
   XSPECTABLEMODEL_NORM( xsatbl ),
   XSPECTABLEMODEL_NORM( xsmtbl ),
