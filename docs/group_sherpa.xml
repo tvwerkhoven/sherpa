@@ -7,8 +7,8 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="group_sherpa" refkeywords="group groups grouped grouping bin bins spectra spectral PHA pha data group_counts group_snr group_adapt group_adapt_snr group_bins group_width " seealsogroups="sh.data sh.group sh.filter" displayseealsogroups="" context="data">
-	<SYNOPSIS>
+<cxchelptopics><ENTRY pkg="sherpa" key="group" refkeywords="group groups grouped grouping bin bins spectra spectral PHA pha data group_counts group_snr group_adapt group_adapt_snr group_bins group_width " seealsogroups="sh.data sh.group sh.filter" displayseealsogroups="" context="data">
+    <SYNOPSIS>
      Enable and specify the grouping settings of a spectral data set
     </SYNOPSIS>
 
@@ -27,11 +27,15 @@ This is a generated file.  DO NOT EDIT!
 
     <LIST>
      <ITEM>
-       id       - the id of the dataset to group; if not given, uses the default dataset id (id=1 by default, see "ahelp get_default_id")
+       id       - the id of the source data set (including associated
+       background data) to group; if not given, uses
+       the default data set id (id=1 by default, see "ahelp get_default_id")
      </ITEM>
      <ITEM>
-       bkg_id   -  background data set ID, if the
-       grouping is to be applied to the background data
+       bkg_id   -  background data set ID, to apply a separate
+       grouping to associated background data (when left blank, 
+       the background will be grouped automatically according to the
+       specified source grouping scheme; see 'id' description above)
 	</ITEM>
 
      <ITEM>
@@ -60,12 +64,8 @@ group()
        energy, wavelength, or channel bins until there are enough
        counts per group for spectral fitting. The group() function
        activates the grouping scheme of a PHA data set, by data set ID or
-       background dataset ID.
-       Specifically, it sets the "grouped" boolean in a Sherpa PHA
-       dataset to 
-       True or False
-       
-       , after the
+       background data set ID. Specifically, it sets the "grouped"
+       boolean in a Sherpa PHA data set to True or False, after the
        'grouping' setting of the data set has been defined with the 
        set_grouping() function (which can be used to apply a
        user-defined array of integers as the grouping scheme, e.g. to
@@ -77,9 +77,14 @@ group()
       </PARA>
 
       <PARA>
-	In all cases, resetting the grouping clears any
-	filters already in place.
+      When a grouping scheme is applied to a source data set, it is
+      also automatically applied to all associated background data
+      sets.  A different grouping scheme for a background can still
+      be imposed afterward, using the bkg_id parameter to group just
+      the background.
       </PARA>
+
+
 
       <PARA>
 group_bins()	
@@ -115,12 +120,14 @@ group_snr()
 group_adapt()	
       </PARA>
       <PARA>
-         This function allows the user to adaptively group PHA spectral data
-	 by counts, i.e., group bins of data until the number of
-	 counts in each group exceeds the minimum number of counts
-	 specified in the 'min' argument, keeping bright features
-	 ungrouped while grouping low signal-to-noise
-	 regions. 
+	
+	This function allows the user to adaptively group PHA spectral
+      data by counts, i.e., group data channels until the number of
+      counts in each group exceeds the minimum number of counts
+      specified in the 'min' argument, keeping bright features
+      ungrouped. Some channels between the bright features may remain
+      ungrouped if the grouping criterium has not been met. These
+      ungrouped channels are given the quality flag=2.
       </PARA>
 
       <PARA>
@@ -128,7 +135,7 @@ group_adapt_snr()
       </PARA>
       <PARA>
         This function allows the user to adaptively group PHA spectral data
-	by signal-to-noise ratio, i.e.,  group bins of data until each group exceeds
+	by signal-to-noise ratio, i.e.,  group data channels until each group exceeds
 	at least the minimum specified signal-to-noise ratio.  This
 	function works similarly to group_adapt(), but instead of
 	using a count threshold to determine group cutoffs, the
@@ -156,12 +163,12 @@ group_width()
 	<DESC>
           <PARA>
 	   When called with no arguments, the group() function activates
-	   the grouping scheme for the default data set. If a
+	   the grouping scheme for the source and background in the default data set. If a
 	   data set ID is specified, such as "2" for the second data
 	   set loaded (or a user-specified string ID), then grouping
-	   is turned on in the indicated data set.  To activate
-	   grouping of a background associated with a source data set,
-	   both the data ID and background ID must be supplied to group().
+	   is turned on in the indicated data set.  To 
+	   group a background data set separately from the associated
+	   source data set, the background ID must be supplied to group().
            </PARA>
 <VERBATIM>
 sherpa&gt; print(get_data(2).grouped)
@@ -185,7 +192,7 @@ True
 	  The function group_counts() requires a 'num' value 
 	  to indicate the minimum number of counts to be
 	  included in each data bin.  In this
-	  example, data set 1 is grouped so that there are at least 16
+	  example, default data set 1 is grouped so that there are at least 16
 	  counts per bin, and data set 3 has a minimum of 20 counts
 	  per bin.
           </PARA>
@@ -195,16 +202,17 @@ True
 	<QEXAMPLE>
        <SYNTAX>
 	 <LINE>sherpa&gt; group_snr(3)</LINE>
+	 <LINE>sherpa&gt; group_snr(5,bkg_id=1)</LINE>
          <LINE>sherpa&gt; group_snr(2, 10)</LINE>
 	</SYNTAX>
        <DESC>
          <PARA>
 	  The function group_snr() requires an 'snr' value 
 	  to indicate the minimum signal-to-noise ratio (snr) for each group
-	  of bins.  In this
-	  example, data set 1 is grouped so that the minimum snr per
-	  group is 3, and each group of bins in data set 2 has a
-	  minimum snr of 10.
+	  of bins.  In this example, first the default data set 1 is grouped so that the minimum snr per
+	  group is 3, and then the background associated with data set
+	  1 is grouped so that the minimum snr per group is 5. In data
+	  set 2, each group of bin has a minimum snr of 10. 
           </PARA>
        </DESC>
      </QEXAMPLE>
@@ -252,8 +260,8 @@ True
          <PARA>
 	   The function group_bins() requires a 'num' value to
 	   indicate the number to divide the number of channels.
-	   The first example shows how to group the default dataset
-	   into 23 bins.  The second examples groups dataset id=3 into
+	   The first example shows how to group the default data set
+	   into 23 bins.  The second examples groups data set id=3 into
 	   30 bins.
           </PARA>
 
@@ -269,8 +277,8 @@ True
          <PARA>
 	   The function group_width() requires a 'num' value to
 	   indicate the number of bins to create. The first example
-	   creates bins of 16 channels for the default dataset.  The
-	   second example divides the channels in dataset id=3 into
+	   creates bins of 16 channels for the default data set.  The
+	   second example divides the channels in data set id=3 into
 	   groups of 20.
           </PARA>
 
@@ -285,6 +293,6 @@ True
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

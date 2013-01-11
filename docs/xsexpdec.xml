@@ -46,8 +46,8 @@ A(E) = K exp(-factor*E)
      This information is taken from the
      <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
      User's Guide</HREF>.
-     Version 12.7 of the XSpec
-     models is supplied with CIAO 4.4.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
    </PARA>
 </DESC>
 
@@ -58,7 +58,7 @@ A(E) = K exp(-factor*E)
      </PARA>
    </BUGS>
 
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 	</ENTRY></cxchelptopics>

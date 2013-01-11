@@ -16,7 +16,7 @@ This is a generated file.  DO NOT EDIT!
     <DESC>
       <PARA>
 	Sherpa includes the "additive" and "multiplicative" models of
-	XSpec version 12.7.  The XSpec model names have the prefix
+	XSpec version 12.7.1.  The XSpec model names have the prefix
 	"xs", e.g. XSpec phabs model is called "xsphabs."
       </PARA>
 
@@ -255,6 +255,10 @@ This is a generated file.  DO NOT EDIT!
 	  <DATA>Absorption edge</DATA>
 	</ROW>
 	<ROW>
+	  <DATA>eplogpar</DATA>
+	  <DATA>Log-parabolic blazar model with nFn normalization</DATA>
+	</ROW>  
+	<ROW>
 	  <DATA>eqpair</DATA>
 	  <DATA>Component of Paolo Coppi's thermal/non-thermal hot plasma emission model</DATA>
 	</ROW>
@@ -287,6 +291,10 @@ This is a generated file.  DO NOT EDIT!
 	<ROW>
 	  <DATA>gabs</DATA>
 	  <DATA>Multiplicative gaussian absorption line</DATA>
+	</ROW>
+	<ROW>
+	  <DATA>gadem</DATA>
+	  <DATA>Plasma emission, multi-temperature with gaussian distribution of emission measure</DATA>
 	</ROW>
 	<ROW>
 	  <DATA>gaussian</DATA>
@@ -332,6 +340,10 @@ This is a generated file.  DO NOT EDIT!
 	<ROW>
 	  <DATA>laor2</DATA>
 	  <DATA>Accretion disk with broken-power law emissivity, black hole emission line</DATA>
+	</ROW>
+	<ROW>
+	  <DATA>logpar</DATA>
+	  <DATA>Log-parabolic blazar model</DATA>
 	</ROW>
 	<ROW>
 	  <DATA>lorentz</DATA>
@@ -391,12 +403,24 @@ This is a generated file.  DO NOT EDIT!
 	  <DATA>Thermally comptonized continuum</DATA>
 	</ROW>
 	<ROW>
+	  <DATA>optxagn</DATA>
+	  <DATA>Colour temperature corrected disc and energetically coupled Comptonisation model for AGN</DATA>
+	</ROW>
+	<ROW>
+	  <DATA>optxagnf</DATA>
+	  <DATA>Colour temperature corrected disc and energetically coupled Comptonisation model for AGN</DATA>
+	</ROW>
+	<ROW>
 	  <DATA>pcfabs</DATA>
 	  <DATA>Partial covering fraction absorption</DATA>
 	</ROW>
 	<ROW>
 	  <DATA>pegpwrlw</DATA>
 	  <DATA>Power law with pegged normalization</DATA>
+	</ROW>
+	<ROW>
+	  <DATA>pexmon</DATA>
+	  <DATA>Neutral Compton reflection with self-consistent Fe and Ni lines</DATA>
 	</ROW>
 	<ROW>
 	  <DATA>pexrav</DATA>
@@ -539,6 +563,10 @@ This is a generated file.  DO NOT EDIT!
 	  <DATA>vequil</DATA>
 	  <DATA>Ionization equilibrium collisional plasma model with
 	  variable abundances</DATA>
+	</ROW>
+	<ROW>
+	  <DATA>vgadem</DATA>
+	  <DATA>Plasma emission, multi-temperature with gaussian distribution of emission measure</DATA>
 	</ROW>
 	<ROW>
 	  <DATA>vgnei</DATA>
@@ -700,8 +728,8 @@ This is a generated file.  DO NOT EDIT!
      </PARA>
    </BUGS>
 
-    <VERSION>CIAO 4.4</VERSION>
+    <VERSION>CIAO 4.5</VERSION>
 
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

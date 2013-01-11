@@ -7,10 +7,10 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="igamc" refkeywords="cephes utility function math " seealsogroups="sh.calc " displayseealsogroups="" context="utilities">
+<cxchelptopics><ENTRY pkg="sherpa" key="igamc" refkeywords="cephes utility function math  gamma regularized " seealsogroups="sh.calc " displayseealsogroups="" context="utilities">
 
      <SYNOPSIS>
-     Calculate the compliment of the incomplete Gamma function (upper)
+     Calculate the complement of the regularized incomplete Gamma function (upper)
     </SYNOPSIS>
 
     <SYNTAX>
@@ -20,7 +20,7 @@ This is a generated file.  DO NOT EDIT!
     <DESC>
       <PARA>
 	Calculate the CEPHES function, igamc, in the range [a &gt; 0;
-	x &gt; 0].  The function is defined as
+	x &gt; 0].  
       </PARA>
 	<PARA>
 The function, igamc, is defined by
@@ -29,8 +29,14 @@ The function, igamc, is defined by
 <VERBATIM>
 igamc(a,x) = 1 - igam(a,x)
 
-           = 1/sqrt(a) Int_(x)^(Inf) e^(-t) t^(a-1) dt
+           = 1/gamma(a) Int_(x)^(Inf) e^(-t) t^(a-1) dt
 </VERBATIM>
+
+       <PARA>
+	 where "igam" represents the regularized incomplete Gamma
+	 function (see "ahelp igam"), and "gamma(a)" the complete Gamma function. (If the igam and igamc functions are *not* regularized, then their sum is not one, but is the complete Gamma function, gamma(a).)
+       </PARA>
+
 	<PARA>
 	In this implementation, both arguments must be positive. 
 	The integral is evaluated by either a power series or
@@ -111,6 +117,6 @@ igamc(a,x) = 1 - igam(a,x)
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

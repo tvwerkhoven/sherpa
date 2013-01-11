@@ -247,6 +247,6 @@ apply_rmf(apply_arf((56494.4943719 * const1d.constant3)))
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

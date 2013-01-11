@@ -11,18 +11,27 @@ This is a generated file.  DO NOT EDIT!
 
 
     <SYNOPSIS>
-      A Voigt model of an absorption feature.
+      A Voigt model of an absorption feature defined in Angstroms.
     </SYNOPSIS>
 
 
  <DESC>
   <PARA>
-     A Voigt model of an absorption feature; using the absorbed Gaussian to model the core, and the absorbed Lorentzian to model the wings of an absorption feature.
+     A Voigt model of an absorption feature; using the absorbed
+     Gaussian to model the core, and the absorbed Lorentzian to model
+     the wings of an absorption feature.
   </PARA>
   <PARA>
-    The approximation presented in Astrophysical Formulae (K. R. Lang, 1980, 2nd ed., p. 220) is used. This approximation works best when the ratio between the FWHM of the Gaussian and Lorentzian sub-components is near unity. 
+    The approximation presented in Astrophysical Formulae (K. R. Lang,
+    1980, 2nd ed., p. 220) is used. This approximation works best when
+    the ratio between the FWHM of the Gaussian and Lorentzian
+    sub-components is near unity.
   </PARA>
 
+      <PARA>
+        The model is defined as a transparency and should be applied
+        as a multiplicative component in the model expression.
+   </PARA>
  
 
 <TABLE>
@@ -45,7 +54,7 @@ This is a generated file.  DO NOT EDIT!
 <ROW> 
   <DATA>3</DATA> 
   <DATA>fwhm</DATA> 
-  <DATA>The FWHM in Angstroms</DATA> 
+  <DATA>The FWHM in km/s</DATA> 
 </ROW>
 <ROW> 
   <DATA>4</DATA> 
@@ -62,6 +71,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

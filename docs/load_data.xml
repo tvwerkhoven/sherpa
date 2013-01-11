@@ -8,7 +8,7 @@ This is a generated file.  DO NOT EDIT!
 
 -->
 <cxchelptopics><ENTRY pkg="sherpa" key="load_data" refkeywords=" read errors load " seealsogroups="sh.io sh.data " displayseealsogroups="" context="data">
-	<SYNOPSIS>
+    <SYNOPSIS>
       Load 1D data from a file
     </SYNOPSIS>
 
@@ -117,6 +117,21 @@ This is a generated file.  DO NOT EDIT!
 	  </PARA>
         </DESC>
       </QEXAMPLE>
+      <QEXAMPLE>
+        <SYNTAX>
+	  <LINE>sherpa&gt; load_data("test_data.dat", dstype=Data1DInt)</LINE>
+	  <LINE>sherpa&gt; load_data("test_data.dat[opt colnames=first]", dstype=Data1DInt)</LINE>
+	  <LINE>sherpa&gt; load_data("test_data.dat[cols xlo,xhi,y,staterror]", dstype=Data1DInt)</LINE>
+        </SYNTAX> 
+	<DESC>
+	  <PARA>
+	    This example shows three equivalent ways of loading four
+	    columns named 'xlo','xhi','y', and 'staterror' from the
+	    ASCII file test_data.dat, where the latter uses the CIAO
+	    Data Model ASCII kernel to select the desired columns.
+          </PARA>
+        </DESC>
+      </QEXAMPLE>
     </QEXAMPLELIST>
 
 <BUGS>
@@ -126,6 +141,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

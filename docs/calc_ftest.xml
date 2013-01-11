@@ -20,8 +20,11 @@ This is a generated file.  DO NOT EDIT!
 
     <DESC>
       <PARA>
-      	The calc_ftest command computes the significance using the F test with the degrees of freedom of the simple model (dof_1) and its best-fit statistic (stat_1), the degrees
-		of freedom of the complex model (dof_2) and its best-fit statistic (stat_2).
+      	The calc_ftest command computes the significance using the F
+      	test with the degrees of freedom of the simple model (dof_1)
+      	and its best-fit statistic (stat_1), along with the degrees of freedom of
+      	the complex model (dof_2) and its best-fit statistic
+      	(stat_2). 
       </PARA>
       
       <LIST>
@@ -30,19 +33,28 @@ This is a generated file.  DO NOT EDIT!
         <ITEM>dof_2: degrees of freedom of the complex model</ITEM>
         <ITEM>stat_2: best_fit statistic of the complex model</ITEM>
       </LIST>
-      
+ 
       <PARA>
       	   The F-test is a model comparison test. Model comparison
-	   tests are used to select from two competing models that which best describes a
-	   particular dataset. A model comparison test statistic, T, is created from the
+	   tests are used to select from two competing models which best describes a
+	   particular data set. A model comparison test statistic, T, is created from the
 	   best-fit statistics of each fit; as with all statistics, it is sampled from a
 	   probability distribution p(T). The test significance is defined as the integral of
 	   p(T) from the observed value of T to infinity. The significance quantifies the
 	   probability that one would select the more complex model when in fact the null
 	   hypothesis is correct. A standard threshold for selecting the more complex model is
-	   significance &gt; 0.05 (the "95% criterion" of statistics).
+	   significance &lt; 0.05 (the "95% criterion" of statistics).
 	  </PARA>
-	  
+	   
+          <PARA>
+	   calc_ftest uses the ratio of the reduced chi2 which follows
+           the F-distribution, (chi2_1/dof_1)/(chi2_2/dof_2). When calculating the significance, Sherpa uses
+           the incomplete Beta function to obtain the integral of the tail of the
+           F-distribution. The significance, or p-value, is returned by
+           calc_ftest.
+           If significance is &lt; 0.05, the more complex model is selected.
+          </PARA>
+
 	  <PARA>
 	   The F-test may be used if:
 	  </PARA>
@@ -71,13 +83,22 @@ This is a generated file.  DO NOT EDIT!
 	   text for details.) If these conditions are not fulfilled, then the F-test
 	   significance may not be accurate. 
 	  </PARA>
+
+          <PARA>
+	    The Sherpa calc_ftest result may be checked by comparing
+	    the expected F value for the required significance of
+	    0.05, which are typically given in the F-distribution
+	    Tables, such as the one found on
+	    the <HREF link="http://www.stattools.net/FTest_Tab.php#0.05">StatTools
+	    webpage</HREF>. 
+	  </PARA>
+	  
     </DESC>
 
     <QEXAMPLELIST>
       <QEXAMPLE>
         <SYNTAX>
           <LINE>sherpa&gt; calc_ftest(2, 20.28, 34, 33.63)</LINE>
-          
 	</SYNTAX>
 	   <DESC>
 		 <PARA>
@@ -93,8 +114,8 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

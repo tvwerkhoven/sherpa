@@ -141,7 +141,7 @@ This is a generated file.  DO NOT EDIT!
       </QEXAMPLE>
       <QEXAMPLE>
         <SYNTAX>
-          <LINE>sherpa&gt; calc_model_sum(bkg_id=1)</LINE>
+          <LINE>sherpa&gt; calc_model_sum(id=1, bkg_id=1)</LINE>
 	  
         </SYNTAX>
           <DESC>
@@ -150,14 +150,13 @@ This is a generated file.  DO NOT EDIT!
 	     convolved background model associated with the specified
 	     background data set will be summed over the entire
 	     data range.  In this example, the first background
-             data set automatically located by Sherpa is used.
+             data set loaded in association with source data set 1 is used.
             </PARA>
           </DESC>
       </QEXAMPLE>
       <QEXAMPLE>
         <SYNTAX>
-          <LINE>sherpa&gt; calc_model_sum(lo=0.1,
-          hi=7.0, "bkg")</LINE>
+          <LINE>sherpa&gt; calc_model_sum(lo=0.1, hi=7.0, "bkg")</LINE>
 	  
         </SYNTAX>
           <DESC>
@@ -191,6 +190,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

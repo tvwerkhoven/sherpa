@@ -197,38 +197,41 @@ This is a generated file.  DO NOT EDIT!
             simultaneously by data ID:
 	  </PARA>     
          
-	  <VERBATIM>
-        sherpa&gt; fit("leg_m1","leg_p1")
-	     LevMar:
-	     Initial fit statistic = 21857.8
-	     Final fit statistic   = 6662.04 at function evaluation 52
-	     Data points           = 3162
-	     Degrees of freedom    = 3158
-	     Probability [Q-value] = 9.26899e-252
-	     Reduced statistic     = 2.10958
-	     Change in statistic   = 15195.8
-	     bpow.phoindx1   1           
-	     bpow.breake    0.763347    
-	     bpow.phoindx2   1.79799     
-	     bpow.norm      0.0294637
+<VERBATIM>
+sherpa&gt; fit("leg_m1","leg_p1")
+Datasets              = 'leg_m1', 'leg_p1'
+Method                = levmar
+Statistic             = chi2gehrels
+Initial fit statistic = 48024.6
+Final fit statistic   = 26310.8 at function evaluation 62
+Data points           = 32768
+Degrees of freedom    = 32765
+Probability [Q-value] = 1
+Reduced statistic     = 0.803016
+Change in statistic   = 21713.8
+   bpow.ampl      0.636989    
+   bpow.index1    0.52646     
+   bpow.index2    2.16595     
+
  
-        sherpa&gt; print get_fit_results()
-	     methodname = LevMar
-	     succeeded  = True
-	     parnames   = ('bpow.phoindx1', 'bpow.breake', 'bpow.phoindx2', 'bpow.norm')
-	     parvals    = (1.00000005713, 0.763346621728, 1.79799457922, 0.0294636807334)
-	     covarerr   = None
-	     statval    = 6662.04434909
-	     istatval   = 21857.8439964
-	     dstatval   = 15195.7996473
-	     numpoints  = 3162
-	     dof        = 3158
-	     qval       = 9.26899264507e-252
-	     rstat      = 2.10957705798
-	     message    = relative error between two consecutive
-	     iterates is at most xtol=1.19209e-07
-	     nfev       = 52         
-          </VERBATIM>
+sherpa&gt; print get_fit_results()
+datasets       = ('leg_m1', 'leg_p1')
+itermethodname = none
+methodname     = levmar
+statname       = chi2gehrels
+succeeded      = True
+parnames       = ('bpow.ampl', 'bpow.index1', 'bpow.index2')
+parvals        = (0.63698867502154433, 0.52646030609918448, 2.1659465149789296)
+statval        = 26310.806281
+istatval       = 48024.6491653
+dstatval       = 21713.8428843
+numpoints      = 32768
+dof            = 32765
+qval           = 1.0
+rstat          = 0.803015604488
+message        = successful termination
+nfev           = 62
+</VERBATIM>
            
           </DESC>
 	</QEXAMPLE> 
@@ -242,6 +245,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

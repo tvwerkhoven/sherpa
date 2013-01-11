@@ -103,6 +103,23 @@ XSpec model.
 </PARA>
 
 <PARA>
+  In versions 4.0 and above, the Compton reflection is done by a call
+  to the ireflct model code, and the relativistic blurring by a call to
+  rdblur. This does introduce some changes in the spectrum from
+  earlier versions. For the case of a neutral reflector (i.e. the
+  ionization parameter is zero), more accurate opacities are
+  calculated. For the case of an ionized reflector, the old version
+  assumed that for the purposes of calculating opacities the input
+  spectrum was a power-law (with index based on the 2-10 keV
+  spectrum). The new version uses the actual input spectrum, which is
+  usually not a power law, giving different opacities for a given
+  ionization parameter and disk temperature. The Greens' function
+  integration required for the Compton reflection calculation is
+  performed to an accuracy of  0.01 (i.e. 1%). This can be changed
+  using, e.g., 'xset COMPPS_PRECISION 0.05' (see 'ahelp set_xsxset').
+</PARA>
+
+<PARA>
      This is an additive model component.
    </PARA>
 
@@ -214,8 +231,8 @@ XSpec model.
      This information is taken from the
      <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
      User's Guide</HREF>.
-     Version 12.7 of the XSpec
-     models is supplied with CIAO 4.4.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
    </PARA>
 </DESC>
 
@@ -226,7 +243,7 @@ XSpec model.
      </PARA>
    </BUGS>
 
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 	</ENTRY></cxchelptopics>

@@ -19,7 +19,7 @@ A 2-D de Vaucouleurs model:
 
 <PARA>
 <EQUATION>
-f(x,y) = f(r) = A exp[-7.67 z^0.25 - 1 ] 
+f(x,y) = f(r) = A exp[-7.669 (z^0.25 - 1) ] 
 </EQUATION>
 </PARA>
 
@@ -69,6 +69,13 @@ x_min = -(x-x_o)sin(theta) + (y-y_o)cos(theta)
 </TABLE>
 
 <PARA>
+  devacouleurs2d is a special case of  <HREF link="http://cxc.harvard.edu/sherpa/ahelp/sersic2d.html">"sersic2d"</HREF> model when the Sersic index n=4.
+  For more detailed description and generalization of the model see
+  <HREF link="http://ned.ipac.caltech.edu/level5/March05/Graham/Graham2.html">
+  "the NED document"
+  </HREF>
+</PARA>
+<PARA>
   The integration of models in Sherpa is controlled by an 
   integration flag in each model structure.  Refer to <HREF link="http://cxc.harvard.edu/sherpa/ahelp/integrate.html">"ahelp integrate"</HREF> 
   for information on integrating model components. 
@@ -83,8 +90,8 @@ x_min = -(x-x_o)sin(theta) + (y-y_o)cos(theta)
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

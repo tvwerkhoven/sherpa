@@ -7,21 +7,23 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="get_covar" refkeywords="get_covariance_results get_covar_results get_covar_opt get covar covariance confidence xconf proj projection " seealsogroups="sh.get sh.conf" displayseealsogroups="" context="confidence">
-	<SYNOPSIS>
+<cxchelptopics><ENTRY pkg="sherpa" key="get_covar" refkeywords="get_covariance_results get_covar_results get_covar_opt get covar covariance confidence xconf proj projection  set_covar_opt " seealsogroups="sh.get sh.conf" displayseealsogroups="" context="confidence">
+
+
+    <SYNOPSIS>
      Return settings or results for the covariance method.
     </SYNOPSIS>
 
     <SYNTAX>
       <LINE> get_covar()</LINE>
-	<LINE>get_covar_results()</LINE>
-	<LINE>get_covar_opt( [name] )</LINE>
+      <LINE>get_covar_results()</LINE>
+      <LINE>get_covar_opt( [name] )</LINE>
       
     </SYNTAX>
 
     <DESC>
       <PARA>
-get_covar   
+	get_covar   
       </PARA>
 
       <PARA>
@@ -31,7 +33,7 @@ get_covar
       </PARA>
 
 <LIST>
-	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=0.01</ITEM>
+	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=1</ITEM>
 	<ITEM>eps - precision of resulting limits, default=0.01</ITEM>
         <ITEM>maxiters- maximum number of tries to bracket desired limits, before returning, default=200</ITEM>
 	<ITEM>soft_limits - a switch which allows the search to go all
@@ -41,7 +43,7 @@ get_covar
       </LIST>
 
       <PARA>
-get_covar_results
+	get_covar_results
       </PARA>
 
       <PARA>
@@ -65,17 +67,18 @@ get_covar_results
       </LIST>
 
       <PARA>
-get_covar_opt
+	get_covar_opt
       </PARA>
 
       <PARA>
 	The get_covar_opt command returns a covariance option by
 	name. If the name isn't specified, it returns a dictionary of
-	all options that govern how covariance is run.
+	all options that govern how covariance is run. The covariance
+	options are modified using the set_covar_opt command.
        </PARA>
 
 <LIST>
-	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=0.01</ITEM>
+	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=1</ITEM>
 	<ITEM>eps - precision of resulting limits, default=0.01</ITEM>
         <ITEM>maxiters- maximum number of tries to bracket desired limits, before returning, default=200</ITEM>
 	<ITEM>soft_limits - a switch which allows the search to go all
@@ -142,11 +145,12 @@ nfits      = 0
         <SYNTAX>
 	  <LINE>sherpa&gt; get_covar_opt("sigma")</LINE>
 	  <LINE>1</LINE>
+	  <LINE>sherpa&gt; set_covar_opt("sigma",3)</LINE>
 	</SYNTAX>
 	<DESC>
           <PARA>
-	    Return the value of the sigma option, which is "1" in this
-	    example. 
+	    Return the current value of the covariance sigma option ('1' in this
+	    example), and change it to the desired value ('3'). 
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -174,6 +178,6 @@ nfits      = 0
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

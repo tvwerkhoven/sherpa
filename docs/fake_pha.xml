@@ -9,7 +9,7 @@ This is a generated file.  DO NOT EDIT!
 -->
 <cxchelptopics><ENTRY pkg="sherpa" key="fake_pha" refkeywords="fakeit bfakeit pha pha2 phaII simulate simulated fake Poisson" seealsogroups="sh.pha " displayseealsogroups="" context="data">
 	<SYNOPSIS>
-     Simulate a PHA dataset with faked counts using Poisson noise
+     Simulate an observed spectrum based on a theoretical model.
     </SYNOPSIS>
 
     <SYNTAX>
@@ -19,9 +19,22 @@ This is a generated file.  DO NOT EDIT!
 
     <DESC>
       <PARA>
-	The fake_pha command creates a PHA dataset with faked counts
-	given a source model and a grid (e.g. ARF and RMF).  The
-	generated counts will contain Poisson noise. 
+	The fake_pha command creates a spectrum (PHA dataset) with
+	faked counts given a source model and the instrument response
+	files (e.g. ARF and RMF). The generated counts will contain
+	Poisson noise.
+      </PARA>
+
+      <PARA>
+	Background counts may be included in the simulation by
+    setting the 'bkg' parameter with background data previously read
+    into the Sherpa session from a PHA file. The background counts are
+    appropriately scaled, a Poisson draw is taken of the scaled
+    background counts, and then that is added to the simulated source
+    counts.  (If there are multiple backgrounds, then the average of
+    the backgrounds is added to the simulated source counts.) Leaving
+    the 'bkg' parameter empty will generate a spectrum containing only
+    source counts.
       </PARA>
 
       <PARA>
@@ -40,17 +53,18 @@ This is a generated file.  DO NOT EDIT!
 	</ITEM>
 
 	<ITEM>
-	  arf - accepts an ARF filename or a Sherpa data
-	  object that contains the ARF data (see "unpack_arf")
+	  arf - accepts an ARF filename or a Sherpa data object that
+	  contains the ARF data (see "unpack_arf"). Set to None for no
+	  ARF.
 	</ITEM>
 
 	<ITEM>
 	  rmf - accepts an RMF filename or a Sherpa data object that
-	  contains the RMF data (see "unpack_rmf")
+	  contains the RMF data (see "unpack_rmf"). This file is required.
 	</ITEM>
 
 	<ITEM>
-	  exposure - length of observation in seconds
+	  exposure - length of observation in seconds. Required input.
 	</ITEM>
 
 	<ITEM>
@@ -85,7 +99,8 @@ This is a generated file.  DO NOT EDIT!
 
 	<ITEM>
 	  bkg - PHA data for the background;
-          default=None
+          default=None (in this case, only source counts are
+          simulated)
           
 	</ITEM>
       </LIST>
@@ -112,8 +127,25 @@ This is a generated file.  DO NOT EDIT!
 	  <PARA>
 	    The ARF and RMF response files associated with dataset 1
 	    are loaded directly with fake_pha() and used to simulate a
-	50ks dataset, ungrouped by default.  The faked data overwrites
-	the existing dataset with id=1.
+	    50ks source spectrum, ungrouped by default, and without a
+	    background component.  The faked data overwrites the
+	    existing dataset with id=1.
+	  </PARA>
+        </DESC>
+      </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+	  <LINE>sherpa&gt; set_source(1,const1d.c1*powlaw1d.p1)</LINE>
+	  <LINE>sherpa&gt; fake_pha(1, arf=get_arf(), rmf=get_rmf(), exposure=10000, grouped=True, bkg=get_bkg())</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	    A model is defined for dataset 1, then fake_pha is run to
+ simulate a grouped, 10ks source-plus-background spectrum, using the
+ responses and background data associated with PHA data set 1
+ (replacing the loaded PHA data in data set 1 with the faked counts). 
+ 
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -132,8 +164,8 @@ This is a generated file.  DO NOT EDIT!
 	    are loaded with the unpack_arf/rmf functions and assigned
 	    response data set ID "1" with the set_arf/rmf
 	    functions. Data set 1 and its instrument response are then
-	    used to simulate a 30ks ungrouped
-	    dataset with fake_pha.  The faked data overwrites the
+	    used to simulate a 30ks, ungrouped, source-only
+	    spectrum with fake_pha.  The faked data overwrites the
 	    existing dataset with id=1.
 	  </PARA>
         </DESC>
@@ -147,21 +179,8 @@ This is a generated file.  DO NOT EDIT!
           <PARA>
 	    Using the ARF and RMF associated with dataset 1 - obtained
 	    via the get_arf and get_rmf commands - simulate a 50ks ungrouped
-	    dataset.  The faked data overwrites the existing dataset
+	    source spectrum.  The faked data overwrites the existing dataset
 	    with id=1.
-	  </PARA>
-        </DESC>
-      </QEXAMPLE>
-
-      <QEXAMPLE>
-        <SYNTAX>
-	  <LINE>sherpa&gt; set_source("faked",const1d.c1*powlaw1d.p1)</LINE>
-	  <LINE>sherpa&gt; fake_pha("faked", arf=get_arf(), rmf=get_rmf(), exposure=10000, grouped=True, bkg=get_bkg())</LINE>
-	</SYNTAX>
-	<DESC>
-          <PARA>
-	    A model is defined for the dataset id "faked", then
-	    fake_pha is run to simulate a grouped 10ks dataset.
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -174,7 +193,7 @@ This is a generated file.  DO NOT EDIT!
 	</SYNTAX>
 	<DESC>
           <PARA>
-	    A 10ks grouped dataset is faked with just an RMF (no ARF).
+	    A 10ks grouped spectrum is faked with just an RMF (no ARF).
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -187,6 +206,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

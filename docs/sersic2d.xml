@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="sersic2d" refkeywords=" sersic Sersic DeVaucouleurs model models modeling modelling source composite nested joint  surface  profile " seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+<SYNOPSIS>
+Sersic 2D surface brightness model.
+
+</SYNOPSIS>
+<DESC>
+<PARA>
+A 2-D Sersic model in Sherpa:
+</PARA>
+
+<PARA>
+<EQUATION>
+f(x,y) = f(r) = A exp[-b(n) (z^(1/n) - 1)]
+</EQUATION>
+</PARA>
+
+
+<PARA>
+<EQUATION>
+b(n) = 2.0*n - 1./3. + 4.0/(405*n) + 46./(25515.0*n^2) 
+</EQUATION>
+</PARA>
+
+<PARA>
+where 'n' is the "Sersic index" controlling the degree of curvature of
+the profile.  The de Vaucouleurs profile is recovered at n=4.
+</PARA>
+
+<PARA>
+<EQUATION>
+z = sqrt[(x_maj/r_maj)^2+(x_min/r_min)^2] 
+</EQUATION>
+</PARA>
+
+<PARA>
+<EQUATION>
+r_maj = r_0 
+</EQUATION>
+</PARA>
+
+<PARA>
+<EQUATION>
+r_min = (1-epsilon)r_0
+</EQUATION>
+</PARA>
+
+<PARA>
+<EQUATION>
+x_maj = (x-x_o)cos(theta) + (y-y_o)sin(theta)
+</EQUATION>
+</PARA>
+
+<PARA>
+<EQUATION>
+x_min = -(x-x_o)sin(theta) + (y-y_o)cos(theta) 
+</EQUATION>
+</PARA>
+
+<TABLE>
+<CAPTION>sersic2d Parmeters</CAPTION>
+<ROW> <DATA>Number</DATA> <DATA>Name</DATA> <DATA>Description</DATA> </ROW>
+<ROW> <DATA>1</DATA> <DATA>r0</DATA> <DATA>core radius r_0</DATA> </ROW>
+<ROW> <DATA>2</DATA> <DATA>xpos</DATA> <DATA>x mean position x_o</DATA> </ROW>
+<ROW> <DATA>3</DATA> <DATA>ypos</DATA> <DATA>y mean position y_o</DATA> </ROW>
+<ROW> <DATA>4</DATA> <DATA>ellip</DATA> <DATA>ellipticity epsilon</DATA> </ROW>
+<ROW> <DATA>5</DATA> <DATA>theta</DATA> <DATA>angle of ellipticity theta</DATA> </ROW>
+<ROW> <DATA>6</DATA> <DATA>ampl</DATA> <DATA>amplitude A at (x_o,y_o)</DATA> </ROW>
+<ROW> <DATA>7</DATA> <DATA>n</DATA> <DATA>Sersic index</DATA> </ROW>
+</TABLE>
+
+<PARA>
+  For more detailed description and generalization of the model see
+  <HREF link="http://ned.ipac.caltech.edu/level5/March05/Graham/Graham2.html">
+  "the NED document"
+  </HREF>
+</PARA>
+<PARA>
+  The integration of models in Sherpa is controlled by an integration
+  flag in each model structure.  Refer to <HREF link="http://cxc.harvard.edu/sherpa/ahelp/integrate.html">"ahelp
+  integrate"</HREF> for information on integrating model components.
+</PARA>
+
+</DESC>
+
+<BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+<VERSION>CIAO 4.5</VERSION>
+
+<LASTMODIFIED>December 2012</LASTMODIFIED>
+
+</ENTRY></cxchelptopics>

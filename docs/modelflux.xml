@@ -8,10 +8,42 @@
 
    <DESC>
       <PARA>
-	Convert between energy flux, photon flux and count rate for
-	any Sherpa model, given a set of spectral response files. 
-	The method assumes the model has an overall linear
-	normalization.
+
+      Convert between absorbed (observed) energy flux, photon flux and count rate for any Sherpa model, 
+      given a set of spectral response files. The 
+      method assumes the model has an overall linear normalization. The default behaviour is to return
+      absorbed (observed) flux given an input count rate.
+
+      </PARA>
+      <PARA>
+      An additional, optional absorption model may also be supplied, in which case the corresponding unabsorbed
+      fluxes and count rates are also calculated.
+
+      </PARA>
+      <PARA>
+      For a given set of model parameters, the base model energy spectrum F(E) is multiplied by the absorption model spectrum A(E) to
+      give the absorbed flux spectrum F'(E)  (A=1 if no absorption model is supplied). The total absorbed flux F' is then
+      calculated as the integral over E of F'(E), and the unabsorbed flux F is the integral of F(E).
+      F'(E) is then multiplied by the product of the supplied ARF and RMF and integrated over E (via the emin and emax parameters)
+      and summed over channel (via the oemin and oemax parameters) to yield a predicted total observed count rate R'.
+
+      </PARA>
+      <PARA>
+      The unabsorbed photon flux spectrum P(E) = (F(E)/E) and its absorbed counterpart P'(E), with integrals P and P',
+      are also calculated from F(E) and F'(E).
+
+      </PARA>
+      <PARA>
+      The model/params and absmodel/absparams paradigm corresponds to a scenario in which a source of flux F would have given
+      rise to a count rate R, but because an intervening absorber reduces the flux by a factor A to F', a reduced count rate R' is seen.
+      Typically, given an observed R', we wish to find F and A. 
+
+      </PARA>
+      <PARA>
+      When opt=rate, the total rate R' is compared to the supplied count rate to scale the normalization of F and F', and P and P'.
+      When opt=flux, F' is compared to the supplied flux to scale the normalization of the other quantities.
+      When opt=pflux, P' is compared to the supplied pflux to scale the normalization of the other quantities.
+      The results are written to the screen (for verbose > 0) and stored in the corresponding parameters.
       </PARA>
    </DESC>
 
@@ -98,6 +130,42 @@
 	 </PARA>
        </DESC>
      </QEXAMPLE>
+     <QEXAMPLE>
+       <SYNTAX>
+	 <LINE>
+
+      modelflux arf="arf.fits" rmf="rmf.fits" model="powlaw1d.p1" 
+      paramvals="p1.gamma=2.26" absmodel="xsphabs.abs1" absparams="abs1.nh=0.8"
+      emin="0.1" emax="10.0" oemin="0.5" oemax="2.0" rate="0.1" opt=rate
+        </LINE>
+	 </SYNTAX>
+       <DESC>
+	 <PARA>
+      This example is like Example 3 but moves the absorption model to the
+      absmodel parameter so that unabsorbed fluxes may also be calculated.
+	   </PARA>
+	 </DESC>
+     </QEXAMPLE>
+
+     <QEXAMPLE>
+     
+       <SYNTAX>
+	 <LINE>
+      modelflux arf="arf.fits" rmf="rmf.fits" model="powlaw1d.p1" 
+      paramvals="p1.gamma=2.26" absmodel="xsphabs.abs1" absparams="abs1.nh=0.8"
+      emin="0.5" emax="7.0" flux="1.e-11" opt=flux
+
+	 </LINE>
+       </SYNTAX>
+       <DESC>
+	 <PARA>
+      This example illustrates the calculation of absorbed and unabsorbed
+      fluxes and rates given an input observed flux. (Input of unabsorbed flux
+      is not supported).
+	 </PARA>
+       </DESC>
+     </QEXAMPLE>
+
 
    </QEXAMPLELIST>
 
@@ -139,6 +207,32 @@
        </SYNOPSIS>
      </PARAM>
 
+
+     <PARAM name="absmodel" type="string" reqd="no">
+       <SYNOPSIS>
+Sherpa model definition string for extra absorption, e.g. xsphabs.abs1.
+       </SYNOPSIS>
+       <DESC>
+	 <PARA>
+          If this parameter is set, the program calculates the absorbed flux 
+          using the product of this model and that given in the base model in the 'model' parameter.
+          It then also gives the unabsorbed flux derived by omitting the absmodel
+          but keeping the base model's normalization unchanged.
+	 </PARA>
+       </DESC>
+
+     </PARAM>
+
+
+     <PARAM name="absparams" type="string" reqd="no">
+       <SYNOPSIS>
+        Semicolon-delimited (';') string of (id.parameter=value) pairs, e.g. abs1.nh=0.07 that
+          defines the parameters for the model specified in absmodel.
+       </SYNOPSIS>
+     </PARAM>
+
+
+
      <PARAM name="oemin" type="real" def="INDEF" reqd="no">
        <SYNOPSIS>
 	 Lower bound of energy range for count rate in keV, default=emin
@@ -169,6 +263,31 @@
        </SYNOPSIS>
      </PARAM>
 
+     <PARAM name="urate" type="real" def="1.0" reqd="no">
+       <SYNOPSIS>
+	 unabsorbed count rate in counts s^-1
+       </SYNOPSIS>
+
+     </PARAM>
+
+     <PARAM name="upflux" type="real" def="INDEF" reqd="no">
+       <SYNOPSIS>
+	 unabsorbed photon flux in energy range in photon cm^-2 s^-1
+       </SYNOPSIS>
+     </PARAM>
+
+     <PARAM name="uflux" type="real" def="INDEF" reqd="no">
+       <SYNOPSIS>
+	 unabsorbed energy flux in energy range in erg cm^-2 s^-1
+       </SYNOPSIS>
+
+     </PARAM>
+
+
+
+
+
+
      <PARAM name="opt" type="string" def="rate" reqd="no">
        <SYNOPSIS>
 	 Input type: (rate|flux|pflux), rate->flux,pflux or flux->rate,pflux
@@ -192,7 +311,7 @@
         on the CIAO website for an up-to-date listing of known bugs.
       </PARA>
    </BUGS>
-   <VERSION>CIAO 4.4</VERSION>
-   <LASTMODIFIED>December 2011</LASTMODIFIED>
+   <VERSION>CIAO 4.5</VERSION>
+   <LASTMODIFIED>December 2012</LASTMODIFIED>
    </ENTRY>
 </cxchelptopics>

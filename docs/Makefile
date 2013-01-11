@@ -310,6 +310,7 @@ XML_FILES	  = \
 	reset.xml \
 	restore.xml \
 	sample_energy_flux.xml \
+	sample_flux.xml \
 	sample_photon_flux.xml \
 	save.xml \
 	save_all.xml \
@@ -333,6 +334,7 @@ XML_FILES	  = \
 	schechter.xml \
 	script.xml \
 	seaton.xml \
+	sersic2d.xml \
 	set_analysis.xml \
 	set_areascal.xml \
 	set_arf.xml \
@@ -462,6 +464,7 @@ XML_FILES	  = \
 	xsdiskir.xml \
 	xsdust.xml \
 	xsedge.xml \
+	xseplogpar.xml \
 	xseqpair.xml \
 	xsequil.xml \
 	xseqtherm.xml \
@@ -470,6 +473,7 @@ XML_FILES	  = \
 	xsexpfac.xml \
 	xsezdiskbb.xml \
 	xsgabs.xml \
+	xsgadem.xml \
 	xsgaussian.xml \
 	xsgnei.xml \
 	xsgrad.xml \
@@ -481,11 +485,14 @@ XML_FILES	  = \
 	xskerrdisk.xml \
 	xslaor2.xml \
 	xslaor.xml \
+	xslogpar.xml \
 	xslorentz.xml \
 	xsmekal.xml \
 	xsmeka.xml \
 	xsmkcflow.xml \
 	xsnei.xml \
+	xsoptxagn.xml \
+	xsoptxagnf.xml \
 	xsnotch.xml \
 	xsnpshock.xml \
 	xsnsagrav.xml \
@@ -496,6 +503,7 @@ XML_FILES	  = \
 	xsnthcomp.xml \
 	xspcfabs.xml \
 	xspegpwrlw.xml \
+	xspexmon.xml \
 	xspexrav.xml \
 	xspexriv.xml \
 	xsphabs.xml \
@@ -528,6 +536,7 @@ XML_FILES	  = \
 	xsvarabs.xml \
 	xsvbremss.xml \
 	xsvequil.xml \
+	xsvgadem.xml \
 	xsvgnei.xml \
 	xsvmcflow.xml \
 	xsvmekal.xml \

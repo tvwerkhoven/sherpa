@@ -10,37 +10,39 @@ This is a generated file.  DO NOT EDIT!
 <cxchelptopics><ENTRY pkg="sherpa" key="absorptionedge" refkeywords="absorption edge model models modeling modelling source optical" seealsogroups="sh.models " displayseealsogroups="" context="models">
 
     <SYNOPSIS>
-      Optical model of interstellar absorption.
+      Optical model of an absorption edge defined in Angstroms. 
     </SYNOPSIS>
  
 
    <DESC>
     <PARA>
-      A model of interstellar absorption, taking the functional form:
+      An absorption model taking the functional form:
     </PARA>
 
     <PARA>
     <EQUATION>
-	f(x) = exp[-tau*(x/edgew)**index] 
+	f(x) = exp[-tau*(x/edgew)**3.0] 
       </EQUATION>
     </PARA>
 
     <PARA>
-     where x &gt; edgew, and x and edgew must be in Angstroms.
+     where x &gt; edgew. Both x and edgew must be in Angstroms.
     </PARA>
 
     <PARA>
 	f(x) = 0,  where x &lt;= edgew .
     </PARA>
 
+      <PARA>
+        The model is defined as a transparency and should be applied
+        as a multiplicative component in the model expression.
+   </PARA>
+
+
 
 
 <TABLE>
-<CAPTION>AbsorptionEdge Parameters</CAPTION>
-<ROW> 
-  <DATA>Number</DATA>
-  <DATA>Name</DATA>
-  <DATA>Description</DATA> 
+<CAPTION>AbsorptionEdge Parameters</CAPTION> <ROW> <DATA>Number</DATA> <DATA>Name</DATA> <DATA>Description</DATA>
 </ROW>
 <ROW> 
   <DATA>1</DATA> 
@@ -53,11 +55,7 @@ This is a generated file.  DO NOT EDIT!
   <DATA>tau</DATA> 
   <DATA>Optical depth</DATA> 
 </ROW>
-<ROW> 
-  <DATA>3</DATA> 
-  <DATA>index</DATA> 
-  <DATA>index</DATA> 
-</ROW>
+
 </TABLE>
 </DESC>
 
@@ -68,6 +66,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<VERSION>CIAO 4.5</VERSION>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

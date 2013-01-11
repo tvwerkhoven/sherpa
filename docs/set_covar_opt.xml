@@ -45,7 +45,7 @@ This is a generated file.  DO NOT EDIT!
 </VERBATIM>
 
  <LIST>
-	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=0.01</ITEM>
+	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=1</ITEM>
 	<ITEM>eps - precision of resulting limits, default=0.01</ITEM>
         <ITEM>maxiters- maximum number of tries to bracket desired limits, before returning, default=200</ITEM>
 	<ITEM>soft_limits - a switch which allows the search to go all
@@ -59,12 +59,13 @@ This is a generated file.  DO NOT EDIT!
     <QEXAMPLELIST>
       <QEXAMPLE>
         <SYNTAX>
+	  <LINE>sherpa&gt; print get_covar_opt()</LINE>
 	  <LINE>sherpa&gt; set_covar_opt ("maxiters", 400)</LINE>
 	  <LINE>sherpa&gt; set_covar_opt ("sigma", 3)</LINE>
 	</SYNTAX>
 	<DESC>
           <PARA>
-		Set the "maxiters" value to 400 and the "sigma" value to 3 for the next run of covariance.
+	    Check the current covariance settings.  Change the "maxiters" value to 400 and the "sigma" value to 3 for the next run of covariance.
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -77,8 +78,8 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

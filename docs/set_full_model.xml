@@ -143,7 +143,7 @@ show_kernel, image_kernel, plot_psf, and other Sherpa PSF functions will not wor
         <SYNTAX>
 	  <LINE>sherpa&gt; rsp = get_response()</LINE>
           <LINE>sherpa&gt; bkg_rsp = get_response(bkg_id=1)</LINE>
-	  <LINE>sherpa&gt; bkg_scale = get_exposure()*get_backscal()/get_exposure(bkg_id=1)/get_backscal(bkg_id=1)</LINE>
+	  <LINE>sherpa&gt; bkg_scale = get_bkg_scale() </LINE>
 	  <LINE>sherpa&gt; set_full_model(rsp(xsphabs.abs1*powlaw1d.p1) + bkg_scale*bkg_rsp(abs1*powlaw1d.p2))</LINE>
           <LINE>sherpa&gt; set_bkg_full_model(bkg_rsp(abs1*p2))</LINE>
 
@@ -193,6 +193,6 @@ show_kernel, image_kernel, plot_psf, and other Sherpa PSF functions will not wor
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

@@ -12,26 +12,16 @@ This is a generated file.  DO NOT EDIT!
 
 
     <SYNOPSIS>
-     Logarithmic emission model
+     Logarithmic Gaussian emission model defined in Angstroms.
     </SYNOPSIS>
 
    
  <DESC>
   <PARA>
-    A logarithmic emission model, taking the functional form:
+    A log of the Gaussian emission model. It includes the skew parameter.
+
   </PARA>
 
-  <PARA>
-  <EQUATION>  
-       arg = log (2) / log(1 + fwhm / 2 / c)
-      </EQUATION>
-  </PARA>
-
-  <PARA>
-  <EQUATION>  
-       fmax = (arg - 1) * flux / 2 / c 
-      </EQUATION>
-  </PARA>
 
   <PARA>
     If skew = 1 and x &lt; pos,
@@ -85,6 +75,30 @@ This is a generated file.  DO NOT EDIT!
   </PARA>
 
 
+<PARA>
+
+where x in Angstroms, c is the speed of light and log is a natural log.
+arg and fmax are defined as:
+</PARA>
+
+
+  <PARA>
+
+       arg = log (2) / log(1 + fwhm / 2 / c)
+
+  </PARA>
+
+  <PARA>
+
+       fmax = (arg - 1) * flux / 2 / c 
+
+  </PARA>
+
+      <PARA>
+        The model is  should be applied
+        as an additive component in the model expression.
+   </PARA>
+
 <TABLE>
 <CAPTION>LogEmission Parameters</CAPTION>
 <ROW> 
@@ -95,7 +109,7 @@ This is a generated file.  DO NOT EDIT!
 <ROW> 
   <DATA>1</DATA> 
   <DATA>fwhm</DATA> 
-  <DATA>FWHM of the feature, in Angstroms</DATA> 
+  <DATA>FWHM in km/s</DATA> 
 </ROW>
 <ROW> 
   <DATA>2</DATA> 
@@ -123,6 +137,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<VERSION>CIAO 4.5</VERSION>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 	</ENTRY></cxchelptopics>

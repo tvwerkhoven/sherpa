@@ -68,9 +68,13 @@ This model should only be used as a multiplicative model:
 </PARA>
 
 <VERBATIM>
-sherpa&gt; powlaw1d[con1](1.,2588.6,0.1)
-sherpa&gt; dered[dr](3.1,0.1)
-sherpa&gt; source 1 = con1*dr
+
+sherpa&gt; set_source(dered.dr*powlaw1d.con1)
+sherpa&gt; set_par("con1.gamma",1.2)
+sherpa&gt; set_par("con1.ref",2588.6)
+sherpa&gt; set_par("con1.ampl",0.1)
+sherpa&gt; set_par("dr.rv",3.1,frozen=True)
+sherpa&gt; set_par("dr.nhgal",0.03,frozen=True)
 </VERBATIM>
 
 <PARA>
@@ -99,8 +103,8 @@ This model provided courtesy of Karl Forster.
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

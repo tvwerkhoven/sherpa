@@ -35,7 +35,15 @@ The metal and iron abundance are variable with respect to those set by
 a command set_xsabund. The opacities are of Balucinska and McCammon (1992
 and 1994, private communication). As expected in AGNs, H and He are
 assumed to be fully ionized. 
-	</PARA>
+</PARA>
+<PARA>
+The core of this model is a Greens' function integration with one
+numerical integral performed for each model energy. The numerical
+integration is done using an adaptive method which continues until a
+given estimated fractional precision is reached. The precision can be
+changed by setting BEXRAV_PRECISION, e.g., 'xset BEXRAV_PRECISION
+0.05' (see 'ahelp set_xsxset'). The default precision is 0.01 (i.e., 1%).
+</PARA>
 
 <PARA>
      This is an additive model component.
@@ -95,8 +103,8 @@ assumed to be fully ionized.
      This information is taken from the
      <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
      User's Guide</HREF>.
-     Version 12.7 of the XSpec
-     models is supplied with CIAO 4.4.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
    </PARA>
 </DESC>
 
@@ -107,8 +115,8 @@ assumed to be fully ionized.
      </PARA>
    </BUGS>
 
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

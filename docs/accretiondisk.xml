@@ -24,7 +24,7 @@ This is a generated file.  DO NOT EDIT!
   <PARA>
 
     <EQUATION>  
-          f(x) = ampl * (x / norm)**(-beta) * exp (-ref / x)
+          f(x) = ampl * (x / 20000.0)**(-beta) * exp (-ref / x)
       </EQUATION>
   </PARA>  
  
@@ -51,11 +51,7 @@ This is a generated file.  DO NOT EDIT!
   <DATA>ampl</DATA> 
   <DATA>Amplitude of the feature</DATA> 
 </ROW>
-<ROW> 
-  <DATA>4</DATA> 
-  <DATA>norm</DATA> 
-  <DATA>Normalization</DATA> 
-</ROW>
+
 </TABLE>
 </DESC>
 
@@ -66,7 +62,7 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<VERSION>CIAO 4.5</VERSION>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

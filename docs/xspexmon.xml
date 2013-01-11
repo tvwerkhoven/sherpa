@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="xspexmon" refkeywords=" xspec model models modeling modelling Neutral Compton reflection Fe Ni pexmon" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+<SYNOPSIS>
+Neutral Compton reflection with self-consistent Fe and Ni lines.
+XSpec model.
+</SYNOPSIS>
+
+<DESC>
+<PARA>
+This model from Nandra et al. (2007; MNRAS 382, 194) combines pexrav
+(see 'ahelp xspexrav') with self-consistently generated Fe K-alpha, Fe K-beta, Ni K-alpha and the Fe K-alpha Compton shoulder. Line strengths are based on Monte Carlo calculations by George and Fabian (1991; MNRAS 249, 352) which are parametrized for 1.1 &lt; gamma &lt; 2.5 by:
+</PARA>
+
+<PARA>
+<EQUATION>
+EW = 9.66 EW_0(gamma^(-2.8) - 0.56)
+</EQUATION>
+</PARA>
+
+<PARA>
+with inclination dependence for i &lt; 85 degrees :
+</PARA>
+<PARA>
+<EQUATION>
+EW = EW_0 (2.20 cos i - 1.749 (cos i)^2 + 0.541(cos i)^3)
+</EQUATION>
+</PARA>
+
+<PARA>
+and abundance dependence :
+</PARA>
+<PARA>
+<EQUATION>
+log EW = log EW_0 (0.0641 log A_Fe - 0.172 (log A_Fe)^2)
+</EQUATION>
+</PARA>
+
+<PARA>
+The Fe K-beta and Ni K-alpha line fluxes are 11.3% and 5% respectively
+of that for Fe K-alpha. The Fe K-alpha Compton shoulder is
+approximated as a gaussian with E = 6.315 keV and sigma = 0.035
+keV. The inclination dependence is taken from Matt (2002; MNRAS 337,
+147) such that :
+</PARA>
+<PARA>
+<EQUATION>
+EW_shoulder = EW_FeKalpha(0.1 + 0.1 cos i)
+</EQUATION>
+</PARA>
+	<PARA>
+     This is an additive model component.
+   </PARA>
+
+<TABLE>
+<CAPTION>xspexmon Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> <DATA>PhoIndex</DATA> <DATA> power-law
+  photon index, N_E prop. to E^(-PhoIndex)</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> <DATA>foldE</DATA>
+  <DATA>cutoff energy in keV (if foldE = 0 there is no cutoff).</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> <DATA>rel_refl</DATA><DATA>the scaling
+  factor for reflection: &lt; 0,  no direct component; =1, isotropic source above the disk </DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> <DATA>redshift</DATA>
+  <DATA/> 
+</ROW>
+<ROW> 
+  <DATA>5</DATA> <DATA>abund</DATA> <DATA>abundance of elements heavier than He relative to Solar</DATA> 
+</ROW>
+<ROW> 
+  <DATA>6</DATA> <DATA>Fe_abund</DATA>
+  <DATA>iron abundance relative to Solar</DATA> 
+</ROW>
+<ROW> 
+  <DATA>7</DATA> <DATA>Incl</DATA>
+  <DATA>cosine of the inclination angle</DATA> 
+</ROW>
+<ROW> 
+  <DATA>8</DATA> <DATA>norm</DATA>
+  <DATA>normalization is the photon flux at 1 keV (photons/keV/cm2/s) of the cutoff power law only (without reflection) and in the Earth frame.</DATA> 
+</ROW>
+</TABLE>
+
+<PARA title="XSpec version">
+     This information is taken from the
+     <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
+     User's Guide</HREF>.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
+   </PARA>
+</DESC>
+
+<BUGS>
+     <PARA>
+       For a list of known bugs and issues with the XSPEC models, please visit
+       the <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/bugs.html">XSPEC bugs page</HREF>.
+     </PARA>
+   </BUGS>
+
+<VERSION>CIAO 4.5</VERSION>
+
+<LASTMODIFIED>December 2012</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

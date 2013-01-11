@@ -7,7 +7,7 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="plot_trace" refkeywords="plot plotting model models modeling modelling  trace iteration sample plot_cdf plot_pdf" seealsogroups="sh.model sh.plot" displayseealsogroups="" context="plotting">
+<cxchelptopics><ENTRY pkg="sherpa" key="plot_trace" refkeywords="plot plotting model models modeling modelling  trace iteration sample plot_cdf plot_pdf draw chain " seealsogroups="sh.model sh.plot" displayseealsogroups="" context="plotting">
 
 
     <SYNOPSIS>
@@ -126,7 +126,6 @@ sherpa&gt; plot_trace(x, name="Energy Flux")
 	    sampled value, with default settings.
 	  </PARA>
 <VERBATIM>
-sherpa&gt; import numpy as np
 sherpa&gt; mu, sigma = 100, 15
 sherpa&gt; x = mu + sigma*np.random.randn(10000)
 sherpa&gt; plot_trace(x)
@@ -142,6 +141,6 @@ sherpa&gt; plot_trace(x)
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

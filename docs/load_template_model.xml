@@ -15,19 +15,20 @@ This is a generated file.  DO NOT EDIT!
     </SYNOPSIS>
 
     <SYNTAX>
-      <LINE>load_template_model(modelname, templatefile, dstype=sherpa.data.Data1D, sep=' ', comment='#', method=sherpa.utils.neville)
-</LINE>
+      <LINE>
+        load_template_model(modelname, templatefile, [dstype=Data1D, sep=' ', comment='#', method=linear_interp])
+     </LINE>
 	</SYNTAX>
 
     <DESC>
      <PARA>
-      The Sherpa load_template_model function, an extenstion of
-    load_table_model (see 'ahelp load_table_model'), can be used to
-    read in a collection of template models from a
-    directory full of template files, in order to compare a data set to
-    all of the templates in that collection.  Sherpa finds the template
-    that best matches the data, and reports back the parameter values
-    associated with that template.
+      The Sherpa load_template_model function, an extension of
+      load_table_model (see 'ahelp load_table_model'), can be used to
+      read in a collection of template models from a directory full of
+      template files, in order to compare a data set to all of the
+      templates in that collection.  Sherpa finds the template that
+      best matches the data, and reports back the parameter values
+      associated with that template.
       </PARA>
 
       <PARA>
@@ -59,7 +60,15 @@ This is a generated file.  DO NOT EDIT!
 	  comment - string value which represents comment in 'templatefile'
 	</ITEM>
 
+	 <ITEM>
+	  method - interpolation method in sherpa.utils:
+	  linear_interp, nearest_interp, neville, neville2d; default=linear_interp
+	</ITEM>
+
       </LIST>
+<PARA>
+</PARA>
+
 
       <PARA>
 	The Sherpa model library will accommodate templates of the
@@ -85,8 +94,7 @@ This is a generated file.  DO NOT EDIT!
 
     <PARA>
       The index file should contain a table with one line per template
-      data file,
-      with three groups of columns in the following order:
+      data file, with three groups of columns in the following order:
     </PARA>
 
     <LIST>
@@ -112,14 +120,27 @@ This is a generated file.  DO NOT EDIT!
      </PARA>
 
   
-
- 
     <PARA>
       The Sherpa template model supports linear, nearest-neighbor, and
       polynomial interpolation. (Interpolation is used by the template
-      model to match the data grid to the model grid - which must match before the fit statistics can be calculated for fitting.)
-    </PARA>  
-    
+      model to match the data grid to the model grid - which must
+      match before the fit statistics can be calculated for fitting.)
+      </PARA>
+
+ <PARA title="Selecting interpolation method">
+Importing sherpa.utils is required in order to access available
+interpolation methods. This can be done for a specific function:
+</PARA>
+<VERBATIM>
+       from sherpa.utils import  neville, nearest_interp 
+</VERBATIM>
+<PARA>
+or by importing all functions in sherpa.utils:
+</PARA>
+<VERBATIM>
+      import sherpa.utils
+</VERBATIM>
+   
     </DESC>
 
     <QEXAMPLELIST>
@@ -154,8 +175,10 @@ sherpa&gt; load_template_model("kerr_temp","templ_index.txt")
         <DESC>
           <PARA>
 	    Load a collection of template models into the Sherpa model
-	    instance 'tbl', and fit to a source data set using the Sherpa grid-searching
-	    optimization method. The parameters of the template model which best matches the data are returned. 
+	    instance 'tbl', and fit to a source data set using the
+	    Sherpa grid-searching optimization method (see 'ahelp gridsearch'). The parameters
+	    of the template model which best matches the data are
+	    returned.
 	  </PARA>
 
 <VERBATIM>
@@ -191,8 +214,32 @@ templatemodel.tbl
    tbl.angle    thawed            1          0.1            1     
 </VERBATIM>
 	</DESC>
+
+
 	</QEXAMPLE>
-   
+
+<QEXAMPLE>
+<DESC>
+
+<VERBATIM>
+sherpa&gt; from sherpa.utils import neville
+sherpa&gt; load_ascii('source.dat', ncols=3, dstype=Data1D)
+sherpa&gt; load_template_model('tbl', 'table.txt', method=neville)
+sherpa&gt; set_model('tbl+const1d.b1')
+sherpa&gt; set_method('moncar')   
+</VERBATIM>
+<PARA>
+Import 'neville' interpolation method from 'sherpa.utils'; load a spectrum
+with errors from an ascii file, and templates and use neville
+interpolation method when fitting the spectrum with this model. A
+combination of a template model 'tbl' and an analytical model
+'const1d' from Sherpa model library is used to fit the data. Note that
+in this case we use moncar (see 'ahelp moncar') instead of gridsearch
+(see 'ahelp gridsearch') to find the best fit.
+</PARA>
+</DESC>
+</QEXAMPLE>
+
     </QEXAMPLELIST>
 
 
@@ -203,6 +250,6 @@ templatemodel.tbl
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

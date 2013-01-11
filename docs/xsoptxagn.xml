@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="xsoptxagn" refkeywords="xspec model models modeling modelling color temperature disc Comptonisation AGN optxagn" seealsogroups="sh.models " displayseealsogroups="" context="models">
+
+
+<SYNOPSIS>
+Color-temperature-corrected disc and energetically coupled Comptonization model for AGN.
+XSpec model.
+</SYNOPSIS>
+
+<DESC>
+<PARA>
+AGN spectral energy distributions are complex, but can be
+phenomenologically fit by a disc, optically thick, low temperature
+thermal Comptonization (to produce the soft X-ray excess) and an
+optically thin, high temperature themal Comptonization (to produce the
+power law emission which dominates above 2 keV). Here we combine these
+three components together assuming that they are all ultimately
+powered by gravitational energy released in accretion. We assume that
+the gravitational energy released in the disc at each radius is
+emitted as a (color-temperature-corrected) blackbody only down to a
+given radius, R_corona. Below this radius, we further assume that the
+energy can no longer completely thermalise, and is distributed between
+powering the soft excess component and the high energy tail. This
+imposes an important energetic self consistency on the model. The key
+aspect of this model is that the optical luminosity constrains the
+mass accretion rate through the outer disc, M_dot, provided there is an
+independent estimate of the black hole mass (from, e.g., the H-beta emission line profile). The total luminosity available to power the entire SED is [L_tot=eff M_dot c^2], where the efficiency is set by black hole spin assuming Novikov-Thorne emissivity. 
+</PARA>
+<PARA>
+There are two versions of the model. Optxagnf (see 'ahelp optxagnf')
+is the one recommended for most purposes, and has the
+color-temperature correction calculated for each temperature from the
+approximations given in Done et al. (2011). Optxagn instead allows the
+user to define their own color-temperature correction, fcol, which is
+then applied to annuli with effective temperature &gt; T_scatt. In both models the flux is set by the physical parameters of mass, L/L_Edd, spin and distance, hence the model normalizations MUST be frozen at unity. 
+</PARA>
+
+	<PARA>
+     This is an additive model component.
+   </PARA>
+
+<TABLE>
+<CAPTION>xsoptxagn Parameters</CAPTION>
+<ROW> 
+  <DATA>Number</DATA>
+  <DATA>Name</DATA>
+  <DATA>Description</DATA> 
+</ROW>
+<ROW> 
+  <DATA>1</DATA> <DATA>mass</DATA> <DATA>Black hole mass in solar masses</DATA> 
+</ROW>
+<ROW> 
+  <DATA>2</DATA> <DATA>dist</DATA>
+  <DATA>Luminosity distance in Mpc</DATA> 
+</ROW>
+<ROW> 
+  <DATA>3</DATA> <DATA>logLLEdd</DATA> <DATA>Eddington ratio</DATA> 
+</ROW>
+<ROW> 
+  <DATA>4</DATA> <DATA>astar</DATA>
+  <DATA>Dimensionless black hole spin</DATA> 
+</ROW>
+<ROW> 
+  <DATA>5</DATA> <DATA>rcor</DATA> <DATA>Coronal radius in R_g=GM/c^2  marking the transition from (color temperature corrected) blackbody emission to a Comptonised spectrum. If this parameter is negative then only the blackbody component is used. </DATA> 
+</ROW>
+<ROW> 
+  <DATA>6</DATA> <DATA>logrout</DATA>
+  <DATA>Log of the outer radius of the disc in units of R_g; if this is '-ve' the code will use the self gravity radius as calculated from Laor &amp; Netzer (1989)</DATA> 
+</ROW>
+<ROW> 
+  <DATA>7</DATA> <DATA>kT_E</DATA> <DATA>Electron temperature for the soft Comptonization component (soft excess) in keV</DATA> 
+</ROW>
+<ROW> 
+  <DATA>8</DATA> <DATA>tau</DATA>
+  <DATA>Optical depth of the soft Comptonization component. If this parameter is negative then only the soft Compton component is used. </DATA> 
+</ROW>
+<ROW> 
+  <DATA>9</DATA> <DATA>Gamma</DATA> <DATA>Spectral index of the hard Comptonization component ('power law') which has temperature fixed to 100 keV. If this parameter is negative then only the hard Compton component is used. </DATA> 
+</ROW>
+<ROW> 
+  <DATA>10</DATA> <DATA>fpl</DATA>
+  <DATA>Fraction of the power below rcor which is emitted in the hard Comptonization component </DATA> 
+</ROW>
+<ROW> 
+  <DATA>11</DATA> <DATA>fcol</DATA>
+  <DATA>Color-temperature correction to apply to the disc blackbody emission for radii below rcor with effective temperature &gt; Tscatt </DATA> 
+</ROW>
+<ROW> 
+  <DATA>12</DATA> <DATA>tscat</DATA>
+  <DATA>Effective temperature criterion used as described above.</DATA> 
+</ROW>
+<ROW> 
+  <DATA>13</DATA> <DATA>Redshift</DATA>
+  <DATA/> 
+</ROW>
+<ROW> 
+  <DATA>14</DATA> <DATA>norm</DATA>
+  <DATA>Normalization, must be frozen</DATA> 
+</ROW>
+</TABLE>
+
+<PARA title="XSpec version">
+     This information is taken from the
+     <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
+     User's Guide</HREF>.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
+   </PARA>
+</DESC>
+
+<BUGS>
+     <PARA>
+       For a list of known bugs and issues with the XSPEC models, please visit
+       the <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/bugs.html">XSPEC bugs page</HREF>.
+     </PARA>
+   </BUGS>
+
+<VERSION>CIAO 4.5</VERSION>
+
+<LASTMODIFIED>December 2012</LASTMODIFIED>
+	</ENTRY></cxchelptopics>

@@ -36,7 +36,11 @@ A(E)= Kbreake1^(phoindx2-phoindx1) * (E/1keV)^-phoindx2 for breake1 &lt;= E &lt;
 <EQUATION>
 A(E)= Kbreake1^(phoindx2-phoindx1)*breake2^(phoindx3-phoindx2)*(E/1keV)^-phoindx3   for breake2  &lt;= E
 </EQUATION>
+</PARA>
 
+<PARA>
+If POW_EMIN and POW_EMAX have been defined by the xset command (see
+'ahelp set_xsxset'), then the norm becomes the flux in units of 10^-12 ergs/cm2/s over the energy range (POW_EMIN, POW_EMAX) keV, unless POW_EMIN = POW_EMAX, in which case the norm becomes the flux density in micro-Jansky at POW_EMIN keV. In these cases it is important that POW_EMIN and POW_EMAX lie within the energy range on which the model is being evaluated.
 </PARA>
 
 <PARA>
@@ -86,8 +90,8 @@ A(E)= Kbreake1^(phoindx2-phoindx1)*breake2^(phoindx3-phoindx2)*(E/1keV)^-phoindx
      This information is taken from the
      <HREF link="http://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/manual/manual.html">XSpec
      User's Guide</HREF>.
-     Version 12.7 of the XSpec
-     models is supplied with CIAO 4.4.
+     Version 12.7.1 of the XSpec
+     models is supplied with CIAO 4.4.1.
    </PARA>
 </DESC>
 
@@ -98,7 +102,7 @@ A(E)= Kbreake1^(phoindx2-phoindx1)*breake2^(phoindx3-phoindx2)*(E/1keV)^-phoindx
      </PARA>
    </BUGS>
 
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 	</ENTRY></cxchelptopics>

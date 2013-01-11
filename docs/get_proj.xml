@@ -42,7 +42,7 @@ get_proj
 	fit statistic is found that is smaller than original best fit,
 	the difference between new and original statistics must be
 	greater than this value, default=0.01</ITEM> 
-	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=0.01</ITEM>
+	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=1</ITEM>
         <ITEM>soft_limits - a switch which allows the search to go all
          the way out to the hard parameter limits; if switched on, the
          search will be restricted to occur within the soft limits,
@@ -99,7 +99,7 @@ get_proj_opt
 	fit statistic is found that is smaller than original best fit,
 	the difference between new and original statistics must be
 	greater than this value, default=0.01</ITEM> 
-	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=0.01</ITEM>
+	<ITEM>sigma - to get 1, 2, or 3-sigma limits, default=1</ITEM>
         <ITEM>soft_limits - a switch which allows the search to go all
          the way out to the hard parameter limits; if switched on, the
          search will be restricted to occur within the soft limits,
@@ -173,6 +173,6 @@ sigma       = 1
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

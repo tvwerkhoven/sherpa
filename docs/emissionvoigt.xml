@@ -12,13 +12,18 @@ This is a generated file.  DO NOT EDIT!
 
 
     <SYNOPSIS>
-     Voigt model of an emission feature
+     Voigt model of an emission feature defined in Angstroms.
     </SYNOPSIS>
 
    
  <DESC>
   <PARA>
-   A model of an emission feature, where a Gaussian modeling the core is added to a Lorentzian modeling the wings. The approximation presented in Astrophysical Formulae (K. R. Lang, 1980, 2nd ed., p. 220) is used. This approximation works best when the ratio between the FWHM of the Gaussian and Lorentzian sub-components is near unity.
+   A model of an emission profile, where a Gaussian model of the core
+   is combined with a Lorentzian model of the wings. The approximation
+   presented in Astrophysical Formulae (K. R. Lang, 1980, 2nd ed.,
+   p. 220) is used. This approximation works best when the ratio
+   between the FWHM of the Gaussian and Lorentzian sub-components is
+   near unity.
   </PARA>
  
  
@@ -43,12 +48,12 @@ This is a generated file.  DO NOT EDIT!
 <ROW> 
   <DATA>3</DATA> 
   <DATA>fwhm</DATA> 
-  <DATA>FWHM, in Angstroms</DATA> 
+  <DATA>FWHM, in km/s</DATA> 
 </ROW>
 <ROW> 
   <DATA>4</DATA> 
   <DATA>lg</DATA> 
-  <DATA>Ratio of Lorenztian to Gaussian</DATA> 
+  <DATA>Ratio of Lorenztian to Gaussian FWHM</DATA> 
 </ROW>
 </TABLE>
 </DESC>
@@ -60,6 +65,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<VERSION>CIAO 4.5</VERSION>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 	</ENTRY></cxchelptopics>

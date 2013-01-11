@@ -7,10 +7,11 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="igam" refkeywords="cephes utility function math " seealsogroups="sh.calc " displayseealsogroups="" context="utilities">
+<cxchelptopics><ENTRY pkg="sherpa" key="igam" refkeywords="cephes utility function math gamma regularized " seealsogroups="sh.calc " displayseealsogroups="" context="utilities">
+
 
      <SYNOPSIS>
-     Calculate the incomplete Gamma function (lower)
+     Calculate the regularized incomplete Gamma function (lower)
     </SYNOPSIS>
 
     <SYNTAX>
@@ -25,9 +26,14 @@ This is a generated file.  DO NOT EDIT!
 
       <PARA>
 <EQUATION>
-igam(a,x) = 1/sqrt(a) Int_(0)^(x) e^(-t) t^(a-1) dt
+igam(a,x) = 1/gamma(a) Int_(0)^(x) e^(-t) t^(a-1) dt
 </EQUATION>
       </PARA>
+
+       <PARA>
+	 where "gamma(a)" represents the complete Gamma function.
+       </PARA>
+
 	<PARA>
 	In this implementation, both arguments must be positive. The
 	integral is evaluated by either a power series or continued
@@ -101,6 +107,6 @@ igam(a,x) = 1/sqrt(a) Int_(0)^(x) e^(-t) t^(a-1) dt
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

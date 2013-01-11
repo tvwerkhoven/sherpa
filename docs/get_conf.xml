@@ -7,8 +7,11 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="get_conf" refkeywords="get_conf get_conf_results get_conf_opt confidence get covar covariance interval " seealsogroups="sh.conf sh.get " displayseealsogroups="" context="confidence">
-	<SYNOPSIS>
+<cxchelptopics><ENTRY pkg="sherpa" key="get_conf" refkeywords="get_conf get_conf_results get_conf_opt confidence get covar covariance interval  set_conf_opt " seealsogroups="sh.conf sh.get " displayseealsogroups="" context="confidence">
+
+
+
+    <SYNOPSIS>
      Return information regarding the confidence method.
     </SYNOPSIS>
 
@@ -91,7 +94,9 @@ get_conf_opt
       <PARA>
 	The get_conf_opt command returns the value of a confidence option by
         name. If the name isn't specified, it returns a dictionary of
-        all options that govern how confidence is run.
+        all options that govern how confidence is run. The confidence
+	options are modified using the set_conf_opt command.
+
        </PARA>
  
 <LIST>
@@ -233,6 +238,6 @@ sherpa&gt; print(get_conf_opt())
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

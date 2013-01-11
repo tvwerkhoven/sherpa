@@ -7,7 +7,8 @@ This is a generated file.  DO NOT EDIT!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 -->
-<cxchelptopics><ENTRY pkg="sherpa" key="get_sampler" refkeywords=" jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler_name  Markov chain Monte Carlo " seealsogroups="sh.get " displayseealsogroups="" context="statistics">
+<cxchelptopics><ENTRY pkg="sherpa" key="get_sampler" refkeywords=" jumping rule MCMC MH Metropolis Metropolis-Hastings get_sampler_opt  get_sampler_name  Markov chain Monte Carlo  sample sampler " seealsogroups="sh.get " displayseealsogroups="" context="statistics">
+
 
 
     <SYNOPSIS>
@@ -168,6 +169,6 @@ sherpa&gt; get_sampler_opt('log')
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

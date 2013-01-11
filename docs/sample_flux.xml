@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+<!--
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+This is a generated file.  DO NOT EDIT!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+-->
+<cxchelptopics><ENTRY pkg="sherpa" key="sample_flux" context="utilities" refkeywords="sample sampling  unabsorbed flux energy distribution" seealsogroups="sh.sample sh.energy sh.flux">
+
+    <SYNOPSIS>
+     Return a sample of Sherpa model parameters and the corresponding
+     unabsorbed energy flux and flux uncertainty 
+    </SYNOPSIS>
+
+    <SYNTAX>
+      <LINE>sample_flux([modelcomponent=None, lo=None, hi=None, id=None, num=1, scales=None, correlated=False, numcores=None, Xrays=True, confidence=68])</LINE>
+    </SYNTAX>
+
+
+
+    <DESC>
+      <PARA>
+	 The sample_flux() function calculates the energy flux for a
+	 model component in a previously defined Sherpa model which
+	 has been assigned and fit to an input data set.  It returns a
+	 set of parameters for each realization of the sample (the
+	 number specified using the 'num' parameter setting), with a
+	 corresponding flux and flux uncertainty for the input model
+	 component or a combination of model components.  The samples
+	 are generated from the multivariate normal distribution, with
+	 the default scales or scales supplied by the user.  The
+	 returned flux value is given by a sample's median, with the
+	 lower and upper quantiles defined by the confidence level
+	 supplied to the function.  </PARA>
+
+      <PARA>
+	When the 'Xrays' parameter is set to 'True', the
+	calc_energy_flux() functions is used, and the units for the
+	flux values are the same as those returned by that function,
+	erg/cm2/s;  otherwise, the units are not specified and depend
+	on the input data. 
+      </PARA>
+
+      <PARA>
+	sample_flux() may be run without
+	specifying any parameter settings, in which case the default
+	values for all parameters are assumed.
+      </PARA>	
+   
+
+      <LIST>
+	<CAPTION>Function arguments</CAPTION>
+	<ITEM>
+         modelcomponent - variable name(s) representing the model
+         component(s) to be used to calculate the energy flux;
+         default=None (in which case the previously defined model
+         expression currently assigned to the associated data set ID
+         will be used)
+	</ITEM>
+
+	<ITEM>
+          lo - lower energy bound; default=None
+	  (in which case the lower limit of the ARF and RMF instrument
+	  model will be used)
+	</ITEM>
+
+	<ITEM>
+          hi - upper energy bound; default=None
+	  (in which case the upper limit of the ARF and RMF instrument
+	  model will be used)
+       </ITEM>
+
+        <ITEM>
+          id - the id of the dataset to use; if not given, uses the default dataset id (id=1 by default, see "ahelp get_default_id")
+	</ITEM>
+
+	<ITEM>
+	  num - number of realizations in the sample; default=1
+	</ITEM>
+
+	<ITEM>
+	  correlated - If 'True' then include a full covariance matrix
+		       to set scales for a multivariate distribution, 
+	               otherwise use only diagonal elements (variances);  
+		       default=False
+        </ITEM>
+
+	<ITEM>
+	  scales - user-supplied scales for the sampling distribution.
+	  If correlated is 'True', then scales must be a symmetric and
+	  positive semi-definite 2-D array of shape (N,N), where N is
+	  the number of free parameters (e.g., the matrix represented
+	  by 'get_covar_results().extra_output'); otherwise scales can
+	  be a 1-D array, of length N (e.g., the vector represented by
+	  'get_covar_results().parmin').  default = None
+
+	</ITEM>  
+
+	<ITEM>
+
+	   numcores       -  the desired number of cores to use for parallel 
+			     processing: default=None (in which case
+	                     all available cores are used )
+        </ITEM>  
+ 
+        <ITEM>
+            bkg_id         - Sherpa background data id;
+                             default = 1
+        </ITEM>
+
+	<ITEM>    
+            Xrays          - If 'True', calc_energy_flux is used and
+	                     the returned flux is in units of
+	                     erg/cm2/s; otherwise the units are not specified
+			     and depend on the data.
+                             default = True
+        </ITEM>
+
+
+	<ITEM>
+         confidence - desired confidence level for the returned flux
+	 uncertainty expressed as a percentile; default=68 for 68%, or
+          1-sigma confidence
+	 </ITEM>
+
+      </LIST>
+
+      <PARA>
+	 sample_flux() returns a list of arrays, with the first two
+	 elements containing the flux value with lower and upper
+	 bounds; and the third array containing a flux value and a 
+	 corresponding set of parameter values (for all the thawed
+	 parameters in the original model), with the length given by 'num'.
+      </PARA>	
+    </DESC>
+
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+         <LINE>set_model(xsphabs.gal*(powlaw1d.p1+xsbremss.kt))</LINE>
+         <LINE>fit()</LINE>
+         <LINE>sample_flux(p1,2,10,num=10)</LINE>
+       	</SYNTAX>
+	<DESC>
+<VERBATIM> 
+WARNING: hard minimum hit for parameter kt.norm
+WARNING: Covariance failed for 'kt.norm', trying Confidence...
+kt.norm lower bound:    -0.134752
+kt.norm upper bound:    4.53335
+original model flux = 5.21521e-13, + 4.02722e-14, - 3.98465e-14
+model component flux = 5.25552e-13, + 4.04962e-14, - 4.0151e-14
+           [array([  5.21520828e-13,   5.61792985e-13,   4.81674334e-13]),
+ array([  5.25552371e-13,   5.66048526e-13,   4.85401374e-13]),
+ array([[  4.97968856e-13,   2.14627029e+00,   2.41616452e-04,
+          5.38265248e-02,   2.94204596e-01],
+       [  5.98506924e-13,   2.01305230e+00,   2.38292572e-04,
+          3.05194938e-02,   4.67447346e-01],
+       [  5.61792985e-13,   2.06043183e+00,   2.40078032e-04,
+          3.62251985e-02,   1.34944030e-01],
+       [  4.84355199e-13,   2.09278386e+00,   2.17173079e-04,
+          5.84797943e-02,   3.47483207e-01],
+       [  5.20766794e-13,   2.05939174e+00,   2.22201482e-04,
+          6.33429422e-02,   1.86909906e-01],
+       [  5.92384505e-13,   2.03565546e+00,   2.43968485e-04,
+          5.50564009e-02,   2.39694143e-01],
+       [  5.45759430e-13,   2.05916741e+00,   2.32787610e-04,
+          5.80381908e-02,   3.13168258e-01],
+       [  5.56799814e-13,   2.09373852e+00,   2.50008827e-04,
+          3.86526634e-02,   0.00000000e+00],
+       [  4.81674334e-13,   2.10968901e+00,   2.21441912e-04,
+          8.03290502e-02,   4.00635466e-01],
+       [  5.21520828e-13,   2.10748353e+00,   2.38980309e-04,
+          7.16617433e-02,   1.75023601e-01]])]
+</VERBATIM>
+          <PARA>
+	    Fit an absorbed power-law-plus-bremsstrahlung model to
+	    data set 1 and calculate the 2-10 keV energy flux with
+	    1-sigma uncertainties. Use 10 random sets of parameters based
+	    on the multivariate normal distribution with scales
+	    defined by the covariance matrix, and return a sample of
+	    model parameters with a corresponding energy flux
+	    (ergs/cm2/s) for the power-law component 'p1' of the
+	    previously defined model. Calculate the median flux and
+	    1-sigma bounds from the generated flux values.
+         </PARA>
+        <PARA>
+	  The screen output shows the initial WARNINGS due to
+	  an unconstrained lower limit on the normalization of the
+	  bremstrahlung model in covar() and automatic switch to
+	  confidence to find the low and high limit. These limits are
+	  assumed for the scale of the multi-normal distribution used
+	  in the sampling of parameters.  The output shows the two
+	  flux values - for the full original model expression and the
+	  specific model component, p1. This value is calculated as a
+	  median of all the flux values given by each set of parameter
+	  values. The upper and lower bound for the flux is calculated
+	  based on the specific confidence argument; by default it is
+	  68% corresponding to about 1 sigma.
+	 </PARA> 
+	 <PARA>
+	  Each row of the output array contains the flux value and the
+	  corresponding set of parameter values for the thawed
+	  parameters in the original model. 
+	</PARA>  
+        </DESC>
+      </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+         <LINE>set_model(xsphabs.gal*(powlaw1d.p1+xsbremss.kt))</LINE>
+	 <LINE>fit()</LINE>
+	 <LINE>covar()</LINE>
+	 <LINE>component = kt</LINE>
+	 <LINE>sample1=sample_flux(component,0.5,1,num=5,
+	 correlated=True)</LINE>
+	 <LINE>print sample1</LINE>
+	 </SYNTAX>
+       
+       <DESC>
+<VERBATIM>  
+WARNING: hard minimum hit for parameter kt.norm
+original model flux = 1.83127e-13, + 6.37898e-15, - 9.66581e-15
+model component flux = 3.22853e-15, + 1.15854e-15, - 2.15045e-15
+[array([  1.83127335e-13,   1.89506312e-13,   1.73461520e-13]),
+ array([  3.22853317e-15,  4.38707698e-15,   1.07807922e-15]),
+array([[ 5.83202219e-02,   7.10863625e-02], [  1.89506312e-13,
+2.14657167e+00,   2.33572970e-04, 4.28830724e-02,   3.60171745e-01], [
+1.73461520e-13,   2.08341468e+00,   2.15629125e-04,  5.32345935e-02,
+1.35047135e-01],[  2.01987593e-13,   2.22932209e+00,   2.41744113e-04,
+5.14682044e-02,   8.95890038e-02], [  1.58920878e-13,   2.00938473e+00,   
+2.05302320e-04, 8.03839626e-02,   0.00000000e+00]])]
+</VERBATIM>
+
+        <PARA>
+	 Calculate the unabsorbed energy flux in ergs/cm2/s, in the
+	 0.5-1 keV range, due to the thermal bremsstrahlung component of
+	 the source model which was fit to data set 1. Along with the
+	 flux value, return the associated flux uncertainty and set of
+	 parameters for five realizations of the sample, using the full
+	 covariance matrix to set the scales for a multi-variate
+	 distribution. 
+	</PARA> 
+
+        <PARA>
+	  The arrays are stored in "sample1", and "print sample1"	
+	  shows the full content.
+	</PARA>
+        </DESC>
+       </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+         <LINE>set_model(xsphabs.gal*(powlaw1d.p1+xsbremss.kt))</LINE>
+	 <LINE>fit()</LINE>
+	 <LINE>covar()</LINE>
+	 <LINE>scal=get_covar_results().parmaxes</LINE>
+         <LINE>print get_covar_results().parmaxes</LINE>
+	 <LINE>sample2=sample_flux(kt,0.5,1,num=5,scales=scal)</LINE>
+         <LINE>print sample2</LINE>
+	</SYNTAX>
+       <DESC>
+<VERBATIM>
+
+(0.065864087374852845, 1.2072589502360655e-05, 0.013357394327874632, 0.19108326305439946)
+	
+original model flux = 1.81635e-13, + -3.53684e-15, - 3.53684e-15
+model component flux = 3.94304e-15, + -6.28962e-16, - 6.28962e-16
+[array([  1.81634852e-13,   1.78098011e-13,   1.78098011e-13]), 
+array([  3.94303753e-15,   3.31407527e-15,   3.31407527e-15]), array([[ 
+                 3.12511180e-02,   0.00000000e+00],
+              [  1.79794099e-13,   2.13340610e+00,   2.23288532e-04,
+                 4.10300679e-02,   0.00000000e+00],
+              [  1.82203379e-13,   2.10398024e+00,   2.28420264e-04,
+                 5.43721849e-02,   0.00000000e+00],
+              [  1.78098011e-13,   2.16047358e+00,   2.15953430e-04,
+                 4.98733464e-02,   2.74619729e-01],
+              [  1.85171694e-13,   2.15348481e+00,   2.26081730e-04,
+                 4.99863717e-02,   1.94361467e-01]])]
+
+
+</VERBATIM>
+
+	<PARA>
+	 Same as example 2 above, except explicitly set the scales for
+	 the multivariate distribution using the model parameter
+	 maximum values from the covariance ('correlated' is 'False'
+	 by default); 'print get_covar_results().parmaxes' shows the values.
+         Note that any array with the required size could be supplied as scales.
+        </PARA>
+       </DESC>
+      </QEXAMPLE>
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>set_model(xsphabs.gal*(powlaw1d.p1+xsbremss.kt))</LINE>
+          <LINE>fit()</LINE>
+	  <LINE>covar()</LINE>
+          <LINE>sample3=sample_flux(kt,0.5,1,num=5,correlated=True,scales=get_covar_results().extra_output)</LINE>
+          <LINE>print sample3</LINE>
+	</SYNTAX>
+	<DESC>
+          <PARA>
+	   	Same as example 2 above, except explicitly set the
+	   	scales for the multivariate distribution using the
+	   	covariance matrix from the run of the covar()
+	   	function. This shows the required formatting for the
+	   	scales.
+	  </PARA>
+<VERBATIM>
+original model flux = 1.71993e-13, + 4.40745e-15, - 2.5235e-14
+model component flux = 3.91979e-15, + 3.79364e-16, - 1.21192e-15
+[array([  1.71992848e-13,   1.76400301e-13,   1.46757870e-13]),
+ array([  3.91979113e-15,   4.29915504e-15,   2.70787394e-15]), 
+array([[  1.76400301e-13,   2.03221780e+00,   2.21707595e-04,
+          6.16020518e-02,   4.76466224e-02],
+       [  1.67585396e-13,   2.06123863e+00,   2.10945704e-04,
+          4.99371817e-02,   1.60467459e-01],
+       [  1.66281055e-13,   2.07226550e+00,   2.10575979e-04,
+          6.80740968e-02,   0.00000000e+00],
+       [  1.46757870e-13,   1.91879025e+00,   1.91684249e-04,
+          5.30641362e-02,   1.36633316e-01],
+       [  1.78641151e-13,   2.13489064e+00,   2.19160136e-04,
+          5.52093351e-02,   7.63813471e-02]])]
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
+
+     </QEXAMPLELIST>
+
+
+   <BUGS>
+     <PARA>
+        See the
+        <HREF link="http://cxc.harvard.edu/sherpa/bugs/">bugs pages
+        on the Sherpa website</HREF> for an up-to-date listing of known bugs.
+     </PARA>
+   </BUGS>
+   <VERSION>CIAO 4.5</VERSION>
+   <LASTMODIFIED>December 2012</LASTMODIFIED>
+
+  </ENTRY></cxchelptopics>

@@ -14,8 +14,8 @@ This is a generated file.  DO NOT EDIT!
     </SYNOPSIS>
 
     <SYNTAX>
-      <LINE>notice_id( ids, [lo,hi] )</LINE>
-      <LINE>notice_id( ids, expr )</LINE>
+      <LINE>notice_id( ids, [lo,hi,bkg_id] )</LINE>
+      <LINE>notice_id( ids, expr, bkg_id )</LINE>
 	</SYNTAX>
 
     <DESC>
@@ -27,13 +27,29 @@ This is a generated file.  DO NOT EDIT!
         
         (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/notice.html">"ahelp notice"</HREF>).
       </PARA>
- 
+
+     <PARA>
+      When a filter is applied to a source data set, it is
+      also automatically applied to all associated background data
+      sets.  A different filter for a background can still
+      be imposed afterward, using the bkg_id parameter to filter just
+      the background.
+      </PARA>
+
       <LIST>
         <ITEM>
           ids - a list of ids of the data sets to filter;
 	  default=None
 	  
         </ITEM>
+    
+        <ITEM>
+        bkg_id   -  background data set ID, to apply a separate
+        filter to associated background data (when left blank,
+        the background will be filtered automatically according to the
+        specified source filter; see 'id' description above)
+        </ITEM>
+
 
         <ITEM>
 	  lo: lower bound of the filter;
@@ -87,7 +103,20 @@ This is a generated file.  DO NOT EDIT!
         (<HREF link="http://cxc.harvard.edu/sherpa/ahelp/notice2d_id.html">"ahelp notice2d_id"</HREF>).
       </PARA>
     </DESC>
-	<QEXAMPLELIST>
+    <QEXAMPLELIST>
+       <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; notice_id(1, 5000,7000, bkg_id=2)</LINE>
+
+        </SYNTAX>
+          <DESC>
+            <PARA>
+            Ignore all data points below channel 5000 and above 7000 in the second
+            backround data set associated with source data set 1.
+            </PARA>
+          </DESC>
+      </QEXAMPLE>
+
       <QEXAMPLE>
         <SYNTAX>
 	  <LINE>sherpa&gt; notice_id([1,2])</LINE>
@@ -106,8 +135,8 @@ This is a generated file.  DO NOT EDIT!
 	</SYNTAX>
 	<DESC>
           <PARA>
-	    Apply a filter to notice_id the range 1.0-6.0 keV in the
-	    dataset "src".
+	     Include only data in the 1.0-6.0 keV range in the
+	    dataset labeled "src".
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -118,7 +147,7 @@ This is a generated file.  DO NOT EDIT!
 	</SYNTAX>
 	<DESC>
           <PARA>
-	    Notice the bins in dataset id=2 between 0.1 and 5 keV and
+	    Notice the bins in dataset 2 between 0.1 and 5 keV and
 	    between 6 and 7 keV. 
 	  </PARA>
         </DESC>
@@ -132,9 +161,10 @@ This is a generated file.  DO NOT EDIT!
 	<DESC>
           <PARA>
 	    These commands are two equivalent ways of applying an
-	    open-ended notice_id filter to data in channel space.  The
-	    lower limit of the filter for dataset 2 is set to 200
-	    channels, but the upper limit is undefined.
+	    open-ended notice_id filter to data set 2, in channel space.  The
+	    lower limit of the filter is set at channel 200, but the
+	    upper limit is undefined so that all
+	    data above channel 200 is included in the analysis.
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -147,9 +177,10 @@ This is a generated file.  DO NOT EDIT!
 	<DESC>
           <PARA>
 	    These commands are two equivalent ways of applying an
-	    open-ended notice_id filter to data in energy space.  The
-	    lower limit of the filter for datasets 2 and 4 is undefined
-	    and the upper limit is set to 8.0 keV.
+	    open-ended notice_id filter to data sets 2 and 4 in energy space.  The
+	    lower limit of the filter is undefined
+	    and the upper limit is set to 8.0 keV, so that all data
+	    below 8.0 keV is included in the analysis.
 	  </PARA>
         </DESC>
       </QEXAMPLE>
@@ -162,6 +193,6 @@ This is a generated file.  DO NOT EDIT!
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

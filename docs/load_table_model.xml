@@ -10,12 +10,14 @@ This is a generated file.  DO NOT EDIT!
 <cxchelptopics><ENTRY pkg="sherpa" key="load_table_model" refkeywords="load_ascii read errors ascii load table atable mtable readascii model models modeling modelling TABLECrate " seealsogroups="sh.io sh.model " displayseealsogroups="" context="modeling">
 
     <SYNOPSIS>
-      Load data into a table model
+      Load  a table model
     </SYNOPSIS>
 
     <SYNTAX>
-      <LINE>load_table_model( modelname, filename|TABLECrate, [ncols=2,colkeys=None,dstype=Data1D] )</LINE>
-      <LINE>load_table_model( modelname, filename|IMAGECrate, [coord="logical"] )</LINE>
+      <LINE>load_table_model( modelname, filename|TABLECrate,
+      [ncols=2,colkeys=None,dstype=Data1D, method=linear_interp]
+      )</LINE> <LINE>load_table_model( modelname, filename|IMAGECrate,
+      [coord="logical"] )</LINE>
 	</SYNTAX>
 
     <DESC>
@@ -29,22 +31,25 @@ This is a generated file.  DO NOT EDIT!
         y-values. The model has one parameter, "ampl", the amplitude;
         the y-values are multiplied by the amplitude.  Additive
         (atable) and multiplicative (mtable) XSPEC-style table models
-        are also supported in this command.
+        are also supported.
       </PARA>
     
 
       <PARA>
-      The Sherpa table model supports linear, nearest-neighbor,
-      and polynomial interpolation. Interpolation is used by the table
-      model to match the data grid to the model grid - which must match before the fit statistics can be calculated for fitting.
+      The Sherpa table model supports linear, nearest-neighbor, and
+      polynomial interpolation. Interpolation is used by the table
+      model to match the data grid to the model grid - which must
+      match before the fit statistics can be calculated for fitting.
+      Importing sherpa.utils is required in order to access available
+      interpolation methods.
       </PARA>
 
      <PARA>
-       The Sherpa table model also supports interpolation of data points on
-        the data set grid from the grid supplied from file.  The grids
-        need not be of constant or comparable bin size. If the table
-        model grid is not sorted, Sherpa will sort it in ascending order.
-      </PARA> 
+       The Sherpa table model also supports interpolation of data
+       points on the data set grid from the grid supplied from file.
+       The grids need not be of constant or comparable bin size. If
+       the table model grid is not sorted, Sherpa will sort it in
+       ascending order.  </PARA>
    
       <PARA>
         The input may be 1D data from a FITS table, ASCII table data,
@@ -81,6 +86,13 @@ This is a generated file.  DO NOT EDIT!
 	  coord (image input) - the coordinate system: logical, image,
 	  physical, world, or wcs; default=logical
 	</ITEM>
+
+        <ITEM>
+          method - interpolation method in sherpa.utils:
+          linear_interp, nearest_interp, neville, neville2d; default=linear_interp
+        </ITEM>
+
+
       </LIST>
 
       <PARA title="Selecting table columns">
@@ -138,7 +150,27 @@ This is a generated file.  DO NOT EDIT!
           
 	</ITEM>
       </LIST>
-    </DESC>
+
+
+      <PARA title="Selecting interpolation method">
+        Selection of interpolation methods is available in
+        sherpa.utils. Importing sherpa.utils is required to
+        access these methods. </PARA> 
+ 
+       <PARA>This can be done for a specific function:</PARA>
+
+<VERBATIM>
+        from sherpa.utils import  neville, nearest_interp, neville2d, linear interp
+</VERBATIM>
+<PARA>
+or by importing all the functions in sherpa.utils:
+</PARA>
+<VERBATIM>
+        import sherpa.utils
+</VERBATIM>
+
+
+   </DESC>
 
     <QEXAMPLELIST>
       <QEXAMPLE>
@@ -164,12 +196,15 @@ tablemodel.emap
 
       <QEXAMPLE>
         <SYNTAX>
-          <LINE>sherpa&gt; load_table_model("tab", "file.fits", ncols=2)</LINE>
+	  <LINE>sherpa&gt; import sherpa.utils</LINE>
+          <LINE>sherpa&gt; load_table_model("tab", "file.fits", ncols=2, method=nearest_interp)</LINE>
 	</SYNTAX>
         <DESC>
           <PARA>
 	    Create a table model named "tab" by loading the first two
-	    columns of file.fits.
+	    columns of file.fits and use nearest-neighbor
+	    interpolation method. Note the required import for
+	    selecting the interpolation method.
 	  </PARA>
        </DESC>
       </QEXAMPLE>
@@ -226,6 +261,6 @@ xstablemodel.tab1
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 </ENTRY></cxchelptopics>

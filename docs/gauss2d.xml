@@ -19,7 +19,7 @@ A 2-D Gaussian model:
 
 <PARA>
 <EQUATION>
-f(x,y) = f(r) = A exp[-f(r/F)^2]
+f(x,y) = f(r) = A exp[-c(r/F)^2]
 </EQUATION>
 </PARA>
 
@@ -50,7 +50,7 @@ y_new = (y-y_o)cos(theta) - (x-x_o)sin(theta)
 </PARA>
 
 <PARA>
-The constant f = 2.7725887 = 4log2 relates the
+The constant c = 2.7725887 = 4log2 relates the
 full-width at half-maximum F to the Gaussian
 sigma.
 </PARA>
@@ -58,7 +58,8 @@ sigma.
 <TABLE>
 <CAPTION>gauss2d Parameters</CAPTION>
 <ROW> <DATA>Number</DATA> <DATA>Name</DATA> <DATA>Description</DATA> </ROW>
-<ROW> <DATA>1</DATA> <DATA>fwhm</DATA> <DATA>full-width at half-maximum F</DATA> </ROW>
+<ROW> <DATA>1</DATA> <DATA>fwhm</DATA> <DATA>full-width
+    at half-maximum w.r.t. the major axis F</DATA> </ROW>
 <ROW> <DATA>2</DATA> <DATA>xpos</DATA> <DATA>x mean position x_o</DATA> </ROW>
 <ROW> <DATA>3</DATA> <DATA>ypos</DATA> <DATA>y mean position y_o</DATA> </ROW>
 <ROW> <DATA>4</DATA> <DATA>ellip</DATA> <DATA>ellipticity  epsilon</DATA> </ROW>
@@ -80,8 +81,8 @@ sigma.
         on the Sherpa website</HREF> for an up-to-date listing of known bugs.
      </PARA>
    </BUGS>
-<VERSION>CIAO 4.4</VERSION>
+<VERSION>CIAO 4.5</VERSION>
 
-<LASTMODIFIED>December 2011</LASTMODIFIED>
+<LASTMODIFIED>December 2012</LASTMODIFIED>
 
 </ENTRY></cxchelptopics>

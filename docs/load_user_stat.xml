@@ -126,9 +126,6 @@ def custom_stat_func(data, model, staterror=None, syserror=None, weight=None):
         <SYNTAX>
           <LINE>sherpa&gt; load_user_stat("new_stat", custom_stat_func, custom_staterr_func)</LINE>
 	  <LINE>sherpa&gt; set_stat( "new_stat" )</LINE>
-
-          <LINE>sherpa&gt; load_user_stat("new_stat", custom_stat_func, custom_staterr_func);</LINE>
-	  
  	</SYNTAX>
         <DESC>
           <PARA>
@@ -139,9 +136,29 @@ def custom_stat_func(data, model, staterror=None, syserror=None, weight=None):
           </PARA>
         </DESC>
       </QEXAMPLE>
+
+      <QEXAMPLE>
+        <SYNTAX>
+          <LINE>sherpa&gt; load_user_stat("mystat", my_stat_func)</LINE>
+	  <LINE>sherpa&gt; set_stat(mystat)</LINE>
+ 	</SYNTAX>
+        <DESC>
+          <PARA>
+	    Create a new user statistic with the definition of chi2
+	    statistic, where my_stat_func is defined as:
+          </PARA>
+
+<VERBATIM>
+def my_stat_func(data, model, staterror, syserror=None,weight=None):
+               fvec = ((data - model) / staterror)**2
+               stat = fvec.sum()
+               return (stat, fvec) 
+</VERBATIM>
+        </DESC>
+      </QEXAMPLE>
     </QEXAMPLELIST>
 
-    <VERSION>CIAO 4.4</VERSION>
-    <LASTMODIFIED>December 2011</LASTMODIFIED>
+    <VERSION>CIAO 4.5</VERSION>
+    <LASTMODIFIED>December 2012</LASTMODIFIED>
 
   </ENTRY></cxchelptopics>
