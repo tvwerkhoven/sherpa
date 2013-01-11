@@ -24,7 +24,8 @@ include sherpa/optmethods/tests/tstopt.hh
 
 # Sherpa executable
 include sherpa/sherpa
-include sherpa/ipythonrc-sherpa
+include sherpa/00-sherpa_startup.py
+include sherpa/ipython_config.py
 include sherpa/sherpa_py
 include sherpa/sherpa.rc
 

@@ -213,6 +213,21 @@ void xsatbl(float* ear, int ne, float* param, const char* filenm, int ifl,
 	    float* photar, float* photer);
 void xsmtbl(float* ear, int ne, float* param, const char* filenm, int ifl, 
 	    float* photar, float* photer);
+
+// XSPEC convolution models
+void C_cflux(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_xsgsmt(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_ireflct(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_kdblur(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_kdblur2(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_spinconv(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_xslsmt(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_PartialCovering(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_rdblur(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_reflct(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_simpl(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_zashift(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
+void C_zmshift(const double* energy, int nFlux, const double* params, int spectrumNumber, double* flux, double* fluxError, const char* initStr);
 }
 
 // Sun's C++ compiler complains if this is declared static
@@ -266,8 +281,19 @@ int _sherpa_init_xspec_library(char* headas)
       std::cout.rdbuf(fout.rdbuf()); // temporary redirect stdout to /dev/null
     
 
-    // Initialize XSPEC model library
-    FNINIT(headas);
+    try {
+      // Initialize XSPEC model library
+      FNINIT(headas);
+    }
+    catch (const std::ios_base::failure& e) {
+      ;
+      // ios badbit errors can be set e.g., by reaching end of file
+      // (line with \n only).  This kind of exception is being raised
+      // only Mountain Lion, but with no practical effect on XSPEC
+      // module usage as far as I can see.  So after XSPEC initialization,
+      // swallow exceptions of this type and move on. Other kinds of 
+      // exceptions should still be raised. SMD 11/19/12
+    }
 
     
     // Get back original std::cout
@@ -922,7 +948,21 @@ static PyMethodDef XSpecMethods[] = {
   // XSPEC table models
   XSPECTABLEMODEL_NORM( xsatbl ),
   XSPECTABLEMODEL_NORM( xsmtbl ),
-
+  // XSPEC convolution models
+  XSPECMODELFCT_C(C_cflux, 3),
+  XSPECMODELFCT_C(C_xsgsmt, 2),
+  XSPECMODELFCT_C(C_ireflct, 7),
+  XSPECMODELFCT_C(C_kdblur, 4),
+  XSPECMODELFCT_C(C_kdblur2, 6),
+  XSPECMODELFCT_C(C_spinconv, 7),
+  XSPECMODELFCT_C(C_xslsmt, 2),
+  XSPECMODELFCT_C(C_PartialCovering, 1),
+  XSPECMODELFCT_C(C_rdblur, 4),
+  XSPECMODELFCT_C(C_reflct, 5),
+  XSPECMODELFCT_C(C_simpl, 3),
+  XSPECMODELFCT_C(C_zashift, 1),
+  XSPECMODELFCT_C(C_zmshift, 1),
+  
   { NULL, NULL, 0, NULL }
 
 };

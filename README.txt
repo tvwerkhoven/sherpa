@@ -1,11 +1,7 @@
 Building and Installing Sherpa
 
-Sherpa 4.4.1
+Sherpa 4.5.0
 =======================
-
-    * New in Sherpa 4.4.1:
-        o Support for XSPEC 12.7.1 models (all additive and
-          multiplicative models).
 
     * Required dependencies:
         o Python-2.7.X (preferred) or Python-2.6.X
@@ -17,7 +13,7 @@ Sherpa 4.4.1
         o PyFITS 1.3 or later (for FITS I/O)
         o matplotlib 0.98.5.2 or later (for plotting and imaging,
           be sure to set "interactive=True" in ~/.matplotlib/matplotlibrc)
-        o IPython 0.10
+        o IPython 0.13
 
 Dependencies
 ============
@@ -25,7 +21,7 @@ Dependencies
 The new Sherpa can be downloaded, built, installed, and used independently of
 CIAO. If you use Sherpa this way, you won't have access to CRATES I/O, ChIPS
 plotting, 2D region, or dynamic grouping but all other functionality will be
-available. The current (CIAO 4.4) source tarball is sherpa-4.4.1.tar.gz. It
+available. The current (CIAO 4.5) source tarball is sherpa-4.5.0.tar.gz. It
 has the following prerequisites:
 
     * Required:
@@ -52,8 +48,8 @@ Build and Install
 
 To build and install the package, do the following:
 
-$ tar xzf sherpa-4.4.1.tar.gz
-$ cd sherpa-4.4.1
+$ tar xzf sherpa-4.5.0.tar.gz
+$ cd sherpa-4.5.0
 $ python setup.py [config-vars] install --prefix=<dest-dir>
 
 config-vars is an optional list of arguments in the format var=value that 
