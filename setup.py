@@ -155,9 +155,10 @@ SunFCompiler.get_libraries = get_libraries
 
 #
 # On Darwin, g77 is not in /usr/bin; the user needs to have
-# installed it in /sw/bin with fink.  But then the GnuFCompiler
-# class needs to have /sw/lib added as a library path, so we
-# can get the g2c library.
+# installed it with fink or Macports.  But then the GnuFCompiler
+# class needs to have that library directory added as a library 
+# path, so we can get the g2c library. For fink this is /sw/lib,
+# for macports this is /opt/local/lib
 #
 if platform.system() == 'Darwin':
     needf90 = True 
@@ -198,6 +199,8 @@ if platform.system() == 'Darwin':
             # Try a likely path if fortran_library_dir points nowhere
             if '/sw/lib' not in dirs:
                 dirs.append('/sw/lib')
+            if '/opt/local/lib' not in dirs:
+                dirs.append('/opt/local/lib')
         return dirs
 
     GnuFCompiler.get_libraries = get_libraries_gnuf
