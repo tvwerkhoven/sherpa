@@ -1,6 +1,6 @@
 Building and Installing Sherpa
 
-Sherpa 4.5.0
+Sherpa 4.5.1
 =======================
 
     * Required dependencies:
@@ -21,7 +21,7 @@ Dependencies
 The new Sherpa can be downloaded, built, installed, and used independently of
 CIAO. If you use Sherpa this way, you won't have access to CRATES I/O, ChIPS
 plotting, 2D region, or dynamic grouping but all other functionality will be
-available. The current (CIAO 4.5) source tarball is sherpa-4.5.0.tar.gz. It
+available. The current (CIAO 4.5) source tarball is sherpa-4.5.1.tar.gz. It
 has the following prerequisites:
 
     * Required:
@@ -48,8 +48,8 @@ Build and Install
 
 To build and install the package, do the following:
 
-$ tar xzf sherpa-4.5.0.tar.gz
-$ cd sherpa-4.5.0
+$ tar xzf sherpa-4.5.1.tar.gz
+$ cd sherpa-4.5.1
 $ python setup.py [config-vars] install --prefix=<dest-dir>
 
 config-vars is an optional list of arguments in the format var=value that 
