@@ -256,7 +256,7 @@ else:
 ###############################################################################
 
 # Include directory for Sherpa headers
-sherpa_inc = ['sherpa/include']
+sherpa_inc = ['sherpa/include', 'sherpa/utils/src']
 
 header_deps = {
     'myArray': (),
