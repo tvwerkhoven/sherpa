@@ -51,7 +51,7 @@ namespace sherpa {
 				NULL, cdata, 0, NPY_CARRAY, NULL ) );
     }
 
-    int from_obj( PyObject* obj, bool contiguous );
+    int from_obj( PyObject* obj, bool contiguous=false );
 
     int zeros( int ndim, const npy_intp* dims )
     {
@@ -117,7 +117,7 @@ namespace sherpa {
 
   template <typename CType, int ArrayType>
   int Array< CType, ArrayType >::from_obj( PyObject* obj,
-					   bool contiguous=false )
+					   bool contiguous )
   {
 
     bool decref = false;
