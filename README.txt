@@ -90,6 +90,32 @@ $ python setup.py \
 The setup.py script distributed with Sherpa uses the standard Python distutils
 package. For more information on using it, see Installing Python Modules.
 
+Installing with Macports 
+------------------------
+
+When installing sherpa using dependencies installed through Macports, one might encounter errors like:
+
+	Undefined symbols for architecture x86_64:
+	  "_PyArg_ParseTupleAndKeywords", referenced from:
+	      _f2py_rout__minpack_enorm in _minpackmodule.o
+	      _f2py_rout__minpack_lmpar in _minpackmodule.o
+	      _f2py_rout__minpack_mylmdif in _minpackmodule.o
+	      _f2py_rout__minpack_qrfac in _minpackmodule.o
+
+In that case, prepend
+
+	LDFLAGS="-bundle -undefined dynamic_lookup $LDFLAGS"
+
+before the install command, for example:
+
+	LDFLAGS="-bundle -undefined dynamic_lookup $LDFLAGS" \
+		python ./setup.py \
+		fftw_library_dir=/opt/local/lib \
+		fftw_include_dir=/opt/local/include \
+		cfitsio_lib=/opt/local/lib \
+		cfitsio_library_dir=/opt/local/lib \
+		build
+
 Configuration Files
 ===================
 
