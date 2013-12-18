@@ -640,7 +640,7 @@ if conf['xspec_library_dir'] is not None:
 
 # CIAO 4.5 release, Sherpa package 1
 setup(name='sherpa',
-      version='4.5.0',
+      version='4.5.1',
       author='Smithsonian Astrophysical Observatory / Chandra X-Ray Center',
       author_email='cxchelp@head.cfa.harvard.edu',
       url='http://cxc.harvard.edu/sherpa/',
